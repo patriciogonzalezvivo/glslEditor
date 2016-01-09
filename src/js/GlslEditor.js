@@ -22,9 +22,7 @@ import 'codemirror/keymap/sublime';
 
 // Import Utils
 import xhr from 'xhr';
-import { parseQuery, subscribeMixin } from 'app/common';
-
-const query = parseQuery(window.location.search.slice(1));
+import { subscribeMixin } from 'app/common';
 
 class GlslEditor {
     constructor (selector, options) {
@@ -38,8 +36,7 @@ class GlslEditor {
         }
 
         if (this.options.frag === undefined) {
-            this.options.frag = `// Author: 
-
+            this.options.frag = `// Author:
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -48,7 +45,7 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 
-void main(){
+void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     st.x *= u_resolution.x/u_resolution.y;
 
@@ -61,54 +58,54 @@ void main(){
         this.chechHash();
 
         // CREATE AND START GLSLCANVAS
-        this.canvasDOM = document.createElement("canvas");
+        this.canvasDOM = document.createElement('canvas');
         this.canvasDOM.setAttribute('class', 'ge_canvas');
         this.canvasDOM.setAttribute('width', '384');
         this.canvasDOM.setAttribute('height', '384');
         this.canvasDOM.setAttribute('animate', 'true');
-        this.canvasDOM.setAttribute("data-fragment", this.options.frag);
-        if(this.options.imgs.length > 0){
-            let textureList = "";
-            for(i in this.options.imgs){
+        this.canvasDOM.setAttribute('data-fragment', this.options.frag);
+        if (this.options.imgs.length > 0) {
+            let textureList = '';
+            for (let i in this.options.imgs) {
                 textureList += this.options.imgs[i];
-                textureList += (i < this.options.imgs.length-1)?",":"";
+                textureList += (i < this.options.imgs.length - 1) ? ',' : '';
             }
-            this.canvasDOM.setAttribute("data-textures",textureList);
-            this.canvasDOM.log("data-textures: " + textureList);
+            this.canvasDOM.setAttribute('data-textures', textureList);
+            this.canvasDOM.log('data-textures: ' + textureList);
         }
         this.container.appendChild(this.canvasDOM);
         let canvas = new GlslCanvas(this.canvasDOM);
         this.canvas = canvas;
 
         // CREATE AND START CODEMIRROR
-        this.editorDOM = document.createElement("div");
+        this.editorDOM = document.createElement('div');
         this.editorDOM.setAttribute('class', 'ge_editor');
         this.container.appendChild(this.editorDOM);
         this.editor = CodeMirror(this.editorDOM, {
             value: this.options.frag,
             lineNumbers: true,
             matchBrackets: true,
-            mode: "x-shader/x-fragment",
-            keyMap: "sublime",
+            mode: 'x-shader/x-fragment',
+            keyMap: 'sublime',
             autoCloseBrackets: true,
-            extraKeys: {"Ctrl-Space": "autocomplete"},
+            extraKeys: { 'Ctrl-Space': 'autocomplete' },
             showCursorWhenSelecting: true,
-            theme: "monokai",
+            theme: 'monokai',
             indentUnit: 4
         });
 
-        this.editor.on("change", () => {
+        this.editor.on('change', () => {
             this.canvas.load(this.editor.getValue());
         });
 
         // Set up some EVENTS
-        window.addEventListener("hashchange", () => {
+        window.addEventListener('hashchange', () => {
             this.chechHash();
         }, false);
     }
 
     chechHash() {
-        if (window.location.hash !== "" ) {
+        if (window.location.hash !== '') {
             this.options.imgs = [];
 
             let hashes = location.hash.split('&');
@@ -117,28 +114,29 @@ void main(){
                 let name = hashes[i];
 
                 // Extract hash if is present
-                if (name.search("#") === 0) {
+                if (name.search('#') === 0) {
                     name = name.substr(1);
                 }
 
-                if (ext == "frag") {
+                if (ext === 'frag') {
                     xhr.get(name, (error, response, body) => {
                         if (error) {
-                            console.log("Error downloading ", name, error );
+                            console.log('Error downloading ', name, error);
                             return;
                         }
                         this.load(body);
                     });
-                } else if (ext == "png" || ext == "jpg" || ext == "PNG" || ext == "JPG" ){
+                }
+                else if (ext === 'png' || ext === 'jpg' || ext === 'PNG' || ext === 'JPG') {
                     this.options.imgs.push(hashes[i]);
                 }
             }
         }
     }
 
-    load (frag_string) {
-        this.canvas.load(frag_string);
-        this.editor.setValue(frag_string);
+    load (fragString) {
+        this.canvas.load(fragString);
+        this.editor.setValue(fragString);
     }
 }
 
