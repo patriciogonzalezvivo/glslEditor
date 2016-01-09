@@ -30,7 +30,7 @@ class GlslEditor {
     constructor (selector, options) {
         subscribeMixin(this);
 
-        this.container = document.querySelector('#glsl_editor');//selector);
+        this.container = document.querySelector(selector);
         this.options = options;
 
         if (this.options.imgs === undefined) {
@@ -38,23 +38,24 @@ class GlslEditor {
         }
 
         if (this.options.frag === undefined) {
-            this.options.frag = `
-                #ifdef GL_ES
-                precision mediump float;
-                #endif
+            this.options.frag = `// Author: 
 
-                uniform vec2 u_resolution;
-                uniform vec2 u_mouse;
-                uniform float u_time;
+#ifdef GL_ES
+precision mediump float;
+#endif
 
-                void main(){
-                    vec2 st = gl_FragCoord.xy/u_resolution.xy;
-                    st.x *= u_resolution.x/u_resolution.y;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
 
-                    vec3 color = vec3(st.x,st.y,abs(sin(u_time)));
+void main(){
+    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    st.x *= u_resolution.x/u_resolution.y;
 
-                    gl_FragColor = vec4(color,1.0);
-                }`;
+    vec3 color = vec3(st.x,st.y,abs(sin(u_time)));
+
+    gl_FragColor = vec4(color,1.0);
+}`;
         }
 
         this.chechHash();
@@ -79,25 +80,6 @@ class GlslEditor {
         let canvas = new GlslCanvas(this.canvasDOM);
         this.canvas = canvas;
 
-        // Set up some EVENTS
-        let mouse = {x: 0, y: 0};
-        document.addEventListener('mousemove', (e) => { 
-            mouse.x = e.clientX || e.pageX; 
-            mouse.y = e.clientY || e.pageY 
-        }, false);
-
-        window.addEventListener("hashchange", () => {
-            this.chechHash();
-        }, false);
-
-        function RenderLoop() {
-            canvas.setMouse(mouse);
-            canvas.render();
-            window.requestAnimationFrame(RenderLoop);
-        }
-
-        RenderLoop();
-
         // CREATE AND START CODEMIRROR
         this.editorDOM = document.createElement("div");
         this.editorDOM.setAttribute('class', 'ge_editor');
@@ -118,10 +100,17 @@ class GlslEditor {
         this.editor.on("change", () => {
             this.canvas.load(this.editor.getValue());
         });
+
+        // Set up some EVENTS
+        window.addEventListener("hashchange", () => {
+            this.chechHash();
+        }, false);
     }
 
     chechHash() {
         if (window.location.hash !== "" ) {
+            this.options.imgs = [];
+
             let hashes = location.hash.split('&');
             for (let i in hashes) {
                 let ext = hashes[i].substr(hashes[i].lastIndexOf('.') + 1);
