@@ -8,23 +8,6 @@ export function parseQuery (qstr) {
     return query;
 }
 
-export function httpGet (url, callback) {
-    let request = new XMLHttpRequest();
-    let method = 'GET';
-
-    request.onreadystatechange = function () {
-        if (request.readyState === 4 && request.status === 200) {
-            let response = request.responseText;
-
-            // TODO: Actual error handling
-            let error = null;
-            callback(error, response);
-        }
-    };
-    request.open(method, url, true);
-    request.send();
-}
-
 export function debounce(func, wait, immediate) {
     let timeout;
     return function() {

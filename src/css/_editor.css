@@ -1,13 +1,10 @@
 /* EDITOR */
 
-div.ge_editor {
-    height: 100%;
-}
-
 .CodeMirror {
     font-family: var(--editor-font-family);
     font-size: 14px;
     line-height: 1.4;
+    height: 100%;
     z-index: var(--z01-editor);
 }
 

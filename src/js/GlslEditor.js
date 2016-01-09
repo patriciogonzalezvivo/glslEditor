@@ -38,8 +38,26 @@ class GlslEditor {
         }
 
         if (this.options.frag === undefined) {
-            this.chechHash();
-        } 
+            this.options.frag = `
+                #ifdef GL_ES
+                precision mediump float;
+                #endif
+
+                uniform vec2 u_resolution;
+                uniform vec2 u_mouse;
+                uniform float u_time;
+
+                void main(){
+                    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+                    st.x *= u_resolution.x/u_resolution.y;
+
+                    vec3 color = vec3(st.x,st.y,abs(sin(u_time)));
+
+                    gl_FragColor = vec4(color,1.0);
+                }`;
+        }
+
+        this.chechHash();
 
         // CREATE AND START GLSLCANVAS
         this.canvasDOM = document.createElement("canvas");
@@ -61,10 +79,15 @@ class GlslEditor {
         let canvas = new GlslCanvas(this.canvasDOM);
         this.canvas = canvas;
 
+        // Set up some EVENTS
         let mouse = {x: 0, y: 0};
         document.addEventListener('mousemove', (e) => { 
             mouse.x = e.clientX || e.pageX; 
             mouse.y = e.clientY || e.pageY 
+        }, false);
+
+        window.addEventListener("hashchange", () => {
+            this.chechHash();
         }, false);
 
         function RenderLoop() {
@@ -98,27 +121,9 @@ class GlslEditor {
     }
 
     chechHash() {
-        if (window.location.hash === "" ) {
-            this.options.frag = `
-#ifdef GL_ES
-precision mediump float;
-#endif
-
-uniform vec2 u_resolution;
-uniform vec2 u_mouse;
-uniform float u_time;
-
-void main(){
-    vec2 st = gl_FragCoord.xy/u_resolution.xy;
-    st.x *= u_resolution.x/u_resolution.y;
-
-    vec3 color = vec3(st.x,st.y,abs(sin(u_time)));
-
-    gl_FragColor = vec4(color,1.0);
-}`;
-        } else {
+        if (window.location.hash !== "" ) {
             let hashes = location.hash.split('&');
-            for (i in hashes) {
+            for (let i in hashes) {
                 let ext = hashes[i].substr(hashes[i].lastIndexOf('.') + 1);
                 let name = hashes[i];
 
@@ -128,12 +133,23 @@ void main(){
                 }
 
                 if (ext == "frag") {
-                    this.options.frag = fetchHTTP(name);
+                    xhr.get(name, (error, response, body) => {
+                        if (error) {
+                            console.log("Error downloading ", name, error );
+                            return;
+                        }
+                        this.load(body);
+                    });
                 } else if (ext == "png" || ext == "jpg" || ext == "PNG" || ext == "JPG" ){
                     this.options.imgs.push(hashes[i]);
                 }
             }
         }
+    }
+
+    load (frag_string) {
+        this.canvas.load(frag_string);
+        this.editor.setValue(frag_string);
     }
 }
 
