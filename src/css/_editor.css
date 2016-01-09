@@ -1,0 +1,21 @@
+/* EDITOR */
+
+div.ge_editor {
+    height: 100%;
+}
+
+.CodeMirror {
+    font-family: var(--editor-font-family);
+    font-size: 14px;
+    line-height: 1.4;
+    z-index: var(--z01-editor);
+}
+
+.CodeMirror-linenumbers {
+    padding: 0 8px;
+}
+
+/* Slightly more padding around the text content */
+.CodeMirror pre {
+    padding: 0 8px;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>GLSL Editor</title>
+
+		<!-- GLSL Canvas -->
+		<script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/build/GlslCanvas.min.js"></script>
+		<style>
+			body {
+				height: 100%;
+    			margin: 0;
+	  			background: #272822;
+			}
+
+			#glsl_editor {
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="glsl_editor"></div>
+	</body>
+
+	<link type="text/css" rel="stylesheet" href="build/css/main.css">
+    <script type="text/javascript" src="build/js/glslEditor.js"></script>
+    <script type="text/javascript">
+    	window.glslEditor = new GlslEditor('#glsl_editor', { });
+    	window.addEventListener("hashchange", function () {
+            window.glslEditor.chechHash()
+        }, false);
+    </script>
+</html>

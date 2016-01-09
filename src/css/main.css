@@ -1,0 +1,40 @@
+@charset 'utf-8';
+
+/* VARIABLES */
+
+:root {
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    /* -- font-family: 'Montserrat'; */
+    --editor-font-family: 'Source Code Pro', monospace;
+    --ui-editor-background-color: #1f2225;
+    --ui-base-color: #26282c;
+    --ui-component-color: #2e3033;
+    --ui-element-color: #3a3c40;
+    --ui-active-color: #36383c;
+    --ui-highlight-color: yellow;
+    --ui-highlight-color-2: rgb(221, 221, 0);
+    --ui-component-text-color: #eefafa;
+    --ui-link-text-color: #e1eeee;
+    --ui-subtext-color: #c0c6c6;
+    --ui-border-color: #999ca0;
+    --modal-shadow: 0 0 0 5px rgba(0,0,0,0.20), 0 4px 8px 0 rgba(0,0,0,0.25);
+
+    /* Z-INDEX SCALE */
+    --z01-editor: 100;
+    --z02-canvas: 200;
+}
+
+/* Native Codemirror */
+@import 'codemirror/lib/codemirror.css';
+@import 'codemirror/addon/dialog/dialog.css';
+@import 'codemirror/addon/fold/foldgutter.css';
+@import 'codemirror/addon/hint/show-hint.css';
+@import 'codemirror/theme/monokai.css';
+
+/* Custom Codemirror */
+@import '_editor';
+
+/* GlslCanvas */
+@import '_canvas';
+
+
