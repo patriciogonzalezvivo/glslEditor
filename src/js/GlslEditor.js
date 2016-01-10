@@ -24,19 +24,7 @@ import 'codemirror/keymap/sublime';
 import xhr from 'xhr';
 import { subscribeMixin } from 'app/common';
 
-class GlslEditor {
-    constructor (selector, options) {
-        subscribeMixin(this);
-
-        this.container = document.querySelector(selector);
-        this.options = options;
-
-        if (this.options.imgs === undefined) {
-            this.options.imgs = [];
-        }
-
-        if (this.options.frag === undefined) {
-            this.options.frag = `// Author:
+var EMPTY_FRAG_SHADER = `// Author:
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -53,9 +41,41 @@ void main() {
 
     gl_FragColor = vec4(color,1.0);
 }`;
+
+class GlslEditor {
+    constructor (selector, options) {
+        subscribeMixin(this);
+
+        this.container = document.querySelector(selector);
+
+        if (options !== undefined) {
+            this.options = options;
+        }
+        else {
+            this.options = {};
+        }
+
+        if (this.options.imgs === undefined) {
+            this.options.imgs = [];
+        }
+
+        if (this.options.frag === undefined) {
+            this.options.frag = EMPTY_FRAG_SHADER;
         }
 
         this.chechHash();
+
+        // CREATE MENU
+        // this.menuDOM = document.createElement('ul');
+        // this.menuDOM.setAttribute('class', 'ge_menu');
+        // let newDOM = document.createElement('li');
+        // newDOM.setAttribute('class', 'ge_menu');
+        // this.menuDOM.innerHTML = 'New |';
+        // newDOM.addEventListener("click", function() {
+        //     console.log("CLICK");
+        // }, false);
+        // this.menuDOM.appendChild(newDOM);
+        // this.container.appendChild(this.menuDOM);
 
         // CREATE AND START GLSLCANVAS
         this.canvasDOM = document.createElement('canvas');
@@ -134,9 +154,20 @@ void main() {
         }
     }
 
+    new () {
+        console.log("");
+        this.load(EMPTY_FRAG_SHADER);
+    }
+
     load (fragString) {
-        this.canvas.load(fragString);
-        this.editor.setValue(fragString);
+        this.options.frag = fragString;
+
+        if (this.canvas) {
+            this.canvas.load(fragString);
+        }
+        if (this.editor) {
+            this.editor.setValue(fragString);
+        }
     }
 }
 

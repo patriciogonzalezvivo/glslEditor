@@ -31,10 +31,8 @@
 @import 'codemirror/addon/hint/show-hint.css';
 @import 'codemirror/theme/monokai.css';
 
-/* Custom Codemirror */
+@import '_menu';
 @import '_editor';
-
-/* GlslCanvas */
 @import '_canvas';
 
 

@@ -1,0 +1,14 @@
+/* MENU */
+
+.ge_menu {
+    cursor: pointer; 
+    cursor: hand;
+    color: white;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+li.ge_menu {
+    list-style-type: none;
+    display: inline;
+    text-align: center;
+}
