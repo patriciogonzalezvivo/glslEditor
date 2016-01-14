@@ -1,11 +1,12 @@
 
-import Menu from 'app/menu';
-import Shader from 'app/shader';
-import { initEditor } from 'app/editor';
+import Menu from 'app/core/menu';
+import Shader from 'app/core/shader';
+import { initEditor } from 'app/core/editor';
 
 // Import Utils
 import xhr from 'xhr';
-import { subscribeMixin } from 'app/common';
+import { subscribeMixin } from 'app/core/common';
+import { saveAs } from 'app/vendor/FileSaver.min.js';
 
 const EMPTY_FRAG_SHADER = `// Author:
 #ifdef GL_ES
@@ -110,13 +111,14 @@ class GlslEditor {
     }
 
     save () {
-        let url = 'http://thebookofshaders.com:8080/save';
+        let content = this.editor.getValue();
+        let name = "shader";
+
+        // STORE A COPY on SERVER
+        let url = 'http://thebookofshaders.com:8080/';
         let data = new FormData();
+        data.append('code', content);
 
-        // code
-        data.append('code', this.editor.getValue());
-
-        // image
         let dataURL = this.sandbox.canvasDOM.toDataURL("image/png");
         let blobBin = atob(dataURL.split(',')[1]);
         let array = [];
@@ -124,15 +126,20 @@ class GlslEditor {
             array.push(blobBin.charCodeAt(i));
         }
         let file = new Blob([new Uint8Array(array)], {type: 'image/png'});
-
         data.append("image", file);
 
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', url, true);
+        xhr.open('POST', url+'save', true);
         xhr.onload = function () {
-            window.location.href = ".#"+this.responseText;
+            // window.location.href = ".#"+this.responseText;
+            console.log("Save on " + url + this.responseText);
         };
         xhr.send(data);
+
+        // Download code
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, name+'.frag');
+        editor.doc.markClean();
     }
 }
 

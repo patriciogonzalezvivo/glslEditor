@@ -4,22 +4,39 @@ import GlslEditor from 'app/GlslEditor';
 
 export default class Menu {
     constructor (container, main) {
-    	this.menus = {};
+        this.menus = {};
 
-    	// CREATE MENU Container
+        // CREATE MENU Container
         this.menuDOM = document.createElement('ul');
         this.menuDOM.setAttribute('class', 'ge_menu');
 
-        // Create Menu elements
+        // NEW
         this.menus.new = new MenuItem(this.menuDOM, "New", (event) => {
             console.log("NEW");
             main.new();
         });
-        this.menus.new = new MenuItem(this.menuDOM, "Open", (event) => {
-            console.log("OPEN");
+
+        // OPEN
+        this.fileInput = document.createElement('input');
+        this.fileInput.setAttribute('type', 'file');
+        this.fileInput.setAttribute('accept', 'text/x-yaml');
+        this.fileInput.style.display = 'none';
+        this.fileInput.addEventListener('change', (event) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                main.load({ contents: e.target.result });
+            };
+            reader.readAsText(event.target.files[0]);
         });
-        this.menus.new = new MenuItem(this.menuDOM, "Save", (event) => {
+        this.menus.open = new MenuItem(this.menuDOM, "Open", (event) => {
+            console.log("OPEN");
+            this.fileInput.click();
+        });
+        
+        // SAVE
+        this.menus.save = new MenuItem(this.menuDOM, "Save", (event) => {
             console.log("SAVE");
+            main.save();
         });
         
         container.appendChild(this.menuDOM);
@@ -28,8 +45,8 @@ export default class Menu {
 
 export class MenuItem {
     constructor (container, name, onClick = noop) {
-    	this.el = document.createElement('li');
-    	this.el.setAttribute('id', 'ge_menu_'+name);
+        this.el = document.createElement('li');
+        this.el.setAttribute('id', 'ge_menu_'+name);
         this.el.setAttribute('class', 'ge_menu');
         this.el.innerHTML = name;
 
