@@ -108,6 +108,32 @@ class GlslEditor {
             this.editor.setValue(fragString);
         }
     }
+
+    save () {
+        let url = 'http://thebookofshaders.com:8080/save';
+        let data = new FormData();
+
+        // code
+        data.append('code', this.editor.getValue());
+
+        // image
+        let dataURL = this.sandbox.canvasDOM.toDataURL("image/png");
+        let blobBin = atob(dataURL.split(',')[1]);
+        let array = [];
+        for (let i = 0; i < blobBin.length; i++) {
+            array.push(blobBin.charCodeAt(i));
+        }
+        let file = new Blob([new Uint8Array(array)], {type: 'image/png'});
+
+        data.append("image", file);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.onload = function () {
+            window.location.href = ".#"+this.responseText;
+        };
+        xhr.send(data);
+    }
 }
 
 window.GlslEditor = GlslEditor;
