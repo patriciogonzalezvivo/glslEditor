@@ -11,9 +11,16 @@ export default class Menu {
         this.menuDOM.setAttribute('class', 'ge_menu');
 
         // Create Menu elements
-        this.menus.new = new MenuItem(this.menuDOM, "New", _onClickNew);
-        this.menus.new = new MenuItem(this.menuDOM, "Open", _onClickOpen);
-        this.menus.new = new MenuItem(this.menuDOM, "Save", _onClickSave);
+        this.menus.new = new MenuItem(this.menuDOM, "New", (event) => {
+            console.log("NEW");
+            main.new();
+        });
+        this.menus.new = new MenuItem(this.menuDOM, "Open", (event) => {
+            console.log("OPEN");
+        });
+        this.menus.new = new MenuItem(this.menuDOM, "Save", (event) => {
+            console.log("SAVE");
+        });
         
         container.appendChild(this.menuDOM);
     }
@@ -34,17 +41,4 @@ export class MenuItem {
 
         container.appendChild(this.el);
     }
-}
-
-function _onClickNew (event) {
-	console.log("NEW");
-    GlslEditor.new();
-}
-
-function _onClickOpen (event) {
-    console.log("OPEN");
-}
-
-function _onClickSave (event) {
-	console.log("SAVE");
 }
