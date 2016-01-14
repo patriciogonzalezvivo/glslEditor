@@ -8,7 +8,8 @@ export default class Shader {
         this.canvasDOM.setAttribute('width', '384');
         this.canvasDOM.setAttribute('height', '384');
         this.canvasDOM.setAttribute('animate', 'true');
-        // this.canvasDOM.setAttribute('data-fragment', options.frag);
+        this.canvasDOM.setAttribute('data-fragment', options.frag);
+
         if (options.imgs.length > 0) {
             let textureList = '';
             for (let i in options.imgs) {
