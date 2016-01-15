@@ -5,8 +5,8 @@ export default class Shader {
         // CREATE AND START GLSLCANVAS
         this.canvasDOM = document.createElement('canvas');
         this.canvasDOM.setAttribute('class', 'ge_canvas');
-        this.canvasDOM.setAttribute('width', '384');
-        this.canvasDOM.setAttribute('height', '384');
+        this.canvasDOM.setAttribute('width', options.viewSize || '384');
+        this.canvasDOM.setAttribute('height', options.viewSize || '384');
         this.canvasDOM.setAttribute('animate', 'true');
         this.canvasDOM.setAttribute('data-fragment', options.frag);
 

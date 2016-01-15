@@ -35,7 +35,7 @@ export function initEditor (container, options) {
         autoCloseBrackets: true,
         extraKeys: { 'Ctrl-Space': 'autocomplete' },
         showCursorWhenSelecting: true,
-        theme: 'monokai',
+        theme: options.theme,
         indentUnit: 4
     });
 

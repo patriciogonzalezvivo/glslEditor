@@ -39,6 +39,10 @@ class GlslEditor {
             this.options = {};
         }
 
+        if (this.options.theme === undefined) {
+            this.options.theme = 'monokai';
+        }
+
         if (this.options.imgs === undefined) {
             this.options.imgs = [];
         }
@@ -50,7 +54,10 @@ class GlslEditor {
         this.chechHash();
 
         // INIT bin
-        this.menu = new Menu(this.container, this);
+        if (options.menu) {
+            this.menu = new Menu(this.container, this);
+        }
+        
         this.sandbox = new Shader(this.container, this.options);
         this.editor = initEditor(this.container, this.options);
 
@@ -110,8 +117,34 @@ class GlslEditor {
         }
     }
 
-    save () {
-        let content = this.editor.getValue();
+    getContent() {
+        return this.editor.getValue();
+    }
+
+    getAuthor() {
+        let content = this.getContent();
+        let result = content.match( /\/\/\s*[A|a]uthor:\s*(\w+)/i );
+        if (result) {
+            return result[1];
+        }
+        else {
+            return '';
+        }
+    }
+
+    getTitle() {
+        let content = this.getContent();
+        let result = content.match( /\/\/\s*[T|t]itle:\s*(\w+)/i );
+        if (result) {
+            return result[1];
+        }
+        else {
+            return '';
+        }
+    }
+
+    saveOnServerAs(callback) {
+        let content = this.getContent();
         let name = "shader";
 
         // STORE A COPY on SERVER
@@ -130,16 +163,27 @@ class GlslEditor {
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', url+'save', true);
-        xhr.onload = function () {
-            // window.location.href = ".#"+this.responseText;
-            console.log("Save on " + url + this.responseText);
+        xhr.onload = () => {
+            if (typeof callback === 'function') {
+                callback({  content: content,
+                            name: name,
+                            url: url, 
+                            path: this.responseText
+                        });
+            }
+            console.log('Save on ' + url + this.responseText);
         };
         xhr.send(data);
+    }
+
+    downloadContent() {
+        let content = this.getContent();
+        let name = "shader";
 
         // Download code
         const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
         saveAs(blob, name+'.frag');
-        editor.doc.markClean();
+        this.editor.doc.markClean();
     }
 }
 

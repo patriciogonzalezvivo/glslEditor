@@ -29,8 +29,16 @@
 @import 'codemirror/addon/dialog/dialog.css';
 @import 'codemirror/addon/fold/foldgutter.css';
 @import 'codemirror/addon/hint/show-hint.css';
-@import 'codemirror/theme/monokai.css';
 
+/* Themes */
+@import 'codemirror/theme/elegant.css';
+@import 'codemirror/theme/material.css';
+@import 'codemirror/theme/monokai.css';
+@import 'codemirror/theme/neat.css';
+@import 'codemirror/theme/neo.css';
+@import 'codemirror/theme/ttcn.css';
+
+/* Elements */
 @import '_menu';
 @import '_editor';
 @import '_canvas';

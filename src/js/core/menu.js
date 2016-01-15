@@ -34,9 +34,16 @@ export default class Menu {
         });
         
         // SAVE
-        this.menus.save = new MenuItem(this.menuDOM, "Save", (event) => {
-            console.log("SAVE");
-            main.save();
+        this.menus.exp = new MenuItem(this.menuDOM, "Export", (event) => {
+            console.log("EXPORT");
+            main.downloadContent();
+        });
+
+        this.menus.save = new MenuItem(this.menuDOM, "Share", (event) => {
+            console.log("SHARE");
+            main.saveOnServerAs((event) => {
+                console.log(event);
+            });
         });
         
         container.appendChild(this.menuDOM);
