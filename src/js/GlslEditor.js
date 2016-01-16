@@ -8,7 +8,9 @@ import xhr from 'xhr';
 import { subscribeMixin } from 'app/core/common';
 import { saveAs } from 'app/vendor/FileSaver.min.js';
 
-const EMPTY_FRAG_SHADER = `// Author:
+const EMPTY_FRAG_SHADER = `// Author: 
+// Title: 
+
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -51,11 +53,17 @@ class GlslEditor {
             this.options.frag = EMPTY_FRAG_SHADER;
         }
 
-        this.chechHash();
-
         // INIT bin
         if (options.menu) {
             this.menu = new Menu(this.container, this);
+        }
+
+        // Set up some EVENTS
+        if (options.loadFromHatch) {
+            this.chechHash();
+            window.addEventListener('hashchange', () => {
+                this.chechHash();
+            }, false);
         }
         
         this.sandbox = new Shader(this.container, this.options);
@@ -66,10 +74,9 @@ class GlslEditor {
             this.sandbox.canvas.load(this.editor.getValue());
         });
 
-        // Set up some EVENTS
-        window.addEventListener('hashchange', () => {
-            this.chechHash();
-        }, false);
+        this.editor.on('viewportChange', () => {
+            console.log(new Date().getTime());
+        });
     }
 
     chechHash() {
@@ -117,6 +124,15 @@ class GlslEditor {
         }
     }
 
+    open (fragFile) {
+        const reader = new FileReader();
+        let ge = this;
+        reader.onload = (e) => {
+            ge.load(e.target.result);
+        };
+        reader.readAsText(fragFile);
+    }
+
     getContent() {
         return this.editor.getValue();
     }
@@ -145,7 +161,12 @@ class GlslEditor {
 
     saveOnServerAs(callback) {
         let content = this.getContent();
-        let name = "shader";
+        let name = this.getAuthor();
+        let title = this.getTitle();
+
+        if (name !== '' && title !== '') {
+            name += '-' + title; 
+        }
 
         // STORE A COPY on SERVER
         let url = 'http://thebookofshaders.com:8080/';
@@ -178,7 +199,11 @@ class GlslEditor {
 
     downloadContent() {
         let content = this.getContent();
-        let name = "shader";
+        let name = this.getTitle();
+        if (name !== '' ) {
+            name += '-'; 
+        }
+        name += new Date().getTime();
 
         // Download code
         const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });

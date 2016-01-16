@@ -1,9 +1,11 @@
 /* CANVAS */
 
 canvas.ge_canvas {
-    position: fixed;
-    right: 10px;
-    top: 10px;
+    float: right;
+    position: relative;
+    /*position: absolute;*/
+    /*right: 0px;*/
+    /*top: 0px;*/
     /*background-color: #fff;*/
     /*border-radius: 15px;*/
     overflow: hidden;

@@ -36,6 +36,7 @@ export function initEditor (container, options) {
         extraKeys: { 'Ctrl-Space': 'autocomplete' },
         showCursorWhenSelecting: true,
         theme: options.theme,
+        dragDrop: false,
         indentUnit: 4
     });
 

@@ -4,6 +4,10 @@
     cursor: pointer; 
     cursor: hand;
     color: white;
+    background-color: black;
+    margin: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     font-family: Verdana, Geneva, sans-serif;
 }
 

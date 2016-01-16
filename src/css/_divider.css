@@ -1,0 +1,60 @@
+/* DRAGGABLE LINE */
+
+.ge-divider {
+    position: absolute;
+    left: 50%; /* Starting position; this is overridden by scripts */
+    top: 0;
+    width: 8px;
+    height: 100%;
+    vertical-align: top;
+    opacity: 1;
+    background-color: var(--ui-base-color);
+    z-index: var(--z01-divider);
+    cursor: col-resize;
+    user-select: none;
+}
+
+.ge-divider:hover {
+    background-color: var(--ui-active-color);
+}
+
+.ge-divider.ge-divider-is-dragging {
+    background-color: var(--ui-active-color);
+
+    .ge-divider-affordance,
+    .ge-divider-affordance::after,
+    .ge-divider-affordance::before {
+        background-color: var(--ui-highlight-color);
+    }
+}
+
+.ge-divider-affordance,
+.ge-divider-affordance::after,
+.ge-divider-affordance::before {
+    display: inline-block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    top: 50%;
+    background-color: var(--ui-component-text-color);
+}
+
+.ge-divider-affordance {
+    left: 2px;
+}
+
+.ge-divider-affordance::after,
+.ge-divider-affordance::before {
+    content: '';
+    position: absolute;
+    top: 0; /* Reset position */
+}
+
+.ge-divider-affordance::after {
+    transform: translateY(10px);
+}
+
+.ge-divider-affordance::before {
+    transform: translateY(-10px);
+}
