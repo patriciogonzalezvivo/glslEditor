@@ -34,12 +34,12 @@ export default class Menu {
             main.download();
         });
 
-        this.menus.save = new MenuItem(this.menuDOM, "Share link", (event) => {
-            console.log("SHARE");
-            saveOnServer(this.main,(event) => {
-                console.log(event);
-            })
-        });
+        // this.menus.save = new MenuItem(this.menuDOM, "Share link", (event) => {
+        //     console.log("SHARE");
+        //     saveOnServer(this.main,(event) => {
+        //         console.log(event);
+        //     })
+        // });
         
         main.container.appendChild(this.menuDOM);
     }
