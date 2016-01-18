@@ -20,7 +20,10 @@ import 'codemirror/mode/clike/clike.js';
 // Keymap
 import 'codemirror/keymap/sublime';
 
-export function initEditor (container, options) {
+export function initEditor (main) {
+    let container = main.container;
+    let options = main.options;
+
 	// CREATE AND START CODEMIRROR
     let editorDOM = document.createElement('div');
     editorDOM.setAttribute('class', 'ge_editor');

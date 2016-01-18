@@ -3,12 +3,13 @@
 .ge_menu {
     cursor: pointer; 
     cursor: hand;
-    color: white;
-    background-color: black;
+    color: var(--ui-component-text-color);
+    background-color: var(--ui-base-color);
     margin: 0px;
     padding-top: 5px;
     padding-bottom: 5px;
     font-family: Verdana, Geneva, sans-serif;
+    z-index: var(--z03-menu);
 }
 
 li.ge_menu {

@@ -2,6 +2,7 @@
 
 .ge-divider {
     position: absolute;
+    
     left: 50%; /* Starting position; this is overridden by scripts */
     top: 0;
     width: 8px;
@@ -9,7 +10,7 @@
     vertical-align: top;
     opacity: 1;
     background-color: var(--ui-base-color);
-    z-index: var(--z01-divider);
+    z-index: var(--z04-divider);
     cursor: col-resize;
     user-select: none;
 }

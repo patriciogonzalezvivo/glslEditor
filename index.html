@@ -27,15 +27,14 @@
     <script type="text/javascript" src="build/js/glslEditor.js"></script>
     <script type="text/javascript">
     	window.glslEditor = new GlslEditor('#glsl_editor', { 
-    		viewSize: 500, 
-    		theme: 'monokai',
+    		canvas_size: 500,
+    		// canvas_follow: true,
             // divider: true,
-            loadFromHatch: true,
+    		theme: 'monokai',
+    		multipleBuffers: true,
+            watchHash: true,
+            fileDrops: true,
     		menu: true
     	});
-
-    	window.addEventListener("hashchange", function () {
-            window.glslEditor.chechHash()
-        }, false);
     </script>
 </html>

@@ -1,11 +1,18 @@
 
-import Menu from 'app/core/menu';
-import Shader from 'app/core/shader';
-import { initEditor } from 'app/core/editor';
+import Shader from 'app/core/Shader';
+import { initEditor } from 'app/core/Editor';
+
+import Menu from 'app/ui/Menu';
+import Divider from 'app/ui/Divider';
+
+import FileDrop from 'app/io/FileDrop';
+import HashWatch from 'app/io/HashWatch';
+import BufferManager from 'app/io/BufferManager';
+
 
 // Import Utils
 import xhr from 'xhr';
-import { subscribeMixin } from 'app/core/common';
+import { subscribeMixin } from 'app/tools/mixin';
 import { saveAs } from 'app/vendor/FileSaver.min.js';
 
 const EMPTY_FRAG_SHADER = `// Author: 
@@ -33,12 +40,10 @@ class GlslEditor {
         subscribeMixin(this);
 
         this.container = document.querySelector(selector);
+        this.options = {};
 
-        if (options !== undefined) {
+        if (options) {
             this.options = options;
-        }
-        else {
-            this.options = {};
         }
 
         if (this.options.theme === undefined) {
@@ -53,25 +58,46 @@ class GlslEditor {
             this.options.frag = EMPTY_FRAG_SHADER;
         }
 
-        // INIT bin
-        if (options.menu) {
-            this.menu = new Menu(this.container, this);
+        // Load UI
+        if (this.options.menu) {
+            this.menu = new Menu(this);
         }
 
-        // Set up some EVENTS
-        if (options.loadFromHatch) {
-            this.chechHash();
-            window.addEventListener('hashchange', () => {
-                this.chechHash();
-            }, false);
+        // Listen to hash changes
+        if (this.options.watchHash) {
+            new HashWatch(this);
+        }
+
+        // Listen to file drops
+        if (this.options.fileDrops) {
+            new FileDrop(this);
+        }
+
+        if (this.options.multipleBuffers) {
+            this.bufferManager = new BufferManager(this);
         }
         
-        this.sandbox = new Shader(this.container, this.options);
-        this.editor = initEditor(this.container, this.options);
+        // CORE elements
+        this.sandbox = new Shader(this);
+        this.editor = initEditor(this);
+        
+        if (this.options.divider) {
+            this.divider = new Divider(this);
+        }
 
         // EVENTS
         this.editor.on('change', () => {
             this.sandbox.canvas.load(this.editor.getValue());
+        });
+
+        this.editor.on("cursorActivity", (cm) => {
+            if (this.options.canvas_follow) {
+                var height = cm.heightAtLine(cm.getCursor().line+1,'local') - this.sandbox.canvasDOM.height;
+                if (height < 0) {
+                    height = 0.0;   
+                }
+                this.sandbox.canvasDOM.style.top = (height).toString()+"px";
+            }
         });
 
         this.editor.on('viewportChange', () => {
@@ -79,58 +105,51 @@ class GlslEditor {
         });
     }
 
-    chechHash() {
-        if (window.location.hash !== '') {
-            this.options.imgs = [];
-
-            let hashes = location.hash.split('&');
-            for (let i in hashes) {
-                let ext = hashes[i].substr(hashes[i].lastIndexOf('.') + 1);
-                let name = hashes[i];
-
-                // Extract hash if is present
-                if (name.search('#') === 0) {
-                    name = name.substr(1);
-                }
-
-                if (ext === 'frag') {
-                    xhr.get(name, (error, response, body) => {
-                        if (error) {
-                            console.log('Error downloading ', name, error);
-                            return;
-                        }
-                        this.load(body);
-                    });
-                }
-                else if (ext === 'png' || ext === 'jpg' || ext === 'PNG' || ext === 'JPG') {
-                    this.options.imgs.push(hashes[i]);
-                }
-            }
-        }
-    }
-
     new () {
         this.load(EMPTY_FRAG_SHADER);
     }
 
-    load (fragString) {
-        this.options.frag = fragString;
-
+    setContent (shader, newBuffer) {
+        // If the string is CODE
+        this.options.frag = shader;
         if (this.sandbox && this.sandbox.canvas) {
-            this.sandbox.canvas.load(fragString);
+            this.sandbox.canvas.load(shader);
         }
+
         if (this.editor) {
-            this.editor.setValue(fragString);
+            if (newBuffer && this.bufferManager !== undefined) {
+                let name = (new Date().getTime()).toString();
+                this.bufferManager.new(name, shader);
+                this.bufferManager.select(name);
+            } else {
+                this.editor.setValue(shader);
+            }
         }
     }
 
-    open (fragFile) {
-        const reader = new FileReader();
-        let ge = this;
-        reader.onload = (e) => {
-            ge.load(e.target.result);
-        };
-        reader.readAsText(fragFile);
+    open (shader) {
+        if (typeof shader === 'object') {
+            const reader = new FileReader();
+            let ge = this;
+            reader.onload = (e) => {
+                console.log(e);
+                ge.setContent(e.target.result, true);
+            };
+            reader.readAsText(shader);
+        } else if (typeof shader === 'string') {
+            if (/\.frag$/.test(shader) || /\.fs$/.test(shader)) {
+                // If the string is an URL
+                xhr.get(shader, (error, response, body) => {
+                    if (error) {
+                        console.log('Error downloading ', shader, error);
+                        return;
+                    }
+                    this.setContent(body);
+                });
+            } else {
+               this.setContent(shader);
+            }
+        }
     }
 
     getContent() {
@@ -159,45 +178,7 @@ class GlslEditor {
         }
     }
 
-    saveOnServerAs(callback) {
-        let content = this.getContent();
-        let name = this.getAuthor();
-        let title = this.getTitle();
-
-        if (name !== '' && title !== '') {
-            name += '-' + title; 
-        }
-
-        // STORE A COPY on SERVER
-        let url = 'http://thebookofshaders.com:8080/';
-        let data = new FormData();
-        data.append('code', content);
-
-        let dataURL = this.sandbox.canvasDOM.toDataURL("image/png");
-        let blobBin = atob(dataURL.split(',')[1]);
-        let array = [];
-        for (let i = 0; i < blobBin.length; i++) {
-            array.push(blobBin.charCodeAt(i));
-        }
-        let file = new Blob([new Uint8Array(array)], {type: 'image/png'});
-        data.append("image", file);
-
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', url+'save', true);
-        xhr.onload = () => {
-            if (typeof callback === 'function') {
-                callback({  content: content,
-                            name: name,
-                            url: url, 
-                            path: this.responseText
-                        });
-            }
-            console.log('Save on ' + url + this.responseText);
-        };
-        xhr.send(data);
-    }
-
-    downloadContent() {
+    download () {
         let content = this.getContent();
         let name = this.getTitle();
         if (name !== '' ) {
