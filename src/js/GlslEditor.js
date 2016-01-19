@@ -39,7 +39,17 @@ class GlslEditor {
     constructor (selector, options) {
         subscribeMixin(this);
 
-        this.container = document.querySelector(selector);
+        if (typeof selector === 'object' && selector.nodeType && selector.nodeType === 1) {
+            this.container = selector;
+        }
+        else if (typeof selector === 'string') {
+            this.container = document.querySelector(selector);
+        }
+        else {
+            console.log('Error, type ' + typeof selector + ' of '+ selector + ' is unknown');
+            return;
+        }
+        
         this.options = {};
 
         if (options) {
