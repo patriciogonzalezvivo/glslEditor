@@ -9,46 +9,47 @@ export default class BufferManager {
 		this.main = main;
 		this.buffers = {};
 		this.tabs = {};
-		this.current = 'Default';
-
-		this.el = document.createElement('ul');
-		this.el.className = 'ge_panel';
+		this.current = 'untitled.frag';
 	}
 
-	new (name, content) {
+	open (name, content) {
 		if (this.panel === undefined) {
+			// Create DOM element
+			this.el = document.createElement('ul');
+			this.el.className = 'ge_panel';
+			// Create Panel CM element
 			this.panel = this.main.editor.addPanel(this.el, {position: 'top'});
-			this.new('Default', this.main.getContent());
+			this.open(this.current, this.main.getContent());
 		}
 		this.buffers[name] = CodeMirror.Doc(content, 'x-shader/x-fragment');
 
+		// Create a new tab
 		let tab = document.createElement('li');
 		tab.setAttribute('class', 'ge_panel_tab');
 		tab.textContent = name;
 		CodeMirror.on(tab, 'click', () => {
-			console.log(name);
 			this.select(name);
 		});
 
-		if (name !== 'Default'){
+		if (this.getLength() !== 1) {
 			let close = tab.appendChild(document.createElement('a'));
-			close.textContent = 'x';//'✖';
+			close.textContent = 'x';
 			close.setAttribute('class', 'ge_panel_tab_close');
 			CodeMirror.on(close, 'click', () => {
-				if (name === this.getCurrent()) {
-					this.select('Default');
-				}
-		    	this.el.removeChild(tab);
-		    	this.tabs[name] = undefined;
-		    	this.buffers[name] = undefined;
+				this.close(name);
 			});
 		}
+
 		this.el.appendChild(tab);
 		this.tabs[name] = tab;
 	}
 
 	select (name) {
 		let buf = this.buffers[name];
+
+		if (buf === undefined) {
+			return;
+		}
 
 		if (buf.getEditor()) {
 			buf = buf.linkedDoc({sharedHist: true});
@@ -77,12 +78,23 @@ export default class BufferManager {
 		this.current = name;
 	}
 
-	delete (name) {
+	close (name) {
+		if (name === this.getCurrent()) {
+			this.select('untitled.frag');
+		}
+    	this.el.removeChild(this.tabs[name]);
+    	delete this.tabs[name];
+    	delete this.buffers[name];
 
+    	if (this.getLength() === 1) {
+    		this.panel.clear();
+    		this.panel = undefined;
+    		this.el = undefined;
+    	}
 	}
 
 	getCurrent () {
-
+		return this.current;
 	}
 
 	getLength () {

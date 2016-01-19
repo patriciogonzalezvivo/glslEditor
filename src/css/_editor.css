@@ -4,7 +4,8 @@
     font-family: var(--editor-font-family);
     font-size: 14px;
     line-height: 1.4;
-    height: 100%;
+    /*height: 100%;*/
+    height: auto;
     z-index: var(--z01-editor);
 }
 

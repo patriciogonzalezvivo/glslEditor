@@ -111,7 +111,7 @@ class GlslEditor {
         });
 
         this.editor.on('viewportChange', () => {
-            console.log(new Date().getTime());
+            // console.log(new Date().getTime());
         });
     }
 
@@ -128,7 +128,7 @@ class GlslEditor {
 
         if (this.editor) {
             if (tabName !== undefined && this.bufferManager !== undefined) {
-                this.bufferManager.new(tabName, shader);
+                this.bufferManager.open(tabName, shader);
                 this.bufferManager.select(tabName);
             } else {
                 this.editor.setValue(shader);
