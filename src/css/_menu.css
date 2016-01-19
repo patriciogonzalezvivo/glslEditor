@@ -1,18 +1,19 @@
 /* MENU */
 
 .ge_menu {
-    cursor: pointer; 
-    cursor: hand;
+    cursor: pointer;
     color: var(--ui-component-text-color);
     background-color: var(--ui-base-color);
     margin: 0px;
     padding-top: 5px;
     padding-bottom: 5px;
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Helvetica, Geneva, sans-serif;
+    font-weight: 500;
     z-index: var(--z03-menu);
 }
 
 li.ge_menu {
+    cursor: pointer;
     list-style-type: none;
     display: inline;
     text-align: center;

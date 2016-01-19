@@ -106,10 +106,10 @@ class GlslEditor {
     }
 
     new () {
-        this.load(EMPTY_FRAG_SHADER);
+        this.setContent(EMPTY_FRAG_SHADER,(new Date().getTime()).toString()+'.frag');
     }
 
-    setContent (shader, newBuffer) {
+    setContent (shader, tabName) {
         // If the string is CODE
         this.options.frag = shader;
         if (this.sandbox && this.sandbox.canvas) {
@@ -117,10 +117,9 @@ class GlslEditor {
         }
 
         if (this.editor) {
-            if (newBuffer && this.bufferManager !== undefined) {
-                let name = (new Date().getTime()).toString();
-                this.bufferManager.new(name, shader);
-                this.bufferManager.select(name);
+            if (tabName !== undefined && this.bufferManager !== undefined) {
+                this.bufferManager.new(tabName, shader);
+                this.bufferManager.select(tabName);
             } else {
                 this.editor.setValue(shader);
             }
@@ -132,8 +131,7 @@ class GlslEditor {
             const reader = new FileReader();
             let ge = this;
             reader.onload = (e) => {
-                console.log(e);
-                ge.setContent(e.target.result, true);
+                ge.setContent(e.target.result, shader.name);
             };
             reader.readAsText(shader);
         } else if (typeof shader === 'string') {
@@ -144,6 +142,7 @@ class GlslEditor {
                         console.log('Error downloading ', shader, error);
                         return;
                     }
+                    console.log(error, response, body);
                     this.setContent(body);
                 });
             } else {

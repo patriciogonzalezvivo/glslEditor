@@ -23,7 +23,7 @@ export default class BufferManager {
 		this.buffers[name] = CodeMirror.Doc(content, 'x-shader/x-fragment');
 
 		let tab = document.createElement('li');
-		tab.setAttribute('class', 'ge_panel');
+		tab.setAttribute('class', 'ge_panel_tab');
 		tab.textContent = name;
 		CodeMirror.on(tab, 'click', () => {
 			console.log(name);
@@ -32,8 +32,8 @@ export default class BufferManager {
 
 		if (name !== 'Default'){
 			let close = tab.appendChild(document.createElement('a'));
-			close.textContent = '✖';
-			close.setAttribute('class', 'ge_panel_close');
+			close.textContent = 'x';//'✖';
+			close.setAttribute('class', 'ge_panel_tab_close');
 			CodeMirror.on(close, 'click', () => {
 				if (name === this.getCurrent()) {
 					this.select('Default');
@@ -70,10 +70,10 @@ export default class BufferManager {
 		this.main.setContent(this.main.getContent());
 
 		if (this.tabs[this.current]) {
-			this.tabs[this.current].setAttribute('class', 'ge_panel');
+			this.tabs[this.current].setAttribute('class', 'ge_panel_tab');
 		}
 		
-		this.tabs[name].setAttribute('class', 'ge_panel_active');
+		this.tabs[name].setAttribute('class', 'ge_panel_tab_active');
 		this.current = name;
 	}
 

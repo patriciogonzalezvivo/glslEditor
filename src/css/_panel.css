@@ -1,39 +1,44 @@
 .ge_panel {
-    cursor: pointer; 
-    cursor: hand;
+    cursor: pointer;
     color: var(--ui-component-text-color);
     background-color: var(--ui-base-color);
-    margin: 0px;
-    font-family: Verdana, Geneva, sans-serif;
-    font-style: normal;
+    font-family: Helvetica, Geneva, sans-serif;
     font-weight: 100;
+    margin: 0px;
+    padding-top: 5px;
     z-index: var(--z03-menu);
 }
 
-li.ge_panel {
+li.ge_panel_tab {
+    cursor: pointer;
     list-style-type: none;
     display: inline;
     text-align: center;
-    margin-right: 20px;
-}
-
-li.ge_panel_active {
-    background-color: var(--ui-active-color);
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    list-style-type: none;
-    display: inline;
-    text-align: center;
-    margin-right: 20px;
+    padding-top: 5px;
     padding-left: 10px;
     padding-right: 10px;
 }
 
-li.ge_panel:hover {
+li.ge_panel_tab_active {
+    cursor: pointer;
+    background-color: var(--ui-active-color);
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    list-style-type: none;
+    display: inline;
+    text-align: center;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+li.ge_panel_tab:hover {
     color: var(--ui-highlight-color);
 }
 
-a.ge_panel_close {
-    margin-left: 10px;
+a.ge_panel_tab_close {
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;    
     font-weight: 100;
 }
