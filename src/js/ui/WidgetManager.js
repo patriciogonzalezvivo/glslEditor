@@ -1,10 +1,32 @@
 'use strict';
 
-// import ColorPickerModal from 'ColorPickerModal';
+import ColorPickerModal from 'app/ui/ColorPickerModal';
+import Color from 'app/tools/Color';
+
+// Return all pattern matches with captured groups
+RegExp.prototype.execAll = function(string) {
+    let match = null;
+    let matches = new Array();
+    while (match = this.exec(string)) {
+        let matchArray = [];
+        for (let i in match) {
+            if (parseInt(i) == i) {
+                matchArray.push(match[i]);
+            }
+        }
+        matchArray.index = match.index;
+        matches.push(matchArray);
+    }
+    return matches;
+}
 
 export default class WidgetManager {
     constructor (main) {
         this.main = main;
+
+        // document.body.addEventListener("mouseup", (event) => {
+        //     console.log('MouseUp', event);
+        // });
 
         let wrapper = this.main.editor.getWrapperElement();
         wrapper.addEventListener("mouseup", (event) => {
@@ -13,69 +35,68 @@ export default class WidgetManager {
                 return;
             }
 
-            console.log('onClick', event);
+            // console.log('onClick', event);
             let cursor = this.main.editor.getCursor(true);
             let token = this.main.editor.getTokenAt(cursor);
-            console.log(cursor,token);
+            // console.log(cursor,token);
 
             // see if there is a match on the cursor click
-            let numberMatch = this.getMatch(cursor, 'number');
-            let vec3Match = this.getMatch(cursor, 'vec3');
+            let colorMatch = this.getMatch(cursor, 'color');
+            if (colorMatch) {
 
-            if (vec3Match) {
-                let color = vec3Match.string;
-                console.log(color);
-                // color = Color.Space(color, "VEC3>RGB>W3");
-                // picker = new thistle.Picker(color);
-                // picker.setCSS(color);
-                // picker.presentModal(pickerLeft,pickerTop)
-                // picker.on('changed',function() {
-                //   picked = picker.getCSS();
-                //   //translate hsl return to rgb
-                //   picked = Color.Space(picked, "W3>HSL>RGB>VEC3");
-                //   pickerCallback(picked,'vec3')
-                // })
+                // Toggles the picker to be off if it's already present.
+                if (this.picker && this.picker.isVisible) {
+                    this.picker.removeModal();
+                    return;
+                }
+                // If no picker is created yet, do it now
+                else if (!this.picker) {
+                    this.picker = new ColorPickerModal(colorMatch.string);
+                }
+                else {
+                    this.picker.setColor(colorMatch.string);
+                }
+
+                // Turn the picker on and present modal at the desired position
+                // let pos = this.el.getBoundingClientRect();
+                // this.picker.presentModal(pos.left + MODAL_X_OFFSET, pos.bottom + MODAL_Y_OFFSET);
+                let topOffset = 220;
+                let topBoundary = 250;
+                let bottomOffset = 16;
+                let leftOffset = 75;
+                let cursorOffset = this.main.editor.cursorCoords(true, "page");
+                let leftBase = this.main.editor.cursorCoords(true, "page").left;
+                let pickerTop = (cursorOffset.top);// - topOffset);
+                if (cursorOffset.top < topBoundary) {
+                    pickerTop = (cursorOffset.top + bottomOffset)
+                }
+                let pickerLeft = leftBase;// - leftOffset;
+                this.picker.presentModal(pickerLeft, pickerTop);
+
+                // Note: this fires change events as a live preview of the color.
+                // TODO: Store original value so we can go back to it if the
+                // interaction is canceled.
+                this.picker.on('changed',() => {
+                    console.log(this.picker.lib.getString('vec'));
+                });
+
+                return
             } 
-            else if(numberMatch) {
-                // slider.value = 0;
+
+            let numberMatch = this.getMatch(cursor, 'number');
+            if (numberMatch) {
                 let value = parseFloat(numberMatch.string);
-                console.log(value);
-                // let sliderRange = getSliderRange(value);
-                // slider.setAttribute("value", value);
-                // slider.setAttribute("step", sliderRange.step);
-                // slider.setAttribute("min", sliderRange.min);
-                // slider.setAttribute("max", sliderRange.max);
-                // slider.value = value;
-
-                // //setup slider position
-                // // position slider centered above the cursor
-                // let sliderTop = cursorOffset.top - y_offset;
-                // let sliderStyle = window.getComputedStyle(sliderDiv);
-                // let sliderWidth = getPixels(sliderStyle.width);
-                // let sliderLeft = cursorOffset.left - sliderWidth/2;
-                // sliderDiv.style.top = sliderTop - 10 + "px";
-                // sliderDiv.style.left = sliderLeft + "px";
-
-                // sliderDiv.style.visibility = "visible";
-            } else {
-
+                // console.log("Number", value);
             }
-        });
-
-        document.body.addEventListener("mouseup", (event) => {
-            console.log('MouseUp', event);
         });
     }
 
     getMatch (cursor, type) {
         if (!type) return;
-        var re;
+        let re;
         switch(type.toLowerCase()) {
-            case 'vec3':
-                re = /vec3\(\s*(\d\.|\d*\.?\d+)\s*,\s*(\d\.|\d*\.?\d+)\s*,\s*(\d\.|\d*\.?\d+)\s*\)/;
-                break;
-            case 'vec4':
-                re = /vec4\(\s*(\d\.|\d*\.?\d+)\s*,\s*(\d\.|\d*\.?\d+)\s*,\s*(\d\.|\d*\.?\d+)\s*,\s*(\d\.|\d*\.?\d+)\s*\)/;
+            case 'color':
+                re = /vec[3|4]\([\d|.|,\s]*\)/g;
                 break;
             case 'number':
                 re = /[-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g;
@@ -84,22 +105,23 @@ export default class WidgetManager {
                 throw new Error("invalid match selection");
                 return;
         }
-        var line = this.main.editor.getLine(cursor.line);
-        var match = re.exec(line);
-        while (match) {
-            var val = match[0];
-            var len = val.length;
-            var start = match.index;
-            var end = match.index + len;
-            if (cursor.ch >= start && cursor.ch <= end) {
-                match = null;
-                return {
-                    start: start,
-                    end: end,
-                    string: val
-                };
+        let line = this.main.editor.getLine(cursor.line);
+        let matches = re.execAll(line);
+
+        if (matches) {
+            for (let i = 0; i < matches.length; i++) {
+                let val = matches[i][0];
+                let len = val.length;
+                let start = matches[i].index;
+                let end = matches[i].index + len;
+                if (cursor.ch >= start && cursor.ch <= end) {
+                    return {
+                        start: start,
+                        end: end,
+                        string: val
+                    };
+                }
             }
-            match = re.exec(line);
         }
         return;
     }

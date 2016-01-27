@@ -8,7 +8,7 @@
     overflow: hidden;
     box-shadow: var(--modal-shadow);
     user-select: none;
-    z-index: var(--z08-colorpicker); /* z-index will be modified by Greensock Draggable when dragging */
+    z-index: var(--z-colorpicker); /* z-index will be modified by Greensock Draggable when dragging */
 }
 
 .colorpicker-modal * {

@@ -2,11 +2,10 @@
 
 .ge_menu_bar {
     cursor: pointer;
-    width: 100%;
     margin: 0px;
     padding-top: 5px;
     padding-bottom: 5px;
-    z-index: var(--z03-menu);
+    z-index: var(--z-menu);
     color: var(--ui-component-text-color);
     background-color: var(--ui-base-color);
     font-family: Helvetica, Geneva, sans-serif;

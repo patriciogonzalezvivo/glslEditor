@@ -1,6 +1,6 @@
 'use strict';
 
-import Colors from 'app/vendor/colors';
+import Color from 'app/tools/Color';
 
 // Import Greensock (GSAP)
 // import 'gsap/src/uncompressed/Tweenlite.js';
@@ -18,50 +18,13 @@ const MODAL_WIDTH = 260; // in pixels
 const MODAL_HEIGHT = 270; // in pixels
 const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
 
-const Tools = {
-    getOrigin (el) {
-        const box = (el.getBoundingClientRect) ? el.getBoundingClientRect() : { top: 0, left: 0 };
-        const doc = el && el.ownerDocument;
-        const body = doc.body;
-        const win = doc.defaultView || doc.parentWindow || window;
-        const docElem = doc.documentElement || body.parentNode;
-        const clientTop = docElem.clientTop || body.clientTop || 0; // border on html or body or both
-        const clientLeft = docElem.clientLeft || body.clientLeft || 0;
-
-        return {
-            left: box.left + (win.pageXOffset || docElem.scrollLeft) - clientLeft,
-            top: box.top + (win.pageYOffset || docElem.scrollTop) - clientTop
-        };
-    },
-    eventCache: null,
-    addEvent (element, event, callback, caller) {
-        var handler;
-        element.addEventListener(event, handler = function (e) {
-            callback.call(caller, e);
-        }, false);
-        return handler;
-    },
-    removeEvent (element, event, callback) {
-        element.removeEventListener(event, callback, false);
-    }
-};
-
 export default class ColorPickerModal {
-    constructor (color = 'rgb(0, 0, 0)') {
-        this.color = _getColorAsRGB(color);
-        this.init();
-        this.initRenderer();
-        this.isVisible = false;
-    }
+    constructor (color = 'vec3(1.0,0.0,0.0)') {
+        this.lib = new Color(color);
 
-    init () {
         this.listeners = {};
         this.dom = {};
         this.el = this.createDom();
-
-        this.lib = new Colors({
-            color: this.color
-        });
 
         // TODO: Improve these references
         // The caching of references is likely to be important for speed
@@ -76,6 +39,9 @@ export default class ColorPickerModal {
 
         this.dom.colorDisc = this.el.querySelector('.colorpicker-disc');
         this.dom.luminanceBar = this.el.querySelector('.colorpicker-bar-luminance');
+
+        this.initRenderer();
+        this.isVisible = false;
     }
 
     createDom () {
@@ -96,7 +62,6 @@ export default class ColorPickerModal {
             </div>
           </div>
         </div>
-
         */
 
         // Creates DOM structure for the widget.
@@ -267,13 +232,17 @@ export default class ColorPickerModal {
      */
     setColor (color) {
         // Set color
-        this.color = _getColorAsRGB(color);
-        this.lib = new Colors({
-            color: this.color
-        });
+        this.color = color;
+        this.lib = new Color(this.color);
 
-        // Update render by one tick
-        this.renderer.tick();
+        if (this.renderer) {
+            // Update render by one tick
+            this.renderer.tick();
+        }
+    }
+
+    getColor () {
+        return this.color;
     }
 
     /* ---------------------------------- */
@@ -311,10 +280,10 @@ export default class ColorPickerModal {
             y = event.clientY - startPoint.top - r,
             h = 360 - ((Math.atan2(y, x) * 180 / Math.PI) + (y < 0 ? 360 : 0)),
             s = (Math.sqrt((x * x) + (y * y)) / r) * 100;
-            this.lib.setColor({ h, s }, 'hsv');
+            this.lib.set({ h, s }, 'hsv');
         }
         else if (currentTarget === this.dom.hsvBarCursors) { // the luminanceBar
-            this.lib.setColor({
+            this.lib.set({
                 v: (currentTargetHeight - (event.clientY - startPoint.top)) / currentTargetHeight * 100
             }, 'hsv');
         }
@@ -391,7 +360,7 @@ export default class ColorPickerModal {
     renderTestPatch () {
         let patch = this.el.querySelector('.colorpicker-patch');
         let color = this.lib.colors;
-        let RGB = color.RND.rgb;
+        let RGB = color.rgb;
         patch.style.backgroundColor = 'rgb(' + RGB.r + ',' + RGB.g + ',' + RGB.b + ')';
     }
 
@@ -438,53 +407,6 @@ export default class ColorPickerModal {
      */
     on (type, callback) {
         this.listeners[type] = callback;
-    }
-
-    /**
-     *  Returns CSS hex value of the current color
-     */
-    getCSS () {
-        return '#' + this.lib.colors.HEX.toLowerCase();
-    }
-
-    /**
-     *  Returns RGB object of the current color
-     *  TODO: Streamline format between end use and what this returns
-     */
-    getRGB () {
-        const RND = this.lib.colors.RND;
-        return {
-            r: RND.rgb.r / 255,
-            g: RND.rgb.g / 255,
-            b: RND.rgb.b / 255
-        };
-    }
-
-    // Not from Thistle.js, but example helper functions for getting color values.
-    // These are retained from old ColorPicker - not currently used anywhere...
-
-    /**
-     *  Gets CSS color strings for output
-     */
-    getColorValues () {
-        const color = this.lib.colors;
-        const RND = this.lib.colors.RND;
-
-        return {
-            hex: `#${color.HEX}`,
-            rgb: 'rgb(' + RND.rgb.r + ',' + RND.rgb.g + ',' + RND.rgb.b + ')',
-            rgba: 'rgba(' + RND.rgb.r + ',' + RND.rgb.g + ',' + RND.rgb.b + ',' + color.alpha + ')',
-            hsl: 'hsl(' + RND.hsl.h + ',' + RND.hsl.s + ',' + RND.hsl.l + ')',
-            hsla: 'hsla(' + RND.hsl.h + ',' + RND.hsl.s + ',' + RND.hsl.l + ',' + color.alpha + ')',
-        };
-    }
-
-    /**
-     *  Returns true if the color is bright
-     *  Helps determine which contrasting text color you need
-     */
-    isBright () {
-        return (this.lib.colors.rgbaMixBlack.luminance > 0.22) ? true : false;
     }
 }
 
@@ -583,4 +505,32 @@ function _getColorAsRGB (color) {
 
     return normalized;
 }
+
+const Tools = {
+    getOrigin (el) {
+        const box = (el.getBoundingClientRect) ? el.getBoundingClientRect() : { top: 0, left: 0 };
+        const doc = el && el.ownerDocument;
+        const body = doc.body;
+        const win = doc.defaultView || doc.parentWindow || window;
+        const docElem = doc.documentElement || body.parentNode;
+        const clientTop = docElem.clientTop || body.clientTop || 0; // border on html or body or both
+        const clientLeft = docElem.clientLeft || body.clientLeft || 0;
+
+        return {
+            left: box.left + (win.pageXOffset || docElem.scrollLeft) - clientLeft,
+            top: box.top + (win.pageYOffset || docElem.scrollTop) - clientTop
+        };
+    },
+    eventCache: null,
+    addEvent (element, event, callback, caller) {
+        var handler;
+        element.addEventListener(event, handler = function (e) {
+            callback.call(caller, e);
+        }, false);
+        return handler;
+    },
+    removeEvent (element, event, callback) {
+        element.removeEventListener(event, callback, false);
+    }
+};
 

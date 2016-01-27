@@ -6,7 +6,7 @@
     font-weight: 100;
     margin: 0px;
     padding-top: 5px;
-    z-index: var(--z03-menu);
+    z-index: var(--z-menu);
 }
 
 li.ge_panel_tab {

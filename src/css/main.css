@@ -6,7 +6,8 @@
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     /* -- font-family: 'Montserrat'; */
     --editor-font-family: 'Source Code Pro', monospace;
-    --ui-base-color: black;
+    --ui-base-color: #26282c;
+    --ui-component-color: #2e3033;
     --ui-element-color: #3a3c40;
     --ui-active-color: #36383c;
     --ui-highlight-color: yellow;
@@ -18,10 +19,11 @@
     --modal-shadow: 0 0 0 5px rgba(0,0,0,0.20), 0 4px 8px 0 rgba(0,0,0,0.25);
 
     /* Z-INDEX SCALE */
-    --z01-editor: 100;
-    --z02-canvas: 200;
-    --z03-menu: 300;
-    --z04-divider: 250;
+    --z-editor: 100;
+    --z-canvas: 200;
+    --z-divider: 250;
+    --z-menu: 300;
+    --z-colorpicker: 1000;
 }
 
 /* Native Codemirror */
@@ -44,4 +46,5 @@
 @import '_panel';
 @import '_editor';
 @import '_canvas';
+@import '_colorpicker';
 
