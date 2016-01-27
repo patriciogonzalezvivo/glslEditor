@@ -1,8 +1,7 @@
 /* DRAGGABLE LINE */
 
 .ge-divider {
-    position: absolute;
-    
+    position: fixed;
     left: 50%; /* Starting position; this is overridden by scripts */
     top: 0;
     width: 8px;
@@ -33,7 +32,7 @@
 .ge-divider-affordance::after,
 .ge-divider-affordance::before {
     display: inline-block;
-    position: absolute;
+    position: fixed;
     width: 4px;
     height: 4px;
     border-radius: 50%;

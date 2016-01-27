@@ -100,19 +100,17 @@ class GlslEditor {
             this.sandbox.canvas.load(this.editor.getValue());
         });
 
-        this.editor.on("cursorActivity", (cm) => {
-            if (this.options.canvas_follow) {
-                var height = cm.heightAtLine(cm.getCursor().line+1,'local') - this.sandbox.canvasDOM.height;
-                if (height < 0) {
-                    height = 0.0;   
-                }
-                this.sandbox.canvasDOM.style.top = (height).toString()+"px";
-            }
-        });
-
-        this.editor.on('viewportChange', () => {
-            // console.log(new Date().getTime());
-        });
+        if (this.options.canvas_follow) {
+            this.sandbox.canvasDOM.style.position = 'relative';
+            this.sandbox.canvasDOM.style.float = 'right';
+            this.editor.on('cursorActivity', (cm) => {
+                    var height = cm.heightAtLine(cm.getCursor().line+1,'local') - this.sandbox.canvasDOM.height;
+                    if (height < 0) {
+                        height = 0.0;   
+                    }
+                    this.sandbox.canvasDOM.style.top = (height).toString()+'px';
+            });
+        }
     }
 
     new () {

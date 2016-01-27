@@ -18,6 +18,7 @@ export default class Divider {
     constructor (main) {
     	this.main = main;
     	this.pressed = false;
+        this.x = 0.;
 
     	this.el = document.createElement('div');
         this.el.setAttribute('class', 'ge-divider');
@@ -50,13 +51,24 @@ export default class Divider {
 			}
 		}, false);
 
+        this.main.editor.on('viewportChange', () => {
+            // console.log(new Date().getTime());
+            this.setPosition(this.getPosition());
+        });
+
 		this.setPosition(this.getStartingPosition());
 	}
 
 	setPosition (x) {
-		x -= this.el.getBoundingClientRect().width/2;
+        this.x = x;
 
-		let transformStyle = 'translate3d(' + x + 'px, 0px, 0px)';
+		x -= this.el.getBoundingClientRect().width/2;
+        let y = 0;
+        if (this.main.menu) {
+            y = this.main.menu.menuDOM.getBoundingClientRect().height;
+        }
+    
+		let transformStyle = 'translate3d(' + x + 'px, '+y+'px, 0px)';
 		if (this.el.style.hasOwnProperty('transform')) {
             this.el.style.transform = transformStyle;
         }
@@ -73,9 +85,17 @@ export default class Divider {
         this.main.editor.setSize(editorWidth,'100%');
 
         let canvasWidth = this.main.container.getBoundingClientRect().width - this.el.getBoundingClientRect().left;
+        let canvasHeight = this.main.container.getBoundingClientRect().height;
+
+
         this.main.sandbox.canvasDOM.style.width = canvasWidth + 'px';
-        this.main.sandbox.canvasDOM.style.height = this.main.container.getBoundingClientRect().height + 'px';
+        this.main.sandbox.canvasDOM.style.height = canvasHeight + 'px';
+        this.el.style.height = canvasHeight + 'px';
 	}
+
+    getPosition() {
+        return this.x;
+    }
 
 	getStartingPosition () {
 		return this.main.container.getBoundingClientRect().width/2;
