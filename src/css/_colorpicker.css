@@ -1,0 +1,130 @@
+.colorpicker-modal {
+    box-sizing: border-box;
+    position: absolute;
+    height: 270px;
+    width: 260px;
+    padding: 10px;
+    background-color: var(--ui-component-color);
+    overflow: hidden;
+    box-shadow: var(--modal-shadow);
+    user-select: none;
+    z-index: var(--z08-colorpicker); /* z-index will be modified by Greensock Draggable when dragging */
+}
+
+.colorpicker-modal * {
+    box-sizing: border-box;
+}
+
+.colorpicker-patch {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 50px;
+}
+
+.colorpicker-hsv-map {
+    position: relative;
+    height: 200px;
+    width: 100%;
+    top: 50px;
+}
+
+.colorpicker-disc-cover {
+    opacity: 0;
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    cursor: crosshair;
+}
+
+.colorpicker-disc-cover::after {
+    content: '';
+    background-color: transparent;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 202px;
+    height: 202px;
+    border: 3px solid var(--ui-component-color);
+    border-radius: 50%;
+    opacity: 1;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+.colorpicker-bar-bg,
+.colorpicker-bar-white {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 25px;
+    height: 200px;
+}
+
+.colorpicker-bar-white {
+    background-color: #fff;
+}
+
+.colorpicker-disc-cursor {
+    position: absolute;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    width: 9px;
+    height: 9px;
+    margin: -5px;
+    cursor: crosshair;
+}
+
+.colorpicker-dark .colorpicker-disc-cursor {
+    border-color: #333;
+}
+
+.colorpicker-no-cursor,
+.colorpicker-no-cursor .colorpicker-patch,
+.colorpicker-no-cursor .colorpicker-disc-cursor,
+.colorpicker-no-cursor .colorpicker-disc-cover {
+    cursor: none;
+}
+
+.colorpicker-bar-luminance {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.colorpicker-bar-cursors {
+    position: absolute;
+    right: 0;
+    width: 25px;
+    top: 0;
+    height: 200px;
+    overflow: hidden;
+}
+.colorpicker-bar-cursor-left,
+.colorpicker-bar-cursor-right {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 4px solid transparent;
+    margin-top: -4px;
+}
+.colorpicker-bar-cursor-left {
+    left: 0;
+    border-left: 4px solid #eee;
+}
+.colorpicker-bar-cursor-right {
+    right: 0;
+    border-right: 4px solid #eee;
+}
+
+.colorpicker-dark .colorpicker-bar-cursor-left {
+    border-left-color: #333;
+}
+.colorpicker-dark .colorpicker-bar-cursor-right {
+    border-right-color: #333;
+}
