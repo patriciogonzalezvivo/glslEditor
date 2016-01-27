@@ -4,6 +4,7 @@ import { initEditor } from 'app/core/Editor';
 
 import Menu from 'app/ui/Menu';
 import Divider from 'app/ui/Divider';
+import WidgetManager from 'app/ui/WidgetManager';
 
 import FileDrop from 'app/io/FileDrop';
 import HashWatch from 'app/io/HashWatch';
@@ -90,6 +91,7 @@ class GlslEditor {
         // CORE elements
         this.sandbox = new Shader(this);
         this.editor = initEditor(this);
+        this.widgets = new WidgetManager(this);
         
         if (this.options.divider) {
             this.divider = new Divider(this);
