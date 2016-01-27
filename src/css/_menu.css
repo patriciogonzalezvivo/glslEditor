@@ -1,15 +1,16 @@
 /* MENU */
 
-.ge_menu {
+.ge_menu_bar {
     cursor: pointer;
-    color: var(--ui-component-text-color);
-    background-color: var(--ui-base-color);
+    width: 100%;
     margin: 0px;
     padding-top: 5px;
     padding-bottom: 5px;
+    z-index: var(--z03-menu);
+    color: var(--ui-component-text-color);
+    background-color: var(--ui-base-color);
     font-family: Helvetica, Geneva, sans-serif;
     font-weight: 500;
-    z-index: var(--z03-menu);
 }
 
 li.ge_menu {

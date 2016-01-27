@@ -9,7 +9,7 @@ export default class Menu {
 
         // CREATE MENU Container
         this.menuDOM = document.createElement('ul');
-        this.menuDOM.setAttribute('class', 'ge_menu');
+        this.menuDOM.setAttribute('class', 'ge_menu_bar');
 
         // NEW
         this.menus.new = new MenuItem(this.menuDOM, "New", (event) => {
