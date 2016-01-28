@@ -31,11 +31,8 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     st.x *= u_resolution.x/u_resolution.y;
 
-    vec3 color = vec3(st.x,st.y,abs(sin(u_time)));
-    vec3 white = vec3(1.);
-    vec3 red = vec3(1.,0.,0.);
-    vec4 green = vec4(vec3(0.,1.,0.2),1.);
-    vec3 yellow = vec3(1.) - vec3(0.2, .2,1. );
+    vec3 color = vec3(1.);
+    color = vec3(st.x,st.y,abs(sin(u_time)));
 
     gl_FragColor = vec4(color,1.0);
 }`;
