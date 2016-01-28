@@ -2,7 +2,7 @@
 
 var valueRanges = {
 		rgb: 	{r: [0, 255], g: [0, 255], b: [0, 255]},
-		hsv:   	{h: [0, 360], s: [0, 100], v: [0, 100]},
+		hsv:   	{h: [0, 1], s: [0, 1], v: [0, 255]},
 		hsl:   	{h: [0, 360], s: [0, 100], l: [0, 100]},
 		cmy:   	{c: [0, 100], m: [0, 100], y: [0, 100]},
 		cmyk:  	{c: [0, 100], m: [0, 100], y: [0, 100], k: [0, 100]},
@@ -27,7 +27,8 @@ var valueRanges = {
 		Z: XYZMatrix.Z[0] + XYZMatrix.Z[1] + XYZMatrix.Z[2]
 	},
 	grey = {r: 0.298954, g: 0.586434, b: 0.114612}, // CIE-XYZ 1931
-	luminance = {r: 0.2126, g: 0.7152, b: 0.0722}; // W3C 2.0
+	luminance = {r: 0.2126, g: 0.7152, b: 0.0722}, // W3C 2.0
+	_colors;
 
 export default class Color {
     constructor (color) {
@@ -37,7 +38,6 @@ export default class Color {
 
 	set (color, type) { // color only full range
 		if (typeof color === 'number') {
-			// console.log('number', color);
 			type = type ? type : 'rgb';
 			this.colors[type] = {};
 			for (var n = 3; n--; ) {
@@ -47,11 +47,10 @@ export default class Color {
 			}
 		}
 		else if (typeof color === 'string') {
-			// console.log('string', color);
 			let parts = color.replace(/(?:#|\)|%)/g, '').split('(');
 			if (parts[1]) {
 				let values = (parts[1] || '').split(/,\s*/);
-				type = type ? type : (parts[1] ? parts[0].substr(0, 3) : 'vec');
+				type = type ? type : (parts[1] ? parts[0].substr(0, 3) : 'rgb');
 				this.set(values,type);
 			} else {
 				this.colors.rgb = ColorConverter.HEX2rgb(parts[0]);
@@ -59,15 +58,13 @@ export default class Color {
 		}
 		else if (color) {
 			if (Array.isArray(color)) {
-				// console.log('array', color);
 				let m = '';
-				type = type || 'vec';
+				type = type || 'rgb';
 
 				this.colors[type] = this.colors[type] || {};
 				for (var n = 3; n--; ) {
 					m = type[n] || type.charAt(n); // IE7
 					let i = color.length >= 3 ? n : 0;
-					// this.colors[type][m] = +color[n];
 					this.colors[type][m] = +color[n] / valueRanges[type][m][1];
 				}
 
@@ -77,27 +74,49 @@ export default class Color {
 			}
 			else if (type) {
 				for (var n in color) {
-					// this.colors[type][n] = limitValue(color[n], valueRanges[type][n][0],valueRanges[type][n][1]);
-					this.colors[type][n] = limitValue(color[n] / valueRanges[type][n][1], 0 ,1);
+					// this.colors[type][n] = limitValue(color[n],valueRanges[type][n][0],valueRanges[type][n][1]);
+					this.colors[type][n] = limitValue(color[n]/valueRanges[type][n][1], 0 ,1)*valueRanges[type][n][1];
+					// this.colors[type][n] = (color[n]/valueRanges[type][n][1];
 				}
 			}
 		}
+
 		if (type !== 'rgb') {
 			var convert = ColorConverter;
 			this.colors.rgb = convert[type+'2rgb'](this.colors[type]);
 		}
-		if (type !== 'hsv') {
-			this.colors.hsv = ColorConverter.rgb2hsv(this.colors['rgb']);
-		}
+		this.convert(type);
 		this.colors.hueRGB = ColorConverter.hue2RGB(this.colors.hsv.h);
-		if (type !== 'vec') {
-			this.colors.vec = ColorConverter.rgb2vec(this.colors['rgb']);
+		this.colors.RGBLuminance = getLuminance(this.colors.hueRGB)*100;
+		// _colors = this.colors;
+	}
+
+	convert (type) {
+		let convert = ColorConverter,
+			ranges = valueRanges,
+			exceptions = {hsl: 'hsv', cmyk: 'cmy', rgb: type};
+
+		if (type !== 'alpha') {
+			for (let typ in ranges) {
+				if (!ranges[typ][typ]) {	// no alpha|HEX
+					if (type !== typ && typ !== 'XYZ') {
+						let from = exceptions[typ] || 'rgb';
+						this.colors[typ] = convert[from + '2' + typ](this.colors[from]);
+					}
+				}
+			}
 		}
-		// console.log(this);
 	}
 
 	get (type) {
-		return convert['rgb2'+type](this.colors['rgb']);
+		if (type !== 'rgb') {
+			var convert = ColorConverter;
+			this.colors[type] = convert['rgb2'+type](this.colors['rgb']);
+			return this.colors[type];
+		}
+		else {
+			return this.colors['rgb'];
+		}
 	}
 
 	getString (type) {
@@ -105,10 +124,7 @@ export default class Color {
 			return convert['rgb2'+type](this.colors['rgb']);
 		}
 		else {
-			if (type !== 'rgb') {
-				var convert = ColorConverter;
-				this.colors[type] = convert['rgb2'+type](this.colors['rgb']);
-			}
+			let color = this.get(type);
 			let str = type, 
 				m = '';
 			if (type === 'vec') {
@@ -117,10 +133,18 @@ export default class Color {
 			str += '(';
 			for (let n = 0; n < 3; n++) {
 				m = type[n] || type.charAt(n); // IE7
-				str += (this.colors[type][m] ).toFixed(3);
+				if (type === 'vec') {
+					str += (color[m]).toFixed(3);
+				} else {
+					str += Math.floor(color[m]);
+				}
 				if (n !== 2) {
 					str +=',';
 				}
+			}
+
+			if (this.colors.alpha) {
+				str += ',' + (this.colors.alpha).toFixed(3);
 			}
 			return str+= ')';
 		}
@@ -417,4 +441,14 @@ class ColorConverter {
 function limitValue(value, min, max) {
 	// return Math.max(min, Math.min(max, value)); // faster??
 	return (value > max ? max : value < min ? min : value);
+}
+
+function getLuminance(rgb, normalized) {
+	var div = normalized ? 1 : 255,
+		RGB = [rgb.r / div, rgb.g / div, rgb.b / div];
+
+	for (var i = RGB.length; i--; ) {
+		RGB[i] = RGB[i] <= 0.03928 ? RGB[i] / 12.92 : Math.pow(((RGB[i] + 0.055) / 1.055), 2.4);
+	}
+	return ((luminance.r * RGB[0]) + (luminance.g * RGB[1]) + (luminance.b * RGB[2]));
 }

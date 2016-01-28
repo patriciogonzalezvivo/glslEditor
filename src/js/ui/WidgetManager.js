@@ -60,24 +60,28 @@ export default class WidgetManager {
                 // Turn the picker on and present modal at the desired position
                 // let pos = this.el.getBoundingClientRect();
                 // this.picker.presentModal(pos.left + MODAL_X_OFFSET, pos.bottom + MODAL_Y_OFFSET);
-                let topOffset = 220;
+                let topOffset = 22;
                 let topBoundary = 250;
                 let bottomOffset = 16;
-                let leftOffset = 75;
+                let leftOffset = -65;
                 let cursorOffset = this.main.editor.cursorCoords(true, "page");
                 let leftBase = this.main.editor.cursorCoords(true, "page").left;
-                let pickerTop = (cursorOffset.top);// - topOffset);
+                let pickerTop = (cursorOffset.top + topOffset);
                 if (cursorOffset.top < topBoundary) {
                     pickerTop = (cursorOffset.top + bottomOffset)
                 }
-                let pickerLeft = leftBase;// - leftOffset;
+                let pickerLeft = leftBase + leftOffset;
                 this.picker.presentModal(pickerLeft, pickerTop);
 
                 // Note: this fires change events as a live preview of the color.
                 // TODO: Store original value so we can go back to it if the
                 // interaction is canceled.
                 this.picker.on('changed',() => {
-                    console.log(this.picker.lib.getString('vec'));
+                    let newColor = this.picker.lib.getString('vec');
+                    let start = {"line":cursor.line, "ch":colorMatch.start};
+                    let end = {"line":cursor.line, "ch":colorMatch.end};
+                    colorMatch.end = colorMatch.start+newColor.length;
+                    this.main.editor.replaceRange(newColor, start, end);
                 });
 
                 return

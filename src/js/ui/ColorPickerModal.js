@@ -273,19 +273,18 @@ export default class ColorPickerModal {
     // Actions when user moves around on HSV color map
     hsvMove (event) {
         let r, x, y, h, s;
-
         if (currentTarget === this.dom.hsvMap) { // the circle
             r = currentTargetHeight / 2,
             x = event.clientX - startPoint.left - r,
             y = event.clientY - startPoint.top - r,
-            h = 360 - ((Math.atan2(y, x) * 180 / Math.PI) + (y < 0 ? 360 : 0)),
-            s = (Math.sqrt((x * x) + (y * y)) / r) * 100;
+            h = (360 - ((Math.atan2(y, x) * 180 / Math.PI) + (y < 0 ? 360 : 0)))/360,
+            s = (Math.sqrt((x * x) + (y * y)) / r);
             this.lib.set({ h, s }, 'hsv');
         }
         else if (currentTarget === this.dom.hsvBarCursors) { // the luminanceBar
-            this.lib.set({
-                v: (currentTargetHeight - (event.clientY - startPoint.top)) / currentTargetHeight * 100
-            }, 'hsv');
+            let v = (currentTargetHeight - (event.clientY - startPoint.top)) / currentTargetHeight;
+            v = Math.max(0, Math.min(1, v))*255;
+            this.lib.set({ v: v }, 'hsv');
         }
 
         // fire 'changed'
@@ -359,9 +358,8 @@ export default class ColorPickerModal {
      */
     renderTestPatch () {
         let patch = this.el.querySelector('.colorpicker-patch');
-        let color = this.lib.colors;
-        let RGB = color.rgb;
-        patch.style.backgroundColor = 'rgb(' + RGB.r + ',' + RGB.g + ',' + RGB.b + ')';
+        let color = this.lib.getString('rgb');
+        patch.style.backgroundColor = color;
     }
 
     /**
@@ -457,53 +455,6 @@ function drawCircle (ctx, coords, radius, color, width) { // uses drawDisk
         ctx.strokeStyle = color || '#000';
         ctx.stroke();
     });
-}
-
-/**
- *  The color passed from ColorPicker is whatever that
- *  CSS background color is of the widget, which is also whatever
- *  is entered as a value in the Tangram YAML. It may be
- *  necessary to normalize this on the widget side instead of
- *  the modal side (TODO; investigate this in future).
- *  Currently the issue is that the color picker functionality
- *  here does not convert from CSS named color values and so
- *  behaves strangely when it encounters it. So it is necessary
- *  to take the raw CSS value and convert it to a format that
- *  Colors.js understand, and this includes rgb(x,x,x) value.
- *  window.getComputedStyle() is a very fast, cross-browser
- *  compatible (no old-IE, though) way of letting the browser
- *  do the work and tell us what the computed rgb() value is.
- *  TODO: Find out what happens if value includes an alpha.
- *  TODO: Guarantee that the returned value is consistent across
- *  browsers.
- */
-function _getColorAsRGB (color) {
-    // Create a test element to apply a CSS color and retrieve
-    // a normalized value from.
-    let test = document.createElement('div');
-    test.style.backgroundColor = color;
-
-    // Chrome requires the element to be in DOM for styles to be computed.
-    document.body.appendChild(test);
-
-    // Get the computed style from the browser, in the format of
-    // rgb(x, x, x)
-    let normalized = window.getComputedStyle(test).backgroundColor;
-
-    // In certain cases getComputedStyle() may return
-    // 'transparent' as a value, which is useless(?) for the current
-    // color picker. According to specifications, transparent
-    // is a black with 0 alpha - rgba(0, 0, 0, 0) - but because
-    // the picker does not currently handle alpha, we return the
-    // black value.
-    if (normalized === 'transparent') {
-        normalized = 'rgb(0, 0, 0)';
-    }
-
-    // Garbage collection
-    test.parentNode.removeChild(test);
-
-    return normalized;
 }
 
 const Tools = {
