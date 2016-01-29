@@ -2,11 +2,6 @@
 
 import Color from 'app/tools/Color';
 
-// Import Greensock (GSAP)
-// import 'gsap/src/uncompressed/Tweenlite.js';
-// import 'gsap/src/uncompressed/plugins/CSSPlugin.js';
-// import Draggable from 'gsap/src/uncompressed/utils/Draggable.js';
-
 // Some common use variables
 let startPoint;
 let currentTarget;
@@ -45,28 +40,6 @@ export default class ColorPickerModal {
     }
 
     createDom () {
-        /* Creates this DOM structure :-/
-
-        <div id='cp' class='colorpicker-modal'>
-          <div class='colorpicker-patch'></div>
-          <div class='colorpicker-hsv-map' id='cp-map'>
-            <canvas class='colorpicker-disc' width='200' height='200'></canvas>
-            <div class='colorpicker-disc-cover'></div>
-            <div class='colorpicker-disc-cursor'></div>
-            <div class='colorpicker-bar-bg'></div>
-            <div class='colorpicker-bar-white'></div>
-            <canvas class='colorpicker-bar-luminance' width='25' height='200'></canvas>
-            <div class='colorpicker-bar-cursors' id='cp-bar'>
-              <div class='colorpicker-bar-cursor-left'></div>
-              <div class='colorpicker-bar-cursor-right'></div>
-            </div>
-          </div>
-        </div>
-        */
-
-        // Creates DOM structure for the widget.
-        // This also caches the DOM nodes in memory so that it does
-        // not need to be re-created on subsequent inits.
         if (!domCache) {
             let modal = document.createElement('div');
             let patch = document.createElement('div');
@@ -122,6 +95,22 @@ export default class ColorPickerModal {
         return domCache.cloneNode(true);
     }
 
+    showAt(cm) {
+        // Turn the picker on and present modal at the desired position
+        let topOffset = 22;
+        let topBoundary = 250;
+        let bottomOffset = 16;
+        let leftOffset = -65;
+        let cursorOffset = cm.cursorCoords(true, "page");
+        let leftBase = cm.cursorCoords(true, "page").left;
+        let pickerTop = (cursorOffset.top + topOffset);
+        if (cursorOffset.top < topBoundary) {
+            pickerTop = (cursorOffset.top + bottomOffset)
+        }
+        let pickerLeft = leftBase + leftOffset;
+        this.presentModal(pickerLeft, pickerTop);
+    }
+
     presentModal (x, y) {
         // Check if desired x, y will be outside the viewport.
         // Do not allow the modal to disappear off the edge of the window.
@@ -136,22 +125,9 @@ export default class ColorPickerModal {
         this.hsvDownHandler = Tools.addEvent(this.dom.hsvMap, 'mousedown', this.hsvDown, this);
 
         // Listen for interaction outside of the modal
-        // TODO: Should this also be added through Tools ?
         window.setTimeout(() => {
             this.onClickOutsideHandler = Tools.addEvent(document.body, 'click', this.onClickOutside, this);
         }, 0);
-
-        // (experimental)
-        // Allows color picker modal to be draggable & reposition-able on screen.
-        // TODO: Better / cacheable DOM queries
-        // TODO: Should dragging indicator be more obvious?
-        // TODO: Consider whether clicking outside a modal can close the colorpicker
-        //       once it's been dragged elsewhere, and then how it can be closed then.
-        // this.draggable = Draggable.create(this.el, {
-        //     type: 'x, y',
-        //     bounds: document.querySelector('.tp-core-container'),
-        //     trigger: this.el.querySelector('.colorpicker-patch')
-        // });
 
         let colorDisc = this.dom.colorDisc;
 
@@ -289,7 +265,7 @@ export default class ColorPickerModal {
 
         // fire 'changed'
         if (this.listeners.changed && typeof this.listeners.changed === 'function') {
-            this.listeners.changed();
+            this.listeners.changed(this.lib);
         }
     }
 
@@ -373,7 +349,7 @@ export default class ColorPickerModal {
         let y = Math.sin(pi2 - color.hsv.h * pi2);
         let r = color.hsv.s * (colorDiscRadius - 5);
 
-        this.dom.hsvMapCover.style.opacity = 1 - color.hsv.v;
+        this.dom.hsvMapCover.style.opacity = 1 - color.hsv.v/255;
         // this is the faster version...
         this.dom.hsvBarWhiteLayer.style.opacity = 1 - color.hsv.s;
         this.dom.hsvBarBGLayer.style.backgroundColor = 'rgb(' +
@@ -384,9 +360,9 @@ export default class ColorPickerModal {
         this.dom.hsvMapCursor.style.cssText =
             'left: ' + (x * r + colorDiscRadius) + 'px;' +
             'top: ' + (y * r + colorDiscRadius) + 'px;' +
-            'border-color: ' + (color.RGBLuminance > 0.22 ? '#333;' : '#ddd');
+            'border-color: ' + (color.luminance > 0.22 ? '#333;' : '#ddd');
 
-        if (color.RGBLuminance > 0.22) {
+        if (color.luminance > 0.22) {
             this.dom.hsvBarCursors.classList.add('colorpicker-dark');
         }
         else {
@@ -394,7 +370,7 @@ export default class ColorPickerModal {
         }
 
         if (this.dom.hsvLeftCursor) {
-            this.dom.hsvLeftCursor.style.top = this.dom.hsvRightCursor.style.top = ((1 - color.hsv.v) * colorDiscRadius * 2) + 'px';
+            this.dom.hsvLeftCursor.style.top = this.dom.hsvRightCursor.style.top = ((1 - color.hsv.v/255) * colorDiscRadius * 2) + 'px';
         }
     }
 

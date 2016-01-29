@@ -65,7 +65,7 @@ export default class Color {
 				for (var n = 3; n--; ) {
 					m = type[n] || type.charAt(n); // IE7
 					let i = color.length >= 3 ? n : 0;
-					this.colors[type][m] = +color[n] / valueRanges[type][m][1];
+					this.colors[type][m] = +color[i] / valueRanges[type][m][1];
 				}
 
 				if (color.length === 4) {
@@ -74,9 +74,7 @@ export default class Color {
 			}
 			else if (type) {
 				for (var n in color) {
-					// this.colors[type][n] = limitValue(color[n],valueRanges[type][n][0],valueRanges[type][n][1]);
 					this.colors[type][n] = limitValue(color[n]/valueRanges[type][n][1], 0 ,1)*valueRanges[type][n][1];
-					// this.colors[type][n] = (color[n]/valueRanges[type][n][1];
 				}
 			}
 		}
@@ -87,8 +85,7 @@ export default class Color {
 		}
 		this.convert(type);
 		this.colors.hueRGB = ColorConverter.hue2RGB(this.colors.hsv.h);
-		this.colors.RGBLuminance = getLuminance(this.colors.hueRGB)*100;
-		// _colors = this.colors;
+		this.colors.luminance = getLuminance(this.colors.rgb);
 	}
 
 	convert (type) {

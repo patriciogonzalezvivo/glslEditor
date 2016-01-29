@@ -35,10 +35,7 @@ export default class WidgetManager {
                 return;
             }
 
-            // console.log('onClick', event);
             let cursor = this.main.editor.getCursor(true);
-            let token = this.main.editor.getTokenAt(cursor);
-            // console.log(cursor,token);
 
             // see if there is a match on the cursor click
             let colorMatch = this.getMatch(cursor, 'color');
@@ -57,27 +54,10 @@ export default class WidgetManager {
                     this.picker.setColor(colorMatch.string);
                 }
 
-                // Turn the picker on and present modal at the desired position
-                // let pos = this.el.getBoundingClientRect();
-                // this.picker.presentModal(pos.left + MODAL_X_OFFSET, pos.bottom + MODAL_Y_OFFSET);
-                let topOffset = 22;
-                let topBoundary = 250;
-                let bottomOffset = 16;
-                let leftOffset = -65;
-                let cursorOffset = this.main.editor.cursorCoords(true, "page");
-                let leftBase = this.main.editor.cursorCoords(true, "page").left;
-                let pickerTop = (cursorOffset.top + topOffset);
-                if (cursorOffset.top < topBoundary) {
-                    pickerTop = (cursorOffset.top + bottomOffset)
-                }
-                let pickerLeft = leftBase + leftOffset;
-                this.picker.presentModal(pickerLeft, pickerTop);
-
-                // Note: this fires change events as a live preview of the color.
-                // TODO: Store original value so we can go back to it if the
-                // interaction is canceled.
-                this.picker.on('changed',() => {
-                    let newColor = this.picker.lib.getString('vec');
+                this.picker.showAt(this.main.editor);
+                
+                this.picker.on('changed',(color) => {
+                    let newColor = color.getString('vec');
                     let start = {"line":cursor.line, "ch":colorMatch.start};
                     let end = {"line":cursor.line, "ch":colorMatch.end};
                     colorMatch.end = colorMatch.start+newColor.length;
