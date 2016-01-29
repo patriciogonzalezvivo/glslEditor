@@ -6,12 +6,11 @@
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     /* -- font-family: 'Montserrat'; */
     --editor-font-family: 'Source Code Pro', monospace;
-    --ui-base-color: #26282c;
+    --ui-base-color: #36383c;
     --ui-component-color: #2e3033;
     --ui-element-color: #3a3c40;
-    --ui-active-color: #36383c;
+    --ui-active-color: #26282c;
     --ui-highlight-color: yellow;
-    --ui-highlight-color-2: rgb(221, 221, 0);
     --ui-component-text-color: #eefafa;
     --ui-link-text-color: #e1eeee;
     --ui-subtext-color: #c0c6c6;

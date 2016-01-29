@@ -12,6 +12,8 @@
 li.ge_panel_tab {
     cursor: pointer;
     list-style-type: none;
+    background-color: var(--ui-base-color);
+    color: gray;
     display: inline;
     text-align: center;
     padding-top: 5px;

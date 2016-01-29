@@ -31,14 +31,12 @@ export default class BufferManager {
 			this.select(name);
 		});
 
-		if (this.getLength() !== 1) {
-			let close = tab.appendChild(document.createElement('a'));
-			close.textContent = 'x';
-			close.setAttribute('class', 'ge_panel_tab_close');
-			CodeMirror.on(close, 'click', () => {
-				this.close(name);
-			});
-		}
+		let close = tab.appendChild(document.createElement('a'));
+		close.textContent = 'x';
+		close.setAttribute('class', 'ge_panel_tab_close');
+		CodeMirror.on(close, 'click', () => {
+			this.close(name);
+		});
 
 		this.el.appendChild(tab);
 		this.tabs[name] = tab;
@@ -79,9 +77,8 @@ export default class BufferManager {
 	}
 
 	close (name) {
-		if (name === this.getCurrent()) {
-			this.select('untitled.frag');
-		}
+		let needChange = name === this.getCurrent();
+
     	this.el.removeChild(this.tabs[name]);
     	delete this.tabs[name];
     	delete this.buffers[name];
@@ -91,6 +88,13 @@ export default class BufferManager {
     		this.panel = undefined;
     		this.el = undefined;
     	}
+
+    	if (needChange) {
+			for (var prop in this.tabs) {
+				this.select(prop);
+				break;
+			}
+		}
 	}
 
 	getCurrent () {
