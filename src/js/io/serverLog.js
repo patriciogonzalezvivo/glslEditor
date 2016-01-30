@@ -8,7 +8,8 @@ export function saveOnServer (ge, callback) {
     }
 
     // STORE A COPY on SERVER
-    let url = 'http://thebookofshaders.com:8080/';
+    // let url = 'http://thebookofshaders.com:8080/';
+    let url = 'http://localhost:8080/';
     let data = new FormData();
     data.append('code', content);
 
@@ -24,16 +25,14 @@ export function saveOnServer (ge, callback) {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', url+'save', true);
     xhr.onload = (event) => {
-        console.log(event);
-        console.log(xhr);
         if (typeof callback === 'function') {
             callback({  content: content,
                         name: name,
                         url: url, 
-                        path: this.responseText
+                        path: xhr.responseText
                     });
         }
-        console.log('Save on ' + url + this.responseText);
+        // console.log('Save on ' + url + xhr.responseText);
     };
     xhr.send(data);
 }

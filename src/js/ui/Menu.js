@@ -34,12 +34,13 @@ export default class Menu {
             main.download();
         });
 
-        // this.menus.save = new MenuItem(this.menuDOM, "Share link", (event) => {
-        //     console.log("SHARE");
-        //     saveOnServer(this.main,(event) => {
-        //         console.log(event);
-        //     })
-        // });
+        this.menus.save = new MenuItem(this.menuDOM, "Share", (event) => {
+            console.log("SHARE");
+            saveOnServer(this.main,(event) => {
+                console.log(event);
+                prompt('Use this url', 'http://editor.thebookofshaders.com/#'+event.url+event.path);
+            })
+        });
         
         main.container.appendChild(this.menuDOM);
     }
