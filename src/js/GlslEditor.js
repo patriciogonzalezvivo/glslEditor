@@ -197,7 +197,7 @@ class GlslEditor {
         name += new Date().getTime();
 
         // Download code
-        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const blob = new Blob([content], { type: 'text/plain' });
         saveAs(blob, name+'.frag');
         this.editor.doc.markClean();
     }
