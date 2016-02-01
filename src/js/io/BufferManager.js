@@ -74,6 +74,7 @@ export default class BufferManager {
 		
 		this.tabs[name].setAttribute('class', 'ge_panel_tab_active');
 		this.current = name;
+		this.main.trigger('new_content', {});
 	}
 
 	close (name) {

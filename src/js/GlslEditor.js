@@ -92,7 +92,7 @@ class GlslEditor {
         // CORE elements
         this.sandbox = new Shader(this);
         this.editor = initEditor(this);
-        this.widgets = new WidgetManager(this);
+        this.widgetManager = new WidgetManager(this);
         
         if (this.options.divider) {
             this.divider = new Divider(this);
@@ -118,6 +118,7 @@ class GlslEditor {
 
     new () {
         this.setContent(EMPTY_FRAG_SHADER,(new Date().getTime()).toString()+'.frag');
+        this.trigger('new_content', {});
     }
 
     setContent (shader, tabName) {

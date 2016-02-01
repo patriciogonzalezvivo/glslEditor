@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var valueRanges = {
 		rgb: 	{r: [0, 255], g: [0, 255], b: [0, 255]},
@@ -289,11 +289,11 @@ class ColorConverter {
 
 	// ------------------------ CMYK ------------------------ //
 	// Quote from Wikipedia:
-	// "Since RGB and CMYK spaces are both device-dependent spaces, there is no 
+	// 'Since RGB and CMYK spaces are both device-dependent spaces, there is no 
 	// simple or general conversion formula that converts between them.  
 	// Conversions are generally done through color management systems, using 
 	// color profiles that describe the spaces being converted. Nevertheless, the 
-	// conversions cannot be exact, since these spaces have very different gamuts."
+	// conversions cannot be exact, since these spaces have very different gamuts.'
 	// Translation: the following are just simple RGB to CMY(K) and visa versa conversion functions.
 
 	static rgb2cmy (rgb) {

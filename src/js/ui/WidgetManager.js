@@ -24,10 +24,7 @@ export default class WidgetManager {
     constructor (main) {
         this.main = main;
 
-        // document.body.addEventListener("mouseup", (event) => {
-        //     console.log('MouseUp', event);
-        // });
-
+        // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
         wrapper.addEventListener("mouseup", (event) => {
             // bail out if we were doing a selection and not a click
@@ -38,52 +35,69 @@ export default class WidgetManager {
             let cursor = this.main.editor.getCursor(true);
 
             // see if there is a match on the cursor click
-            let colorMatch = this.getMatch(cursor, 'color');
-            if (colorMatch) {
+            let match = this.getMatch(cursor);
+            if (match) {
+                if (match.type === 'color') {
+                    // Toggles the picker to be off if it's already present.
+                    if (this.picker && this.picker.isVisible) {
+                        this.picker.removeModal();
+                        return;
+                    }
+                    // If no picker is created yet, do it now
+                    else if (!this.picker) {
+                        this.picker = new ColorPickerModal(match.string);
+                    }
+                    else {
+                        this.picker.setColor(match.string);
+                    }
 
-                // Toggles the picker to be off if it's already present.
-                if (this.picker && this.picker.isVisible) {
-                    this.picker.removeModal();
-                    return;
+                    this.picker.showAt(this.main.editor);
+                    this.picker.on('changed',(color) => {
+                        let newColor = color.getString('vec');
+                        let start = {"line":cursor.line, "ch":match.start};
+                        let end = {"line":cursor.line, "ch":match.end};
+                        match.end = match.start+newColor.length;
+                        this.main.editor.replaceRange(newColor, start, end);
+                    });
                 }
-                // If no picker is created yet, do it now
-                else if (!this.picker) {
-                    this.picker = new ColorPickerModal(colorMatch.string);
+                else if (match.type === 'pos') {
+                    console.log('Pos', match);
                 }
-                else {
-                    this.picker.setColor(colorMatch.string);
+                else if (match.type === 'number') {
+                    console.log('Number', match);
                 }
-
-                this.picker.showAt(this.main.editor);
-                
-                this.picker.on('changed',(color) => {
-                    let newColor = color.getString('vec');
-                    let start = {"line":cursor.line, "ch":colorMatch.start};
-                    let end = {"line":cursor.line, "ch":colorMatch.end};
-                    colorMatch.end = colorMatch.start+newColor.length;
-                    this.main.editor.replaceRange(newColor, start, end);
-                });
-
-                return
             } 
-
-            let numberMatch = this.getMatch(cursor, 'number');
-            if (numberMatch) {
-                let value = parseFloat(numberMatch.string);
-                // console.log("Number", value);
+            else {
+                let token = this.main.editor.getTokenAt(cursor);
+                console.log('Token', token.type, token);
             }
         });
     }
 
-    getMatch (cursor, type) {
+    getMatch (cursor) {
+        let types = ['color', 'pos', 'number'];
+        let rta = undefined;
+        for (let i in types) {
+            rta = this.getTypeMatch(cursor, types[i]);
+            if (rta) {
+                return rta;
+            }
+        }   
+        return;
+    }
+
+    getTypeMatch (cursor, type) {
         if (!type) return;
         let re;
         switch(type.toLowerCase()) {
-            case 'color':
-                re = /vec[3|4]\([\d|.|,\s]*\)/g;
-                break;
             case 'number':
                 re = /[-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g;
+                break;
+            case 'pos':
+                re = /vec2\([\d|.|,\s]*\)/g;
+                break;
+            case 'color':
+                re = /vec[3|4]\([\d|.|,\s]*\)/g;
                 break;
             default:
                 throw new Error("invalid match selection");
@@ -100,6 +114,7 @@ export default class WidgetManager {
                 let end = matches[i].index + len;
                 if (cursor.ch >= start && cursor.ch <= end) {
                     return {
+                        type: type,
                         start: start,
                         end: end,
                         string: val

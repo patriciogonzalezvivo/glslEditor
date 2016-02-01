@@ -15,7 +15,7 @@ const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where
 
 export default class ColorPickerModal {
     constructor (color = 'vec3(1.0,0.0,0.0)') {
-        this.lib = new Color(color);
+        this.value = new Color(color);
 
         this.listeners = {};
         this.dom = {};
@@ -209,7 +209,7 @@ export default class ColorPickerModal {
     setColor (color) {
         // Set color
         this.color = color;
-        this.lib = new Color(this.color);
+        this.value = new Color(this.color);
 
         if (this.renderer) {
             // Update render by one tick
@@ -255,17 +255,17 @@ export default class ColorPickerModal {
             y = event.clientY - startPoint.top - r,
             h = (360 - ((Math.atan2(y, x) * 180 / Math.PI) + (y < 0 ? 360 : 0)))/360,
             s = (Math.sqrt((x * x) + (y * y)) / r);
-            this.lib.set({ h, s }, 'hsv');
+            this.value.set({ h, s }, 'hsv');
         }
         else if (currentTarget === this.dom.hsvBarCursors) { // the luminanceBar
             let v = (currentTargetHeight - (event.clientY - startPoint.top)) / currentTargetHeight;
             v = Math.max(0, Math.min(1, v))*255;
-            this.lib.set({ v: v }, 'hsv');
+            this.value.set({ v: v }, 'hsv');
         }
 
         // fire 'changed'
         if (this.listeners.changed && typeof this.listeners.changed === 'function') {
-            this.listeners.changed(this.lib);
+            this.listeners.changed(this.value);
         }
     }
 
@@ -334,7 +334,7 @@ export default class ColorPickerModal {
      */
     renderTestPatch () {
         let patch = this.el.querySelector('.colorpicker-patch');
-        let color = this.lib.getString('rgb');
+        let color = this.value.getString('rgb');
         patch.style.backgroundColor = color;
     }
 
@@ -342,7 +342,7 @@ export default class ColorPickerModal {
      *  Render HSV picker
      */
     renderHSVPicker () {
-        let color = this.lib.colors;
+        let color = this.value.colors;
         let colorDiscRadius = this.dom.colorDisc.offsetHeight / 2;
         let pi2 = Math.PI * 2;
         let x = Math.cos(pi2 - color.hsv.h * pi2);
