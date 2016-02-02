@@ -32,7 +32,6 @@ void main() {
     st.x *= u_resolution.x/u_resolution.y;
 
     vec3 color = vec3(1.);
-    vec2 pos = vec2(.5);
     color = vec3(st.x,st.y,abs(sin(u_time)));
 
     gl_FragColor = vec4(color,1.0);
