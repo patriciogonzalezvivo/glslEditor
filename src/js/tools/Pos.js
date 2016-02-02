@@ -14,8 +14,12 @@ export default class Pos {
         }
         else if (typeof pos === 'string') {
             let parts = pos.replace(/(?:#|\)|%)/g, '').split('(');
-            let values = (parts[1] || '').split(/,\s*/);
+            let strValues = (parts[1] || '').split(/,\s*/);
             type = type || (parts[1] ? parts[0].substr(0, 4) : 'vec2');
+            let values = [];
+            for (let i in strValues) {
+                values.push(parseFloat(strValues[i])); 
+            }
             this.set(values,type);
         }
         else if (pos) {
@@ -31,5 +35,60 @@ export default class Pos {
                 this.dim = pos.dim;
             }
         }
+    }
+
+    set x (v) {
+        this.value[0] = v;
+    }
+
+    set y (v) {
+        this.value[1] = v;
+    }
+
+    set z (v) {
+        if (this.dim < 3) {
+            this.value.push(v);
+            this.dim = 3;
+        }
+        else {
+            this.value[2] = v;
+        }
+    }
+
+    set w (v) {
+        while (this.dim < 4) {
+            this.value.push(0);
+        }
+        this.dim = this.value.length;
+        this.value[3] = v;
+    }
+
+    get x () {
+        return this.value[0];
+    }
+
+    get y () {
+        return this.value[1];
+    }
+
+    get z () {
+        return this.value[2];
+    }
+
+    get w () {
+        return this.value[2];
+    }
+
+    getString(type) {
+        type = type || 'vec' + this.dim;
+        
+        let str = type + '(';
+        for (let n = 0; n < this.dim; n++) {
+            str += this.value[n].toFixed(3);
+            if (n !== this.dim-1) {
+                str +=',';
+            }
+        }
+        return str+= ')';
     }
 }

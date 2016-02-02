@@ -4,7 +4,7 @@ import { initEditor } from 'app/core/Editor';
 
 import Menu from 'app/ui/Menu';
 import Divider from 'app/ui/Divider';
-import WidgetManager from 'app/ui/WidgetManager';
+import Helpers from 'app/ui/Helpers';
 
 import FileDrop from 'app/io/FileDrop';
 import HashWatch from 'app/io/HashWatch';
@@ -32,6 +32,7 @@ void main() {
     st.x *= u_resolution.x/u_resolution.y;
 
     vec3 color = vec3(1.);
+    vec2 pos = vec2(.5);
     color = vec3(st.x,st.y,abs(sin(u_time)));
 
     gl_FragColor = vec4(color,1.0);
@@ -92,7 +93,8 @@ class GlslEditor {
         // CORE elements
         this.sandbox = new Shader(this);
         this.editor = initEditor(this);
-        this.widgetManager = new WidgetManager(this);
+
+        this.helpers = new Helpers(this);
         
         if (this.options.divider) {
             this.divider = new Divider(this);

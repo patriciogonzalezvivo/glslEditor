@@ -22,7 +22,7 @@
     --z-canvas: 200;
     --z-divider: 250;
     --z-menu: 300;
-    --z-colorpicker: 1000;
+    --z-helpers: 1000;
 }
 
 /* Native Codemirror */
@@ -46,4 +46,5 @@
 @import '_editor';
 @import '_canvas';
 @import '_colorpicker';
+@import '_trackpad';
 

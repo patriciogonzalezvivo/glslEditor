@@ -1,0 +1,19 @@
+.trackpad-modal {
+    box-sizing: border-box;
+    position: absolute;
+    padding: 2px;
+    background-color: var(--ui-component-color);
+    overflow: hidden;
+    box-shadow: var(--modal-shadow);
+    user-select: none;
+    z-index: var(--z-helpers); /* z-index will be modified by Greensock Draggable when dragging */
+}
+
+.trackpad-modal * {
+    box-sizing: border-box;
+}
+
+#trackpad-canvas {
+    width: 100%;
+    height: 100%;
+}

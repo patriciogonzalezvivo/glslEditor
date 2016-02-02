@@ -1,7 +1,7 @@
 'use strict';
 
-import ColorPickerModal from 'app/ui/ColorPickerModal';
-import Color from 'app/tools/Color';
+import ColorPickerModal from 'app/ui/modals/ColorPickerModal';
+import TrackPadModal from 'app/ui/modals/TrackPadModal';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -20,7 +20,7 @@ RegExp.prototype.execAll = function(string) {
     return matches;
 }
 
-export default class WidgetManager {
+export default class Helpers {
     constructor (main) {
         this.main = main;
 
@@ -37,22 +37,16 @@ export default class WidgetManager {
             // see if there is a match on the cursor click
             let match = this.getMatch(cursor);
             if (match) {
-                if (match.type === 'color') {
-                    // Toggles the picker to be off if it's already present.
-                    if (this.picker && this.picker.isVisible) {
-                        this.picker.removeModal();
-                        return;
-                    }
-                    // If no picker is created yet, do it now
-                    else if (!this.picker) {
-                        this.picker = new ColorPickerModal(match.string);
-                    }
-                    else {
-                        this.picker.setColor(match.string);
-                    }
+                // Toggles the trackpad to be off if it's already present.
+                if (this.activeModal && this.activeModal.isVisible) {
+                    this.activeModal.removeModal();
+                    return;
+                }
 
-                    this.picker.showAt(this.main.editor);
-                    this.picker.on('changed',(color) => {
+                if (match.type === 'color') {
+                    this.activeModal = new ColorPickerModal(match.string);
+                    this.activeModal.showAt(this.main.editor);
+                    this.activeModal.on('changed',(color) => {
                         let newColor = color.getString('vec');
                         let start = {"line":cursor.line, "ch":match.start};
                         let end = {"line":cursor.line, "ch":match.end};
@@ -61,7 +55,15 @@ export default class WidgetManager {
                     });
                 }
                 else if (match.type === 'pos') {
-                    console.log('Pos', match);
+                    this.activeModal = new TrackPadModal(match.string);
+                    this.activeModal.showAt(this.main.editor);
+                    this.activeModal.on('changed',(pos) => {
+                        let newpos = pos.getString();
+                        let start = {"line":cursor.line, "ch":match.start};
+                        let end = {"line":cursor.line, "ch":match.end};
+                        match.end = match.start+newpos.length;
+                        this.main.editor.replaceRange(newpos, start, end);
+                    });
                 }
                 else if (match.type === 'number') {
                     console.log('Number', match);
@@ -94,7 +96,7 @@ export default class WidgetManager {
                 re = /[-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g;
                 break;
             case 'pos':
-                re = /vec2\([\d|.|,\s]*\)/g;
+                re = /vec2\([-|\d|.|,\s]*\)/g;
                 break;
             case 'color':
                 re = /vec[3|4]\([\d|.|,\s]*\)/g;
