@@ -45,6 +45,9 @@
 @import '_panel';
 @import '_editor';
 @import '_canvas';
+
+
 @import '_colorpicker';
 @import '_trackpad';
+@import '_tooltip';
 

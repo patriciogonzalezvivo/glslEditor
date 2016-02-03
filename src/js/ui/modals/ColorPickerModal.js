@@ -20,6 +20,8 @@ export default class ColorPickerModal extends Modal {
 
         this.width = 260;  // in pixels
         this.height = 270; // in pixels
+
+        this.init();
     }
 
     init () {

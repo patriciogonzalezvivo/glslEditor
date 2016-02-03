@@ -8,13 +8,13 @@ let startPoint;
 let domCache;
 const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
 
-export default class TrackPadModal extends Modal {
-    constructor (pos, properties) {
+export default class SliderModal extends Modal {
+    constructor (number, properties) {
         super('trackpad-');
 
         properties = properties || {};
-        this.width = properties.width || 200;
-        this.height = properties.height || 200;
+        this.width = properties.width || 300;
+        this.height = properties.height || 100;
         this.min = properties.min || -1;
         this.max = properties.max || 1;
         this.size =  properties.size || 6;
@@ -23,8 +23,7 @@ export default class TrackPadModal extends Modal {
         this.fnColor = 'rgb(230, 230, 230)';
         this.dimColor = 'rgb(100, 100, 100)';
 
-        let center = ((this.range/2)-this.max)*-1;
-        this.value = new Pos(pos || [center,center]);
+        this.value = parseFloat(number);
 
         this.init();
     }

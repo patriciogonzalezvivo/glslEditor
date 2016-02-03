@@ -7,7 +7,6 @@ export default class Modal {
         this.CSS_PREFIX = CSS_PREFIX;
 
         this.listeners = {};
-        this.init();
 
         /**
          *  This initializes the renderer. It uses requestAnimationFrame() to
@@ -17,9 +16,13 @@ export default class Modal {
             // Stores a reference to the animation rendering loop.
             frame: null,
 
+            drawFrame: () => {
+                this.draw();
+            },
+
             // Starts animation rendering loop
             start: () => {
-                this.draw();
+                this.renderer.drawFrame();
                 this.renderer.frame = window.requestAnimationFrame(this.renderer.start);
             },
 
@@ -29,10 +32,6 @@ export default class Modal {
             }
         };
         this.isVisible = false;
-    }
-
-    init () {
-        // Init rutine
     }
 
     draw () {

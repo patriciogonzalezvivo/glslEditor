@@ -2,6 +2,7 @@
 
 import ColorPickerModal from 'app/ui/modals/ColorPickerModal';
 import TrackPadModal from 'app/ui/modals/TrackPadModal';
+import ToolTipModal from 'app/ui/modals/ToolTipModal';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -36,6 +37,7 @@ export default class Helpers {
 
             // see if there is a match on the cursor click
             let match = this.getMatch(cursor);
+            let token = this.main.editor.getTokenAt(cursor);
             if (match) {
                 // Toggles the trackpad to be off if it's already present.
                 if (this.activeModal && this.activeModal.isVisible) {
@@ -69,8 +71,12 @@ export default class Helpers {
                     console.log('Number', match);
                 }
             } 
+            else if (token.type === 'builtin' || token.type === 'variable-3') {
+                console.log(token.string);
+                this.activeModal = new ToolTipModal('Learn more about '+token.string,'http://thebookofshaders.com/glossary/?search='+token.string);
+                this.activeModal.showAt(this.main.editor);
+            }
             else {
-                let token = this.main.editor.getTokenAt(cursor);
                 console.log('Token', token.type, token);
             }
         });
