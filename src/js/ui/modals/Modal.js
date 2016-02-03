@@ -43,19 +43,10 @@ export default class Modal {
     }
 
     showAt (cm) {
-        // Turn the picker on and present modal at the desired position
-        let topOffset = 22;
-        let topBoundary = 250;
-        let bottomOffset = 16;
-        let leftOffset = -65;
-        let cursorOffset = cm.cursorCoords(true, "page");
-        let leftBase = cm.cursorCoords(true, "page").left;
-        let pickerTop = (cursorOffset.top + topOffset);
-        if (cursorOffset.top < topBoundary) {
-            pickerTop = (cursorOffset.top + bottomOffset)
-        }
-        let x = leftBase + leftOffset;
-        this.presentModal(x, pickerTop);
+        let cursor = cm.cursorCoords(true, "page");
+        let x = cursor.left - this.width*.5;
+        let y = cursor.bottom + 20;
+        this.presentModal(x, y);
     }
 
     presentModal (x, y) {

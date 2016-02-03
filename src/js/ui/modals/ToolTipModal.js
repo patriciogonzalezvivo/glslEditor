@@ -40,6 +40,7 @@ export default class TootTip extends Modal {
     }
 
     presentModal (x, y) {
+        console.log(this.el.offsetWidth);
         super.presentModal(x,y);
 
         // Check if desired x, y will be outside the viewport.
@@ -47,8 +48,9 @@ export default class TootTip extends Modal {
         let modalXPos = (x + this.width < window.innerWidth) ? x : (window.innerWidth - 20 - this.width);
         let modalYPos = (y + this.height < window.innerHeight) ? y : (window.innerHeight - 20 - this.height);
 
-        this.el.style.left = (modalXPos - 24) + 'px';
-        this.el.style.top = (modalYPos + 14) + 'px';
+
+        this.el.style.left = x + 'px';
+        this.el.style.top = y + 'px';
         document.body.appendChild(this.el);
 
         this.draw();

@@ -81,8 +81,7 @@ export default class Helpers {
                 }
             } 
             else if (token.type === 'builtin' || token.type === 'variable-3') {
-                console.log(token.string);
-                this.activeModal = new ToolTipModal('Learn more about '+token.string,'http://thebookofshaders.com/glossary/?search='+token.string);
+                this.activeModal = new ToolTipModal( (token.type === 'builtin'? 'Function ' : 'Variable type ') + token.string + (token.type === 'builtin'? '() ...' : ' ...') ,'http://thebookofshaders.com/glossary/?search='+token.string);
                 this.activeModal.showAt(this.main.editor);
             }
             else {

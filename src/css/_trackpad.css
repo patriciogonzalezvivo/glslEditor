@@ -3,7 +3,7 @@
     position: absolute;
     padding: 2px;
     background-color: var(--ui-component-color);
-    overflow: hidden;
+    /*overflow: hidden;*/
     box-shadow: var(--modal-shadow);
     user-select: none;
     z-index: var(--z-helpers); /* z-index will be modified by Greensock Draggable when dragging */
@@ -16,4 +16,29 @@
 #trackpad-canvas {
     width: 100%;
     height: 100%;
+}
+
+.trackpad-modal:after, .trackpad-modal:before {
+    bottom: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    z-index: var(--z-helpers);
+}
+
+.trackpad-modal:after {
+    border-color: rgba(75, 87, 94, 0);
+    border-bottom-color: var(--modal-shadow);
+    border-width: 10px;
+    margin-left: -10px;
+}
+.trackpad-modal:before {
+    border-color: rgba(75, 87, 94, 0);
+    border-bottom-color: var(--ui-component-color);
+    border-width: 13px;
+    margin-left: -13px;
 }

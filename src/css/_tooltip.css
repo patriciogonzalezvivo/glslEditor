@@ -23,7 +23,7 @@
 
 .tooltip-modal:after, .tooltip-modal:before {
     bottom: 100%;
-    left: 50%;
+    left: 14px;
     border: solid transparent;
     content: " ";
     height: 0;
