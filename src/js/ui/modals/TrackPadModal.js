@@ -68,6 +68,18 @@ export default class TrackPadModal extends Modal {
         ctx.lineWidth = 2.0;
         ctx.strokeRect(0, 0, this.width, this.height);
 
+        ctx.beginPath();
+        ctx.lineWidth = .25;
+        let sections = 20;
+        let step = this.width/sections;
+        for (let i = 0; i < sections; i++) {
+            ctx.moveTo(i*step,0);
+            ctx.lineTo(i*step,this.height);
+            ctx.moveTo(0,i*step);
+            ctx.lineTo(this.width,i*step);
+        }
+        ctx.stroke();
+
         // horizontal line
         ctx.strokeStyle = this.dimColor;
         ctx.lineWidth = 1.0;
@@ -172,7 +184,7 @@ export default class TrackPadModal extends Modal {
     close () {
         this.destroyEvents();
         removeEvent(this.el, 'mousedown', this.onMouseDownHandler);
-        this.onHsvDownHandler = null;
+        this.onMouseDownHandler = null;
     }
 
     setPos (pos) {

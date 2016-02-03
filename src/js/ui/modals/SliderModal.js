@@ -13,18 +13,16 @@ export default class SliderModal extends Modal {
         super('trackpad-');
 
         properties = properties || {};
-        this.width = properties.width || 300;
-        this.height = properties.height || 100;
-        this.min = properties.min || -1;
-        this.max = properties.max || 1;
-        this.size =  properties.size || 6;
-        this.range = this.max - this.min;
-
+        this.width = properties.width || 250;
+        this.height = properties.height || 50;
+        
         this.fnColor = 'rgb(230, 230, 230)';
         this.dimColor = 'rgb(100, 100, 100)';
 
-        this.value = parseFloat(number);
+        this.start = 0;
+        this.range = 2;
 
+        this.setValue(number);
         this.init();
     }
 
@@ -49,18 +47,12 @@ export default class SliderModal extends Modal {
 	}
 
 	draw () {
-        if (this.value.x < this.min) this.value.x = this.min; 
-        if (this.value.x > this.max) this.value.x = this.max; 
-        if (this.value.y < this.min) this.value.y = this.min; 
-        if (this.value.y > this.max) this.value.y = this.max;
-
         let canvas = this.dom.canvas;//document.getElementById(this.CSS_PREFIX + 'canvas');
         canvas.width = this.width;
         canvas.height = this.height;
 
         let ctx = canvas.getContext('2d');
-
-        ctx.clearRect(-1,0,this.width,this.height+14);
+        // ctx.clearRect(-1,0,this.width,this.height+14);
 
         // frame
         ctx.strokeStyle = this.dimColor;
@@ -76,34 +68,51 @@ export default class SliderModal extends Modal {
         ctx.closePath();
         ctx.stroke();
 
-        // vertical line
+        let times = 3;
+        let unit = 100;
+        let step = this.width/unit;
+        let sections = unit*times;
+
+        let offset = this.offset;
+        let offsetX = this.offsetX;
+        let offsetI = 0;
+        let min = this.min;
+        let max = this.max;
+
+        if (Math.abs(this.offsetX-this.width*.5) > this.width*.5) {
+            offsetX = (this.offsetX-this.width*.5)%(this.width*.5);
+        //     offsetI =  Math.floor(this.offsetX/(this.width));
+        //     console.log('integer offset ',offsetI, offsetX);
+        }
+
+        // console.log(min,this.offset,max);
         ctx.beginPath();
-        ctx.moveTo(0.5+this.width/2, 0);
-        ctx.lineTo(0.5+this.width/2, this.height);
+        for (let i = 0; i < sections; i++) {
+            let y1 = ( i%(unit/2) === 0)? 5 : 0;
+            let y2 = ( i%(unit/2) === 0)? 20 : ( i%(unit/4) === 0)? 15 : 10;
+            ctx.moveTo(offsetX-this.width+i*step,this.height*.5-y1);
+            ctx.lineTo(offsetX-this.width+i*step,this.height*.5+y2);
+        }
+        ctx.stroke();
+
+        let val = Math.round(((this.value - this.min)/this.range)*this.width );
+
+        // point
+        ctx.strokeStyle = this.fnColor;
+        ctx.lineWidth = 1.0;
+        ctx.beginPath();
+        ctx.moveTo(this.offsetX+val, this.height*.5);
+        ctx.lineTo(this.offsetX+val, this.height);
         ctx.closePath();
         ctx.stroke();
 
-        let x = Math.round( ((this.value.x - this.min)/this.range)*this.width );
-        let y = Math.round( ((1.-(this.value.y - this.min)/this.range))*this.height );
-
-        let half = this.size/2;
-
-        if (x < half) {
-            x = half;
-        }
-        if (x > this.width-half) {
-            x = this.width-half;
-        }
-        if (y < half) {
-            y = half;
-        }
-        if (y > this.height-half) {
-            y = this.height-half;
-        }
-
-        // point
-        ctx.fillStyle = this.fnColor;
-        ctx.fillRect(x-half, y-half, this.size, this.size);
+        ctx.fillStyle = this.dimColor;
+        ctx.font = '10px Arial';
+        ctx.textBaseline = "alphabetic";
+        ctx.textAlign = "center";
+        ctx.fillText(Math.floor(this.integer-1-offsetI), offsetX, this.height*.3);
+        ctx.fillText(Math.floor(this.integer-offsetI),offsetX+this.width*0.5, this.height*.3);
+        ctx.fillText(Math.floor(this.integer+1-offsetI), offsetX+this.width, this.height*.3);
 
         ctx.restore();
 	}
@@ -132,6 +141,11 @@ export default class SliderModal extends Modal {
         event.preventDefault();
 
         startPoint = getDomOrigin(target);
+        let x = event.clientX - startPoint.left;
+        let y = event.clientY - startPoint.top;
+        if (y < this.height*.5) {
+            this.start = x-this.offsetX;
+        }
 
         // Starts listening for mousemove and mouseup events
         this.onMouseMoveHandler = addEvent(window, 'mousemove', this.onMouseMove, this);
@@ -146,13 +160,41 @@ export default class SliderModal extends Modal {
     onMouseMove (event) {
         let x = event.clientX - startPoint.left;
         let y = event.clientY - startPoint.top;
-        this.value.x = ((this.range/this.width)*x)-(this.range-this.max);
-        this.value.y = (((this.range/this.height)*y)-(this.range-this.max))*-1.;
 
+        if (y < this.height*.5) {
+            this.offsetX = x-this.start;
+            this.offset = ((this.range/this.width)*this.offsetX)-(this.range-this.max);
+        } else {
+            x -= this.width*.5+this.offsetX;
+            this.fraction = ((this.range/this.width)*x)-(this.range-this.max);
+        }
+        
         // fire 'changed'
         if (this.listeners.changed && typeof this.listeners.changed === 'function') {
-            this.listeners.changed(this.value);
+            this.listeners.changed(this.getValue().toFixed(3));
         }
+    }
+
+    setValue (value) {
+        if (typeof value === 'string') {
+            this.value = parseFloat(value);
+        }
+        else if (typeof value === 'number') {
+            this.value = value;
+        }
+        
+        this.integer = Math.floor(this.value);
+        this.fraction = this.value % 1;
+
+        this.offsetX = 0;
+        this.min = this.integer-1;
+        this.max = this.integer+1;
+        this.offset = 0;
+    }
+
+    getValue () {
+        this.value = this.integer + this.fraction;
+        return this.value;
     }
 
     onMouseUp (event) {
@@ -171,16 +213,7 @@ export default class SliderModal extends Modal {
     close () {
         this.destroyEvents();
         removeEvent(this.el, 'mousedown', this.onMouseDownHandler);
-        this.onHsvDownHandler = null;
-    }
-
-    setPos (pos) {
-        this.value = new Pos(this.pos);
-        this.draw();
-    }
-
-    getPos() {
-        return this.value;
+        this.onMouseDownHandler = null;
     }
 }
 

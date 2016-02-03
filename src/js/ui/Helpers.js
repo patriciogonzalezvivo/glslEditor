@@ -2,6 +2,7 @@
 
 import ColorPickerModal from 'app/ui/modals/ColorPickerModal';
 import TrackPadModal from 'app/ui/modals/TrackPadModal';
+import SliderModal from 'app/ui/modals/SliderModal';
 import ToolTipModal from 'app/ui/modals/ToolTipModal';
 
 // Return all pattern matches with captured groups
@@ -69,6 +70,14 @@ export default class Helpers {
                 }
                 else if (match.type === 'number') {
                     console.log('Number', match);
+                    this.activeModal = new SliderModal(match.string);
+                    this.activeModal.showAt(this.main.editor);
+                    this.activeModal.on('changed',(string) => {
+                        let start = {"line":cursor.line, "ch":match.start};
+                        let end = {"line":cursor.line, "ch":match.end};
+                        match.end = match.start+string.length;
+                        this.main.editor.replaceRange(string, start, end);
+                    });
                 }
             } 
             else if (token.type === 'builtin' || token.type === 'variable-3') {
