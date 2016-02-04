@@ -85,18 +85,18 @@ export default class SliderModal extends Modal {
         let step = this.width/unit;
         let sections = unit*times;
 
-        let offsetX = -this.offsetX;
+        let offsetX = this.offsetX;
 
         if (Math.abs(this.offsetX-this.width*.5) > this.width*.5) {
-            offsetX = (this.offsetX-this.width*.5)%(this.width*.5);
+            offsetX = (this.offsetX-this.width*.5)%(this.width*.5)+this.width;
         }
 
         ctx.strokeStyle = this.dimColor;
         ctx.beginPath();
         for (let i = 0; i < sections; i++) {
             let l = ( i%(unit/2) === 0)? this.height*.35 : ( i%(unit/4) === 0)? this.height*.2 : this.height*.1;
-            ctx.moveTo(offsetX-this.width+i*step,this.height*.5-l);
-            ctx.lineTo(offsetX-this.width+i*step,this.height*.5+l);
+            ctx.moveTo(i*step-offsetX,this.height*.5-l);
+            ctx.lineTo(i*step-offsetX,this.height*.5+l);
         }
         ctx.stroke();
 
@@ -142,7 +142,6 @@ export default class SliderModal extends Modal {
         let y = event.clientY - startPoint.top;
 
         this.prevOffset = x;
-        console.log("start: ", this.prevOffset);
 
         // Starts listening for mousemove and mouseup events
         this.onMouseMoveHandler = addEvent(window, 'mousemove', this.onMouseMove, this);
@@ -158,10 +157,8 @@ export default class SliderModal extends Modal {
         let x = event.clientX - startPoint.left;
         let y = event.clientY - startPoint.top;
 
-        console.log("X: ", x);
         let vel = x-this.prevOffset;
         let offset = this.offsetX - vel;
-        console.log("Offset: ", offset);
 
         let center = this.width/this.scale;
         this.setValue(offset/center);
@@ -187,7 +184,6 @@ export default class SliderModal extends Modal {
         }
         let center = (this.width/this.scale);
         this.offsetX = this.value*center;
-        console.log("setValue: ",this.value, this.offsetX);
     }
 
     getValue () {

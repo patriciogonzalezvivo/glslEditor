@@ -69,7 +69,6 @@ export default class Helpers {
                     });
                 }
                 else if (match.type === 'number') {
-                    console.log('Number', match);
                     this.activeModal = new SliderModal(match.string);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed',(string) => {
