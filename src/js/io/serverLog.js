@@ -31,7 +31,6 @@ export function saveOnServer (ge, callback) {
                         url: url
                     });
         }
-        // console.log('Save on ' + url + xhr.responseText);
     };
     xhr.send(data);
 }

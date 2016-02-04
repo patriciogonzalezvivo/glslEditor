@@ -44,7 +44,9 @@ export function initEditor (main) {
         theme: options.theme,
         dragDrop: false,
         indentUnit: 4,
-        gutters: ['CodeMirror-linenumbers', 'var-in', 'var-out']
+        gutters: ['CodeMirror-linenumbers', 'var-in', 'var-out'],
+        lineWrapping: true,
+        autofocus: true,
     });
 
     return cm;

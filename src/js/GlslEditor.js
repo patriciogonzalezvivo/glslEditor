@@ -5,6 +5,7 @@ import { initEditor } from 'app/core/Editor';
 import Menu from 'app/ui/Menu';
 import Divider from 'app/ui/Divider';
 import Helpers from 'app/ui/Helpers';
+import DisplayErrors from 'app/ui/DisplayErrors';
 
 import FileDrop from 'app/io/FileDrop';
 import HashWatch from 'app/io/HashWatch';
@@ -95,7 +96,8 @@ class GlslEditor {
         this.editor = initEditor(this);
 
         this.helpers = new Helpers(this);
-        
+        this.displayErrors = new DisplayErrors(this);
+
         if (this.options.divider) {
             this.divider = new Divider(this);
         }
@@ -156,7 +158,6 @@ class GlslEditor {
                         console.log('Error downloading ', shader, error);
                         return;
                     }
-                    console.log(error, response, body);
                     this.setContent(body);
                 });
             } else {

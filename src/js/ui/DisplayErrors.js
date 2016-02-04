@@ -1,0 +1,47 @@
+'use strict';
+
+export default class DisplayErrors {
+    constructor(main) {
+        this.main = main;
+
+        //  private variables
+        this.widgets = [];
+
+        // EVENTS
+        this.main.sandbox.canvas.on('error', (arg) => {
+            this.clean();
+            this.addError(arg);
+        });
+
+        this.main.editor.on('changes', (cm, changesObjs) => {
+            if (this.main.sandbox.canvas.isValid) {
+                this.clean();
+            }
+        });
+    }
+
+    clean() {
+        for (let i = 0; i < this.widgets.length; i++) {
+            this.main.editor.removeLineWidget(this.widgets[i]);
+        }
+        this.widgets.length = 0;
+    }
+
+    addError(args) {
+        let re = /ERROR:\s+\d+:(\d+):\s+('.*)/g;
+        let matches = re.exec(args.error);
+        console.log(matches);
+
+        if (matches) {
+            let line = parseInt(matches[1])-1;
+            let er = matches[2];
+            let msg = document.createElement('div');
+            console.log("Line", line, ":", er);
+            let icon = msg.appendChild(document.createElement('span'));
+            icon.className = 'btm bt-exclamation-triangle ge-error-icon';
+            msg.appendChild(document.createTextNode(er));
+            msg.className = 'ge-error';
+            this.widgets.push(this.main.editor.addLineWidget(line, msg));//, { coverGutter: false, noHScroll: true }));
+        }
+    }
+}

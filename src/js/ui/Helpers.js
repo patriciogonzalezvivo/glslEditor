@@ -29,6 +29,8 @@ export default class Helpers {
         // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
         wrapper.addEventListener("mouseup", (event) => {
+            this.main.editor.clearGutter('var-in');
+
             // bail out if we were doing a selection and not a click
             if (this.main.editor.somethingSelected()) {
                 return;
@@ -84,27 +86,23 @@ export default class Helpers {
                 this.activeModal.showAt(this.main.editor);
             }
             else if (token.type === 'variable') {
-                console.log('Token', token);
+                console.log('Token', token.type, token);
                 let cm = this.main.editor;
                 let nLines = cm.getDoc().size;
 
+                function makeMarker() {
+                    let marker = document.createElement('div');
+                    marker.style.color = '#444';
+                    marker.innerHTML = '&#10095;';
+                    return marker;
+                }
                 let count = 0;
                 let re = new RegExp('[\\s+]('+token.string+')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\-|\\/]?=','i');
-
-                function makeMarker() {
-                  var marker = document.createElement('div');
-                  marker.style.color = '#282';
-                  marker.innerHTML = '●';
-                  return marker;
-                }
-
                 for (let i = 0; i < nLines; i++) {
-                    let line = cm.getLine(i);
-                    let match = re.exec(line);
+                    let match = re.exec(cm.getLine(i));
                     if (match) {
-                        let info = cm.lineInfo(i);
                         cm.setGutterMarker(i, 'var-in', makeMarker());
-                        console.log(i, match, info);
+                        // console.log(i, match);
                     }
                 }
             }
