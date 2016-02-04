@@ -2,8 +2,9 @@
 import CodeMirror from 'codemirror';
 
 // Import CodeMirror addons and modules
-import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/search/search';
+import 'codemirror/addon/search/searchcursor';
+// import 'codemirror/addon/search/matchesonscrollbar';
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/matchbrackets';
@@ -42,7 +43,8 @@ export function initEditor (main) {
         showCursorWhenSelecting: true,
         theme: options.theme,
         dragDrop: false,
-        indentUnit: 4
+        indentUnit: 4,
+        gutters: ['CodeMirror-linenumbers', 'var-in', 'var-out']
     });
 
     return cm;

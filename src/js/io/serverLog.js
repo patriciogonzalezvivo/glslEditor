@@ -27,9 +27,8 @@ export function saveOnServer (ge, callback) {
     xhr.onload = (event) => {
         if (typeof callback === 'function') {
             callback({  content: content,
-                        name: name,
-                        url: url, 
-                        path: xhr.responseText
+                        name: xhr.responseText,
+                        url: url
                     });
         }
         // console.log('Save on ' + url + xhr.responseText);

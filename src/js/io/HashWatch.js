@@ -32,5 +32,22 @@ export default class HashWatch {
                 }
             }
         }
+
+        let query = parseQuery(window.location.search.slice(1));
+        if (query) {
+            if (query.log) {
+                this.main.open('http://thebookofshaders.com:8080/data/'+query.log+'.frag');
+            }
+        }
     }
+}
+
+function parseQuery (qstr) {
+    let query = {};
+    let a = qstr.split('&');
+    for (let i in a) {
+        let b = a[i].split('=');
+        query[decodeURIComponent(b[0])] = decodeURIComponent(b[1]);
+    }
+    return query;
 }

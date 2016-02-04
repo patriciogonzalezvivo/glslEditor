@@ -83,6 +83,31 @@ export default class Helpers {
                 this.activeModal = new ToolTipModal( (token.type === 'builtin'? 'Function ' : 'Variable type ') + token.string + (token.type === 'builtin'? '() ...' : ' ...') ,'http://thebookofshaders.com/glossary/?search='+token.string);
                 this.activeModal.showAt(this.main.editor);
             }
+            else if (token.type === 'variable') {
+                console.log('Token', token);
+                let cm = this.main.editor;
+                let nLines = cm.getDoc().size;
+
+                let count = 0;
+                let re = new RegExp('[\\s+]('+token.string+')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\-|\\/]?=','i');
+
+                function makeMarker() {
+                  var marker = document.createElement('div');
+                  marker.style.color = '#282';
+                  marker.innerHTML = '●';
+                  return marker;
+                }
+
+                for (let i = 0; i < nLines; i++) {
+                    let line = cm.getLine(i);
+                    let match = re.exec(line);
+                    if (match) {
+                        let info = cm.lineInfo(i);
+                        cm.setGutterMarker(i, 'var-in', makeMarker());
+                        console.log(i, match, info);
+                    }
+                }
+            }
             else {
                 console.log('Token', token.type, token);
             }

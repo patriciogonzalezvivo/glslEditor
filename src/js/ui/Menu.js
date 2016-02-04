@@ -38,7 +38,7 @@ export default class Menu {
             console.log("SHARE");
             saveOnServer(this.main,(event) => {
                 console.log(event);
-                prompt('Use this url', 'http://patriciogonzalezvivo.github.io/glslEditor/#'+event.url+event.path);
+                prompt('Use this url', 'http://patriciogonzalezvivo.github.io/glslEditor/?log='+event.name);
             })
         });
         
