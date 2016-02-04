@@ -10,17 +10,17 @@ const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where
 
 export default class SliderModal extends Modal {
     constructor (number, properties) {
-        super('trackpad-');
+        super('slider-');
 
         properties = properties || {};
         this.width = properties.width || 250;
-        this.height = properties.height || 50;
+        this.height = properties.height || 40;
         
         this.fnColor = 'rgb(230, 230, 230)';
         this.dimColor = 'rgb(100, 100, 100)';
 
-        this.start = 0;
-        this.range = 2;
+        this.prevOffset = 0;
+        this.scale = 2;
 
         this.setValue(number);
         this.init();
@@ -52,12 +52,6 @@ export default class SliderModal extends Modal {
         canvas.height = this.height;
 
         let ctx = canvas.getContext('2d');
-        // ctx.clearRect(-1,0,this.width,this.height+14);
-
-        // frame
-        ctx.strokeStyle = this.dimColor;
-        ctx.lineWidth = 2.0;
-        ctx.strokeRect(0, 0, this.width, this.height);
 
         // horizontal line
         ctx.strokeStyle = this.dimColor;
@@ -68,30 +62,41 @@ export default class SliderModal extends Modal {
         ctx.closePath();
         ctx.stroke();
 
+        // vertical line
+        ctx.strokeStyle = this.fnColor;
+        ctx.lineWidth = 1.0;
+        ctx.beginPath();
+        ctx.moveTo(this.width*.5, 0);
+        ctx.lineTo(this.width*.5, this.height);
+        ctx.closePath();
+        ctx.stroke();
+
+        // Triangle line
+        ctx.fillStyle = this.fnColor;
+        ctx.beginPath();
+        ctx.moveTo(this.width*.5, 5);
+        ctx.lineTo(this.width*.48, 0);
+        ctx.lineTo(this.width*.52, 0);
+        ctx.closePath();
+        ctx.fill();
+
         let times = 3;
-        let unit = 100;
+        let unit = 40;
         let step = this.width/unit;
         let sections = unit*times;
 
-        let offset = this.offset;
-        let offsetX = this.offsetX;
-        let offsetI = 0;
-        let min = this.min;
-        let max = this.max;
+        let offsetX = -this.offsetX;
 
         if (Math.abs(this.offsetX-this.width*.5) > this.width*.5) {
             offsetX = (this.offsetX-this.width*.5)%(this.width*.5);
-        //     offsetI =  Math.floor(this.offsetX/(this.width));
-        //     console.log('integer offset ',offsetI, offsetX);
         }
 
-        // console.log(min,this.offset,max);
+        ctx.strokeStyle = this.dimColor;
         ctx.beginPath();
         for (let i = 0; i < sections; i++) {
-            let y1 = ( i%(unit/2) === 0)? 5 : 0;
-            let y2 = ( i%(unit/2) === 0)? 20 : ( i%(unit/4) === 0)? 15 : 10;
-            ctx.moveTo(offsetX-this.width+i*step,this.height*.5-y1);
-            ctx.lineTo(offsetX-this.width+i*step,this.height*.5+y2);
+            let l = ( i%(unit/2) === 0)? this.height*.35 : ( i%(unit/4) === 0)? this.height*.2 : this.height*.1;
+            ctx.moveTo(offsetX-this.width+i*step,this.height*.5-l);
+            ctx.lineTo(offsetX-this.width+i*step,this.height*.5+l);
         }
         ctx.stroke();
 
@@ -105,14 +110,6 @@ export default class SliderModal extends Modal {
         ctx.lineTo(this.offsetX+val, this.height);
         ctx.closePath();
         ctx.stroke();
-
-        ctx.fillStyle = this.dimColor;
-        ctx.font = '10px Arial';
-        ctx.textBaseline = "alphabetic";
-        ctx.textAlign = "center";
-        ctx.fillText(Math.floor(this.integer-1-offsetI), offsetX, this.height*.3);
-        ctx.fillText(Math.floor(this.integer-offsetI),offsetX+this.width*0.5, this.height*.3);
-        ctx.fillText(Math.floor(this.integer+1-offsetI), offsetX+this.width, this.height*.3);
 
         ctx.restore();
 	}
@@ -143,9 +140,9 @@ export default class SliderModal extends Modal {
         startPoint = getDomOrigin(target);
         let x = event.clientX - startPoint.left;
         let y = event.clientY - startPoint.top;
-        if (y < this.height*.5) {
-            this.start = x-this.offsetX;
-        }
+
+        this.prevOffset = x;
+        console.log("start: ", this.prevOffset);
 
         // Starts listening for mousemove and mouseup events
         this.onMouseMoveHandler = addEvent(window, 'mousemove', this.onMouseMove, this);
@@ -161,18 +158,24 @@ export default class SliderModal extends Modal {
         let x = event.clientX - startPoint.left;
         let y = event.clientY - startPoint.top;
 
-        if (y < this.height*.5) {
-            this.offsetX = x-this.start;
-            this.offset = ((this.range/this.width)*this.offsetX)-(this.range-this.max);
-        } else {
-            x -= this.width*.5+this.offsetX;
-            this.fraction = ((this.range/this.width)*x)-(this.range-this.max);
-        }
+        console.log("X: ", x);
+        let vel = x-this.prevOffset;
+        let offset = this.offsetX - vel;
+        console.log("Offset: ", offset);
+
+        let center = this.width/this.scale;
+        this.setValue(offset/center);
+        this.prevOffset = x;
         
         // fire 'changed'
         if (this.listeners.changed && typeof this.listeners.changed === 'function') {
             this.listeners.changed(this.getValue().toFixed(3));
         }
+    }
+
+    onMouseUp (event) {
+        this.renderer.stop();
+        this.destroyEvents();
     }
 
     setValue (value) {
@@ -182,24 +185,13 @@ export default class SliderModal extends Modal {
         else if (typeof value === 'number') {
             this.value = value;
         }
-        
-        this.integer = Math.floor(this.value);
-        this.fraction = this.value % 1;
-
-        this.offsetX = 0;
-        this.min = this.integer-1;
-        this.max = this.integer+1;
-        this.offset = 0;
+        let center = (this.width/this.scale);
+        this.offsetX = this.value*center;
+        console.log("setValue: ",this.value, this.offsetX);
     }
 
     getValue () {
-        this.value = this.integer + this.fraction;
         return this.value;
-    }
-
-    onMouseUp (event) {
-        this.renderer.stop();
-        this.destroyEvents();
     }
 
     // Destroy event listeners that exist during mousedown colorpicker interaction

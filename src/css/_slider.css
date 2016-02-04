@@ -1,4 +1,4 @@
-.trackpad-modal {
+.slider-modal {
     box-sizing: border-box;
     position: absolute;
     padding: 0px;
@@ -9,17 +9,17 @@
     z-index: var(--z-helpers); /* z-index will be modified by Greensock Draggable when dragging */
 }
 
-.trackpad-modal * {
+.slider-modal * {
     box-sizing: border-box;
 }
 
-#trackpad-canvas {
+#slider-canvas {
     width: 100%;
     height: 100%;
     cursor: crosshair;
 }
 
-.trackpad-modal:after, .trackpad-modal:before {
+.slider-modal:after, .slider-modal:before {
     bottom: 100%;
     left: 50%;
     border: solid transparent;
@@ -31,14 +31,14 @@
     z-index: var(--z-helpers);
 }
 
-.trackpad-modal:after {
+.slider-modal:after {
     border-color: rgba(75, 87, 94, 0);
-    border-bottom-color: rgb(100,100,100);
+    border-bottom-color: rgb(230,230,230);
     /*border-bottom-color: var(--modal-shadow);*/
     border-width: 5px;
     margin-left: -5px;
 }
-.trackpad-modal:before {
+.slider-modal:before {
     border-color: rgba(75, 87, 94, 0);
     border-bottom-color: var(--ui-component-color);
     border-width: 13px;

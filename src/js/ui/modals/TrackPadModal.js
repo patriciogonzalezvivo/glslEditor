@@ -91,10 +91,19 @@ export default class TrackPadModal extends Modal {
 
         // vertical line
         ctx.beginPath();
-        ctx.moveTo(0.5+this.width/2, 0);
-        ctx.lineTo(0.5+this.width/2, this.height);
+        ctx.moveTo(0.5+this.width*.5, 0);
+        ctx.lineTo(0.5+this.width*.5, this.height);
         ctx.closePath();
         ctx.stroke();
+
+        // Triangle line
+        ctx.fillStyle = this.dimColor;
+        ctx.beginPath();
+        ctx.moveTo(this.width*.5, 5);
+        ctx.lineTo(this.width*.48, 0);
+        ctx.lineTo(this.width*.52, 0);
+        ctx.closePath();
+        ctx.fill();
 
         let x = Math.round( ((this.value.x - this.min)/this.range)*this.width );
         let y = Math.round( ((1.-(this.value.y - this.min)/this.range))*this.height );
