@@ -143,9 +143,9 @@
 
 .colorpicker-modal:after {
     border-color: rgba(75, 87, 94, 0);
-    border-bottom-color: var(--modal-shadow);
-    border-width: 10px;
-    margin-left: -10px;
+    border-bottom-color: var(--ui-component-color);
+    border-width: 5px;
+    margin-left: -5px;
 }
 .colorpicker-modal:before {
     border-color: rgba(75, 87, 94, 0);
