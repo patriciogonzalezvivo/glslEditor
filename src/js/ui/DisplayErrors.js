@@ -36,9 +36,10 @@ export default class DisplayErrors {
             let line = parseInt(matches[1])-1;
             let er = matches[2];
             let msg = document.createElement('div');
-            console.log("Line", line, ":", er);
+
             let icon = msg.appendChild(document.createElement('span'));
-            icon.className = 'btm bt-exclamation-triangle ge-error-icon';
+            icon.className = 'ge-error-icon';
+            icon.innerHTML = "x";
             msg.appendChild(document.createTextNode(er));
             msg.className = 'ge-error';
             this.widgets.push(this.main.editor.addLineWidget(line, msg));//, { coverGutter: false, noHScroll: true }));
