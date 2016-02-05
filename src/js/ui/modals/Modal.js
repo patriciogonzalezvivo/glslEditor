@@ -61,6 +61,7 @@ export default class Modal {
         // Listen for interaction outside of the modal
         window.setTimeout(() => {
             this.onClickOutsideHandler = addEvent(document.body, 'click', this.onClickOutside, this);
+            this.onKeyPressHandler = addEvent(document.body, 'keypress', this.onKeyPress, this);
         }, 0);
         this.isVisible = true;
     }
@@ -74,6 +75,9 @@ export default class Modal {
         }
         removeEvent(document.body, 'click', this.onClickOutsideHandler);
         this.onClickOutsideHandler = null;
+        removeEvent(document.body, 'keypress', this.onKeyPressHandler);
+        this.onKeyPressHandler = null
+
         this.close();
         this.isVisible = false;
     }
@@ -83,6 +87,10 @@ export default class Modal {
      */
     on (type, callback) {
         this.listeners[type] = callback;
+    }
+
+    onKeyPress (event) {
+        this.removeModal();
     }
 
     onClickOutside (event) {
