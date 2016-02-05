@@ -30,8 +30,6 @@ export default class ErrorsDisplay {
     addError(args) {
         let re = /ERROR:\s+\d+:(\d+):\s+('.*)/g;
         let matches = re.exec(args.error);
-        console.log(matches);
-
         if (matches) {
             let line = parseInt(matches[1])-1;
             let er = matches[2];

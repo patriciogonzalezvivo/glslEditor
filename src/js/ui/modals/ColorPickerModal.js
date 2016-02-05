@@ -231,7 +231,6 @@ export default class ColorPickerModal extends Modal {
 
     // Actions when user moves around on HSV color map
     onHsvMove (event) {
-        console.log(event.target);
         let r, x, y, h, s;
         if (event.target === this.dom.hsvMapCover && currentTarget === this.dom.hsvMap) { // the circle
             r = currentTargetHeight / 2,
@@ -239,8 +238,6 @@ export default class ColorPickerModal extends Modal {
             y = event.offsetY - r,
             h = (360 - ((Math.atan2(y, x) * 180 / Math.PI) + (y < 0 ? 360 : 0)))/360,
             s = (Math.sqrt((x * x) + (y * y)) / r);
-
-            console.log(x,y);
             this.value.set({ h, s }, 'hsv');
         }
         else if (event.target === this.dom.hsvBarCursors && currentTarget === this.dom.hsvBarCursors) { // the luminanceBar
