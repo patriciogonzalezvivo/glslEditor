@@ -2,6 +2,8 @@
 
 import {addEvent, removeEvent} from 'app/tools/common'
 
+const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
+
 export default class Modal {
     constructor (CSS_PREFIX) {
         this.CSS_PREFIX = CSS_PREFIX;
@@ -46,6 +48,12 @@ export default class Modal {
         let cursor = cm.cursorCoords(true, "page");
         let x = cursor.left - this.width*.5;
         let y = cursor.bottom + 20;
+
+        // // Check if desired x, y will be outside the viewport.
+        // // Do not allow the modal to disappear off the edge of the window.
+        // let modalXPos = (x + this.width < window.innerWidth) ? x : (window.innerWidth - 20 - this.width);
+        // let modalYPos = (y + this.height < window.innerHeight) ? y : (window.innerHeight - 20 - this.height);
+
         this.presentModal(x, y);
     }
 

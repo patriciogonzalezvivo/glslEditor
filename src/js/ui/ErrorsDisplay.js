@@ -1,6 +1,6 @@
 'use strict';
 
-export default class DisplayErrors {
+export default class ErrorsDisplay {
     constructor(main) {
         this.main = main;
 

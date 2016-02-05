@@ -6,7 +6,6 @@ import { addEvent, removeEvent, getDomOrigin } from 'app/tools/common'
 
 let startPoint;
 let domCache;
-const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
 
 export default class TrackPadModal extends Modal {
     constructor (pos, properties) {
@@ -133,13 +132,8 @@ export default class TrackPadModal extends Modal {
     presentModal (x, y) {
         super.presentModal(x,y);
 
-        // Check if desired x, y will be outside the viewport.
-        // Do not allow the modal to disappear off the edge of the window.
-        let modalXPos = (x + this.width < window.innerWidth) ? x : (window.innerWidth - MODAL_VIEWPORT_EDGE_BUFFER - this.width);
-        let modalYPos = (y + this.height < window.innerHeight) ? y : (window.innerHeight - MODAL_VIEWPORT_EDGE_BUFFER - this.height);
-
-        this.el.style.left = modalXPos + 'px';
-        this.el.style.top = modalYPos + 'px';
+        this.el.style.left = x + 'px';
+        this.el.style.top = y + 'px';
         this.el.style.width = this.width + 'px';
         this.el.style.height = this.height + 'px';
         document.body.appendChild(this.el);
