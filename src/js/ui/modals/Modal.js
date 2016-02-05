@@ -1,3 +1,8 @@
+/*
+Original: https://github.com/tangrams/tangram-play/blob/gh-pages/src/js/addons/ui/widgets/ColorPickerModal.js
+Author: Lou Huang (@saikofish)
+*/
+
 'use strict';
 
 import {addEvent, removeEvent} from 'app/tools/common'
@@ -96,7 +101,7 @@ export default class Modal {
     onClickOutside (event) {
         // HACKY!!
         // A click event fires on the body after mousedown - mousemove, simultaneously with
-        // mouseup. So if someone started a mouse action inside the color picker modal and then
+        // mouseup. So if someone started a mouse action inside the modal and then
         // mouseup'd outside of it, it fires a click event on the body, thus, causing the
         // modal to disappear when the user does not expect it to, since the mouse down event
         // did not start outside the modal.

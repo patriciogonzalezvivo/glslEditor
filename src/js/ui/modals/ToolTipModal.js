@@ -40,7 +40,6 @@ export default class TootTip extends Modal {
     }
 
     presentModal (x, y) {
-        console.log(this.el.offsetWidth);
         super.presentModal(x,y);
 
         this.el.style.left = x + 'px';

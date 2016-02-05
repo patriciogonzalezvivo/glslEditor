@@ -1,3 +1,8 @@
+/*
+Original: https://github.com/tangrams/tangram-play/blob/gh-pages/src/js/addons/ui/widgets/ColorPickerModal.js
+Author: Lou Huang (@saikofish)
+*/
+
 'use strict';
 
 import Modal from 'app/ui/modals/Modal'
@@ -214,7 +219,7 @@ export default class ColorPickerModal extends Modal {
         currentTargetHeight = currentTarget.offsetHeight; // as diameter of circle
 
         // Starts listening for mousemove and mouseup events
-        this.onHsvMoveHandler = addEvent(window, 'mousemove', this.onHsvMove, this);
+        this.onHsvMoveHandler = addEvent(this.el, 'mousemove', this.onHsvMove, this);
         this.onHsvUpHandler = addEvent(window, 'mouseup', this.onHsvUp, this);
 
         this.onHsvMove(event);
@@ -226,17 +231,21 @@ export default class ColorPickerModal extends Modal {
 
     // Actions when user moves around on HSV color map
     onHsvMove (event) {
+        console.log(event.target);
         let r, x, y, h, s;
-        if (currentTarget === this.dom.hsvMap) { // the circle
+        if (event.target === this.dom.hsvMapCover && currentTarget === this.dom.hsvMap) { // the circle
             r = currentTargetHeight / 2,
-            x = event.clientX - startPoint.left - r,
-            y = event.clientY - startPoint.top - r,
+            x = event.offsetX - r,
+            y = event.offsetY - r,
             h = (360 - ((Math.atan2(y, x) * 180 / Math.PI) + (y < 0 ? 360 : 0)))/360,
             s = (Math.sqrt((x * x) + (y * y)) / r);
+
+            console.log(x,y);
             this.value.set({ h, s }, 'hsv');
         }
-        else if (currentTarget === this.dom.hsvBarCursors) { // the luminanceBar
-            let v = (currentTargetHeight - (event.clientY - startPoint.top)) / currentTargetHeight;
+        else if (event.target === this.dom.hsvBarCursors && currentTarget === this.dom.hsvBarCursors) { // the luminanceBar
+            // let v = (currentTargetHeight - (event.clientY - startPoint.top)) / currentTargetHeight;
+            let v = (currentTargetHeight - (event.offsetY)) / currentTargetHeight;
             v = Math.max(0, Math.min(1, v))*255;
             this.value.set({ v: v }, 'hsv');
         }
@@ -257,7 +266,7 @@ export default class ColorPickerModal extends Modal {
 
     // Destroy event listeners that exist during mousedown colorpicker interaction
     destroyEvents () {
-        removeEvent(window, 'mousemove', this.onHsvMoveHandler);
+        removeEvent(this.el, 'mousemove', this.onHsvMoveHandler);
         this.onHsvMoveHandler = null;
         removeEvent(window, 'mouseup', this.onHsvUpHandler);
         this.onHsvUpHandler = null;

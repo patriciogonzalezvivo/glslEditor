@@ -4,7 +4,6 @@ import Modal from 'app/ui/modals/Modal'
 import Pos from 'app/tools/Pos';
 import { addEvent, removeEvent, getDomOrigin } from 'app/tools/common'
 
-let startPoint;
 let domCache;
 
 export default class TrackPadModal extends Modal {
@@ -147,10 +146,8 @@ export default class TrackPadModal extends Modal {
         let target = event.target || event.srcElement;
         event.preventDefault();
 
-        startPoint = getDomOrigin(target);
-
         // Starts listening for mousemove and mouseup events
-        this.onMouseMoveHandler = addEvent(window, 'mousemove', this.onMouseMove, this);
+        this.onMouseMoveHandler = addEvent(this.el, 'mousemove', this.onMouseMove, this);
         this.onMouseUpHandler = addEvent(window, 'mouseup', this.onMouseUp, this);
 
         this.onMouseMove(event);
@@ -160,8 +157,9 @@ export default class TrackPadModal extends Modal {
 
     // Actions when user moves around on HSV color map
     onMouseMove (event) {
-        let x = event.clientX - startPoint.left;
-        let y = event.clientY - startPoint.top;
+        let x = event.offsetX;
+        let y = event.offsetY;
+
         this.value.x = ((this.range/this.width)*x)-(this.range-this.max);
         this.value.y = (((this.range/this.height)*y)-(this.range-this.max))*-1.;
 
@@ -178,7 +176,7 @@ export default class TrackPadModal extends Modal {
 
     // Destroy event listeners that exist during mousedown colorpicker interaction
     destroyEvents () {
-        removeEvent(window, 'mousemove', this.onMouseMoveHandler);
+        removeEvent(this.el, 'mousemove', this.onMouseMoveHandler);
         this.onMouseMoveHandler = null;
         removeEvent(window, 'mouseup', this.onMouseUpHandler);
         this.onMouseUpHandler = null;

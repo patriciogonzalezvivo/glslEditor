@@ -81,12 +81,11 @@ export default class Helpers {
                     });
                 }
             } 
-            else if (token.type === 'builtin' || token.type === 'variable-3') {
+            else if (token.type === 'builtin' || token.type === 'variable-3' || this.main.options.toolTils) {
                 this.activeModal = new ToolTipModal( (token.type === 'builtin'? 'Function ' : 'Variable type ') + token.string + (token.type === 'builtin'? '() ...' : ' ...') ,'http://thebookofshaders.com/glossary/?search='+token.string);
                 this.activeModal.showAt(this.main.editor);
             }
             else if (token.type === 'variable') {
-                console.log('Token', token.type, token);
                 let cm = this.main.editor;
                 let nLines = cm.getDoc().size;
 

@@ -4,7 +4,6 @@ import Modal from 'app/ui/modals/Modal'
 import Pos from 'app/tools/Pos';
 import { addEvent, removeEvent, getDomOrigin } from 'app/tools/common'
 
-let startPoint;
 let domCache;
 const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
 
@@ -132,14 +131,10 @@ export default class SliderModal extends Modal {
         let target = event.target || event.srcElement;
         event.preventDefault();
 
-        startPoint = getDomOrigin(target);
-        let x = event.clientX - startPoint.left;
-        let y = event.clientY - startPoint.top;
-
-        this.prevOffset = x;
+        this.prevOffset = event.offsetX;
 
         // Starts listening for mousemove and mouseup events
-        this.onMouseMoveHandler = addEvent(window, 'mousemove', this.onMouseMove, this);
+        this.onMouseMoveHandler = addEvent(this.el, 'mousemove', this.onMouseMove, this);
         this.onMouseUpHandler = addEvent(window, 'mouseup', this.onMouseUp, this);
 
         this.onMouseMove(event);
@@ -149,8 +144,8 @@ export default class SliderModal extends Modal {
 
     // Actions when user moves around on HSV color map
     onMouseMove (event) {
-        let x = event.clientX - startPoint.left;
-        let y = event.clientY - startPoint.top;
+        let x = event.offsetX;
+        let y = event.offsetY;
 
         let vel = x-this.prevOffset;
         let offset = this.offsetX - vel;
@@ -187,7 +182,7 @@ export default class SliderModal extends Modal {
 
     // Destroy event listeners that exist during mousedown colorpicker interaction
     destroyEvents () {
-        removeEvent(window, 'mousemove', this.onMouseMoveHandler);
+        removeEvent(this.el, 'mousemove', this.onMouseMoveHandler);
         this.onMouseMoveHandler = null;
         removeEvent(window, 'mouseup', this.onMouseUpHandler);
         this.onMouseUpHandler = null;
