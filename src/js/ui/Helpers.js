@@ -86,23 +86,8 @@ export default class Helpers {
                 this.activeModal.showAt(this.main.editor);
             }
             else if (token.type === 'variable') {
-                let cm = this.main.editor;
-                let nLines = cm.getDoc().size;
-
-                function makeMarker() {
-                    let marker = document.createElement('div');
-                    marker.style.color = '#444';
-                    marker.innerHTML = '&#10095;';
-                    return marker;
-                }
-                let count = 0;
-                let re = new RegExp('[\\s+]('+token.string+')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\-|\\/]?=','i');
-                for (let i = 0; i < nLines; i++) {
-                    let match = re.exec(cm.getLine(i));
-                    if (match) {
-                        cm.setGutterMarker(i, 'var-in', makeMarker());
-                        // console.log(i, match);
-                    }
+                if (this.main.visualDebugger) {
+                    this.main.visualDebugger.iluminate(token.string);
                 }
             }
             else {

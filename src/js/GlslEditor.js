@@ -6,6 +6,7 @@ import Menu from 'app/ui/Menu';
 import Divider from 'app/ui/Divider';
 import Helpers from 'app/ui/Helpers';
 import ErrorsDisplay from 'app/ui/ErrorsDisplay';
+import VisualDebugger from 'app/ui/VisualDebugger';
 
 import FileDrop from 'app/io/FileDrop';
 import HashWatch from 'app/io/HashWatch';
@@ -97,6 +98,7 @@ class GlslEditor {
 
         this.helpers = new Helpers(this);
         this.errorsDisplay = new ErrorsDisplay(this);
+        this.visualDebugger = new VisualDebugger(this);
 
         if (this.options.divider) {
             this.divider = new Divider(this);
