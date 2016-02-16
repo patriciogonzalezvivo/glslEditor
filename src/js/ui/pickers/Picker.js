@@ -5,13 +5,19 @@ Author: Lou Huang (@saikofish)
 
 'use strict';
 
-import {addEvent, removeEvent} from 'app/tools/common'
+import {addEvent, removeEvent} from './events'
 
-const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
-
-export default class Modal {
-    constructor (CSS_PREFIX) {
+export default class Picker {
+    constructor (CSS_PREFIX, properties) {
         this.CSS_PREFIX = CSS_PREFIX;
+
+        this.width = 10;
+        this.height = 10;
+
+        properties = properties || {};
+        for (let prop in properties) {
+            this[prop] = properties[prop];
+        }
 
         this.listeners = {};
 
@@ -24,6 +30,7 @@ export default class Modal {
             frame: null,
 
             drawFrame: () => {
+                if (!this.el) { return }
                 this.draw();
             },
 
@@ -41,12 +48,33 @@ export default class Modal {
         this.isVisible = false;
     }
 
+    create () {
+        this.el = document.createElement('div');
+        this.el.className = this.CSS_PREFIX + 'modal picker-modal';
+        
+        this.canvas = document.createElement('canvas');
+        this.canvas.className = this.CSS_PREFIX + 'canvas picker-canvas';
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+
+        this.el.appendChild(this.canvas);
+        this.ctx = this.canvas.getContext('2d');
+    }
+
     draw () {
         // render rutine
     }
 
     close () {
         // Close rutine
+    }
+
+    setValue (value) {
+        this.value = value;
+    }
+
+    getValue () {
+        return this.value;
     }
 
     showAt (cm) {
@@ -69,6 +97,16 @@ export default class Modal {
             this.onKeyPressHandler = addEvent(document.body, 'keypress', this.onKeyPress, this);
         }, 0);
         this.isVisible = true;
+
+        this.el.style.left = x + 'px';
+        this.el.style.top = y + 'px';
+        this.el.style.width = this.width + 'px';
+        this.el.style.height = this.height + 'px';
+        document.body.appendChild(this.el);
+
+        this.onMouseDownHandler = addEvent(this.el, 'mousedown', this.onMouseDown, this);
+
+        this.renderer.drawFrame();
     }
 
      /**
@@ -122,6 +160,41 @@ export default class Modal {
         if (!target.classList.contains(this.CSS_PREFIX+'modal')) {
             this.removeModal();
         }
+    }
+
+    onMouseDown (event) {
+        let target = event.target || event.srcElement;
+        event.preventDefault();
+
+        // Starts listening for mousemove and mouseup events
+        this.onMouseMoveHandler = addEvent(this.el, 'mousemove', this.onMouseMove, this);
+        this.onMouseUpHandler = addEvent(window, 'mouseup', this.onMouseUp, this);
+
+        this.onMouseMove(event);
+
+        this.renderer.start();
+    }
+
+    onMouseMove (event) {
+    }
+
+    onMouseUp (event) {
+        this.renderer.stop();
+        this.destroyEvents();
+    }
+
+
+    destroyEvents () {
+        removeEvent(this.el, 'mousemove', this.onMouseMoveHandler);
+        this.onMouseMoveHandler = null;
+        removeEvent(window, 'mouseup', this.onMouseUpHandler);
+        this.onMouseUpHandler = null;
+    }
+
+    close () {
+        this.destroyEvents();
+        removeEvent(this.el, 'mousedown', this.onMouseDownHandler);
+        this.onMouseDownHandler = null;
     }
 }
 

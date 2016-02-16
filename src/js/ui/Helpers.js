@@ -1,9 +1,8 @@
 'use strict';
 
-import ColorPickerModal from 'app/ui/modals/ColorPickerModal';
-import TrackPadModal from 'app/ui/modals/TrackPadModal';
-import SliderModal from 'app/ui/modals/SliderModal';
-import ToolTipModal from 'app/ui/modals/ToolTipModal';
+import ColorPicker from 'app/ui/pickers/ColorPicker';
+import PositionPicker from 'app/ui/pickers/PositionPicker';
+import ValuePicker from 'app/ui/pickers/ValuePicker';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -28,7 +27,7 @@ export default class Helpers {
 
         // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
-        wrapper.addEventListener("mouseup", (event) => {
+        wrapper.addEventListener('mouseup', (event) => {
             this.main.editor.clearGutter('var-in');
 
             // bail out if we were doing a selection and not a click
@@ -49,41 +48,39 @@ export default class Helpers {
                 }
 
                 if (match.type === 'color') {
-                    this.activeModal = new ColorPickerModal(match.string);
+                    this.activeModal = new ColorPicker(match.string);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed',(color) => {
                         let newColor = color.getString('vec');
-                        let start = {"line":cursor.line, "ch":match.start};
-                        let end = {"line":cursor.line, "ch":match.end};
+                        let start = {'line':cursor.line, 'ch':match.start};
+                        let end = {'line':cursor.line, 'ch':match.end};
                         match.end = match.start+newColor.length;
                         this.main.editor.replaceRange(newColor, start, end);
                     });
                 }
-                else if (match.type === 'pos') {
-                    this.activeModal = new TrackPadModal(match.string);
+                else if (match.type === 'position') {
+                    this.activeModal = new PositionPicker(match.string);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed',(pos) => {
                         let newpos = pos.getString();
-                        let start = {"line":cursor.line, "ch":match.start};
-                        let end = {"line":cursor.line, "ch":match.end};
+                        let start = {'line':cursor.line, 'ch':match.start};
+                        let end = {'line':cursor.line, 'ch':match.end};
                         match.end = match.start+newpos.length;
                         this.main.editor.replaceRange(newpos, start, end);
                     });
                 }
                 else if (match.type === 'number') {
-                    this.activeModal = new SliderModal(match.string);
+                    this.activeModal = new ValuePicker(match.string);
                     this.activeModal.showAt(this.main.editor);
-                    this.activeModal.on('changed',(string) => {
-                        let start = {"line":cursor.line, "ch":match.start};
-                        let end = {"line":cursor.line, "ch":match.end};
+                    this.activeModal.on('changed', (string) => {
+                        let start = {'line':cursor.line, 'ch':match.start};
+                        let end = {'line':cursor.line, 'ch':match.end};
                         match.end = match.start+string.length;
                         this.main.editor.replaceRange(string, start, end);
                     });
                 }
             } 
             else if (token.type === 'builtin' || token.type === 'variable-3' || this.main.options.toolTils) {
-                this.activeModal = new ToolTipModal( (token.type === 'builtin'? 'Function ' : 'Variable type ') + token.string + (token.type === 'builtin'? '() ...' : ' ...') ,'http://thebookofshaders.com/glossary/?search='+token.string);
-                this.activeModal.showAt(this.main.editor);
             }
             else if (token.type === 'variable') {
                 if (this.main.visualDebugger) {
@@ -91,13 +88,13 @@ export default class Helpers {
                 }
             }
             else {
-                console.log('Token', token.type, token);
+                // console.log('Token', token.type, token);
             }
         });
     }
 
     getMatch (cursor) {
-        let types = ['color', 'pos', 'number'];
+        let types = ['color', 'position', 'number'];
         let rta = undefined;
         for (let i in types) {
             rta = this.getTypeMatch(cursor, types[i]);
@@ -115,14 +112,14 @@ export default class Helpers {
             case 'number':
                 re = /[-]?\d+\.\d+/g;
                 break;
-            case 'pos':
+            case 'position':
                 re = /vec2\([-|\d|.|,\s]*\)/g;
                 break;
             case 'color':
                 re = /vec[3|4]\([\d|.|,\s]*\)/g;
                 break;
             default:
-                throw new Error("invalid match selection");
+                throw new Error('invalid match selection');
                 return;
         }
         let line = this.main.editor.getLine(cursor.line);

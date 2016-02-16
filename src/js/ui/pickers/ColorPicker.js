@@ -5,12 +5,11 @@ Author: Lou Huang (@saikofish)
 
 'use strict';
 
-import Modal from 'app/ui/modals/Modal'
-import Color from 'app/tools/Color';
-import { getDomOrigin, addEvent, removeEvent } from 'app/tools/common'
+import Picker from './Picker'
+import Color from './Color';
+import { addEvent, removeEvent } from './events'
 
 // Some common use variables
-let startPoint;
 let currentTarget;
 let currentTargetHeight = 0;
 let domCache;
@@ -18,18 +17,18 @@ let domCache;
 // Default modal appearance values
 const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
 
-export default class ColorPickerModal extends Modal {
-    constructor (color = 'vec3(1.0,0.0,0.0)') {
-        super('colorpicker-');
-        this.value = new Color(color);
-
+export default class ColorPicker extends Picker {
+    constructor (color = 'vec3(1.0,0.0,0.0)', properties) {
+        super('colorpicker-', properties);
+        
         this.width = 260;  // in pixels
-        this.height = 270; // in pixels
+        this.height = 250; // in pixels
 
+        this.setValue(color);
         this.init();
     }
 
-    init () {
+    init() {
         if (!domCache) {
             let modal = document.createElement('div');
             let patch = document.createElement('div');
@@ -44,7 +43,7 @@ export default class ColorPickerModal extends Modal {
             let leftcursor = document.createElement('div');
             let rightcursor = document.createElement('div');
 
-            modal.className = this.CSS_PREFIX + 'modal';
+            modal.className = this.CSS_PREFIX + 'modal picker-modal';
             patch.className = this.CSS_PREFIX + 'patch';
             map.className = this.CSS_PREFIX + 'hsv-map';
             disc.className = this.CSS_PREFIX + 'disc';
@@ -98,7 +97,7 @@ export default class ColorPickerModal extends Modal {
         this.dom.luminanceBar = this.el.querySelector('.colorpicker-bar-luminance');
     }
 
-    draw () {
+    draw () {     
         //  Render color patch
         let patch = this.el.querySelector('.colorpicker-patch');
         patch.style.backgroundColor = this.value.getString('rgb');
@@ -138,12 +137,8 @@ export default class ColorPickerModal extends Modal {
 
     presentModal (x, y) {
         super.presentModal(x,y);
-        
-        this.el.style.left = x + 'px';
-        this.el.style.top = y + 'px';
-        document.body.appendChild(this.el);
 
-        // Listen for interaction on the HSV map
+        // // Listen for interaction on the HSV map
         this.onHsvDownHandler = addEvent(this.dom.hsvMap, 'mousedown', this.onHsvDown, this);
 
         let colorDisc = this.dom.colorDisc;
@@ -193,15 +188,8 @@ export default class ColorPickerModal extends Modal {
      *  so that it can update its internal value from an outside source.
      *  Does no DOM creation & other initialization work.
      */
-    setColor (color) {
-        // Set color
-        this.color = color;
-        this.value = new Color(this.color);
-        this.draw();
-    }
-
-    getColor () {
-        return this.color;
+    setValue (color) {
+        this.value = new Color(color);
     }
 
     /* ---------------------------------- */
@@ -215,7 +203,6 @@ export default class ColorPickerModal extends Modal {
         event.preventDefault();
 
         currentTarget = target.id ? target : target.parentNode;
-        startPoint = getDomOrigin(currentTarget);
         currentTargetHeight = currentTarget.offsetHeight; // as diameter of circle
 
         // Starts listening for mousemove and mouseup events
@@ -241,7 +228,6 @@ export default class ColorPickerModal extends Modal {
             this.value.set({ h, s }, 'hsv');
         }
         else if (event.target === this.dom.hsvBarCursors && currentTarget === this.dom.hsvBarCursors) { // the luminanceBar
-            // let v = (currentTargetHeight - (event.clientY - startPoint.top)) / currentTargetHeight;
             let v = (currentTargetHeight - (event.offsetY)) / currentTargetHeight;
             v = Math.max(0, Math.min(1, v))*255;
             this.value.set({ v: v }, 'hsv');

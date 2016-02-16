@@ -1,6 +1,6 @@
 'use strict'
 
-export default class Pos {
+export default class Position {
     constructor (pos) {
         this.value = [0,0];
         this.dim = 2;
