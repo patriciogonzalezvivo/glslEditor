@@ -67,12 +67,12 @@
     border-color: #333;
 }
 
-.colorpicker-no-cursor,
+/*.colorpicker-no-cursor,
 .colorpicker-no-cursor .colorpicker-patch,
 .colorpicker-no-cursor .colorpicker-disc-cursor,
 .colorpicker-no-cursor .colorpicker-disc-cover {
     cursor: none;
-}
+}*/
 
 .colorpicker-bar-luminance {
     position: absolute;
