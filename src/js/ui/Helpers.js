@@ -80,8 +80,6 @@ export default class Helpers {
                     });
                 }
             } 
-            else if (token.type === 'builtin' || token.type === 'variable-3' || this.main.options.toolTils) {
-            }
             else if (token.type === 'variable') {
                 if (this.main.visualDebugger) {
                     this.main.visualDebugger.iluminate(token.string);
