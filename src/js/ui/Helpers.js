@@ -108,7 +108,7 @@ export default class Helpers {
         let re;
         switch(type.toLowerCase()) {
             case 'number':
-                re = /[-]?\d+\.\d+/g;
+                re = /[-]?\d*\.\d*/g;
                 break;
             case 'position':
                 re = /vec2\([-|\d|.|,\s]*\)/g;
