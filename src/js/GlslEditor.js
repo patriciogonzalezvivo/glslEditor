@@ -127,7 +127,7 @@ class GlslEditor {
         this.trigger('new_content', {});
     }
 
-    setContent (shader, tabName) {
+    setContent(shader, tabName) {
         // If the string is CODE
         this.options.frag = shader;
         if (this.shader && this.shader.canvas) {
@@ -146,7 +146,7 @@ class GlslEditor {
         }
     }
 
-    open (shader) {
+    open (shader, tabName) {
         if (typeof shader === 'object') {
             const reader = new FileReader();
             let ge = this;
@@ -162,10 +162,10 @@ class GlslEditor {
                         console.log('Error downloading ', shader, error);
                         return;
                     }
-                    this.setContent(body);
+                    this.setContent(body, tabName);
                 });
             } else {
-               this.setContent(shader);
+               this.setContent(shader, tabName);
             }
         }
     }
