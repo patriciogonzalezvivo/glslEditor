@@ -8,13 +8,13 @@ export default class ErrorsDisplay {
         this.widgets = [];
 
         // EVENTS
-        this.main.sandbox.canvas.on('error', (arg) => {
+        this.main.shader.canvas.on('error', (arg) => {
             this.clean();
             this.addError(arg);
         });
 
         this.main.editor.on('changes', (cm, changesObjs) => {
-            if (this.main.sandbox.canvas.isValid) {
+            if (this.main.shader.canvas.isValid) {
                 this.clean();
             }
         });

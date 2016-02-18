@@ -93,7 +93,7 @@ class GlslEditor {
         }
         
         // CORE elements
-        this.sandbox = new Shader(this);
+        this.shader = new Shader(this);
         this.editor = initEditor(this);
 
         this.helpers = new Helpers(this);
@@ -106,18 +106,18 @@ class GlslEditor {
 
         // EVENTS
         this.editor.on('change', () => {
-            this.sandbox.canvas.load(this.editor.getValue());
+            this.shader.canvas.load(this.editor.getValue());
         });
 
         if (this.options.canvas_follow) {
-            this.sandbox.canvasDOM.style.position = 'relative';
-            this.sandbox.canvasDOM.style.float = 'right';
+            this.shader.canvasDOM.style.position = 'relative';
+            this.shader.canvasDOM.style.float = 'right';
             this.editor.on('cursorActivity', (cm) => {
-                    var height = cm.heightAtLine(cm.getCursor().line+1,'local') - this.sandbox.canvasDOM.height;
+                    var height = cm.heightAtLine(cm.getCursor().line+1,'local') - this.shader.canvasDOM.height;
                     if (height < 0) {
                         height = 0.0;   
                     }
-                    this.sandbox.canvasDOM.style.top = (height).toString()+'px';
+                    this.shader.canvasDOM.style.top = (height).toString()+'px';
             });
         }
     }
@@ -130,8 +130,8 @@ class GlslEditor {
     setContent (shader, tabName) {
         // If the string is CODE
         this.options.frag = shader;
-        if (this.sandbox && this.sandbox.canvas) {
-            this.sandbox.canvas.load(shader);
+        if (this.shader && this.shader.canvas) {
+            this.shader.canvas.load(shader);
         }
 
         if (this.editor) {
@@ -140,6 +140,8 @@ class GlslEditor {
                 this.bufferManager.select(tabName);
             } else {
                 this.editor.setValue(shader);
+                this.editor.setSize(null,this.editor.getDoc().height+"px");
+                this.editor.setSize(null,"auto");
             }
         }
     }

@@ -33,7 +33,7 @@ export function initEditor (main) {
     
     let cm = CodeMirror(editorDOM, {
         value: options.frag,
-        // viewportMargin: Infinity,
+        viewportMargin: Infinity,
         lineNumbers: true,
         matchBrackets: true,
         mode: 'x-shader/x-fragment',

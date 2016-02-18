@@ -88,8 +88,8 @@ export default class Divider {
         let canvasHeight = this.main.container.getBoundingClientRect().height;
 
 
-        this.main.sandbox.canvasDOM.style.width = canvasWidth + 'px';
-        this.main.sandbox.canvasDOM.style.height = canvasHeight + 'px';
+        this.main.shader.canvasDOM.style.width = canvasWidth + 'px';
+        this.main.shader.canvasDOM.style.height = canvasHeight + 'px';
         this.el.style.height = canvasHeight + 'px';
 	}
 

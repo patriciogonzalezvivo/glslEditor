@@ -74,6 +74,10 @@ export default class BufferManager {
 		
 		this.tabs[name].setAttribute('class', 'ge_panel_tab_active');
 		this.current = name;
+
+		this.main.editor.setSize(null,this.main.editor.getDoc().height+"px");
+        this.main.editor.setSize(null,"auto");
+
 		this.main.trigger('new_content', {});
 	}
 

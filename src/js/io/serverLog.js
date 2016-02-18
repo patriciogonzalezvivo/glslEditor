@@ -13,7 +13,7 @@ export function saveOnServer (ge, callback) {
     let data = new FormData();
     data.append('code', content);
 
-    let dataURL = ge.sandbox.canvasDOM.toDataURL("image/png");
+    let dataURL = ge.shader.canvasDOM.toDataURL("image/png");
     let blobBin = atob(dataURL.split(',')[1]);
     let array = [];
     for (let i = 0; i < blobBin.length; i++) {
