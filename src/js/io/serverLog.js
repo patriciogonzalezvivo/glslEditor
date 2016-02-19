@@ -40,27 +40,32 @@ export function saveOnServer (ge, callback) {
 }
 
 function createOpenFrameArtwork(glslEditor, name, url) {
-    // let data = new FormData();
-    // // data.append('title',glslEditor.getTitle());
-    // // data.append('author_name',glslEditor.getAuthor());
-    // // data.append('format', 'openframe-glslviewer');
-    // // data.append('url', url+'data/'+name+'.frag');
-    // // data.append('thumb_url', url+'data/'+name+'.png');
-
-    // data.append('body',{
-    //         title: glslEditor.getTitle(),
-    //         author_name: glslEditor.getAuthor(),
-    //         format: 'openframe-glslviewer',
-    //         url: url+'data/'+name+'.frag',
-    //         thumb_url: url+'data/'+name+'.png'
-    //     });
-
-    // data.append('user', { id: '56c5e50de860aa062caac935', username: 'thebookofshaders'});
+    let title = glslEditor.getTitle();
+    let author_name = glslEditor.getAuthor();
     
-    // let xhr = new XMLHttpRequest();
-    // xhr.open('POST', 'http://openframe.io:8888/add-artwork', true);
-    // xhr.onload = (event) => {
-    //     console.log(event);
-    // };
-    // xhr.send(data);
+    if (title === '' || author_name === '') {
+        return;
+    }
+
+    let id = '56c5e50de860aa062caac935'; // The book of Shader ID
+    let xhr = new XMLHttpRequest();
+    // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
+    xhr.open('POST', 'http://openframe.io:8888/api/users/'+id+'/collections/primary/artwork', true);
+    // set content type to JSON...
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    // This is essential in order to include auth cookies:
+    xhr.withCredentials = true;
+    xhr.onload = (event) => {
+        console.log(event);
+    };
+    xhr.onerror = (event) => {
+        console.log(event);
+    };
+    xhr.send(JSON.stringify({
+        'title': title,
+        'author_name': author_name,
+        'format': 'openframe-glslviewer',
+        'url': url+'data/'+name+'.frag',
+        'thumb_url': url+'data/'+name+'.png'
+    }));
 }
