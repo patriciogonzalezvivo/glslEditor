@@ -47,10 +47,11 @@ function createOpenFrameArtwork(glslEditor, name, url) {
         return;
     }
 
-    let id = '56c5e50de860aa062caac935'; // The book of Shader ID
+    // let id = '56c5e50de860aa062caac935'; // The book of Shader ID
     let xhr = new XMLHttpRequest();
     // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
-    xhr.open('POST', 'http://openframe.io:8888/api/users/'+id+'/collections/primary/artwork', true);
+    xhr.open('POST', 'http://openframe.io:8888/api/users/current/collections/primary/artwork', true);
+    // xhr.open('POST', 'http://openframe.io:8888/api/users/'+id+'/collections/primary/artwork', true);
     // set content type to JSON...
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     // This is essential in order to include auth cookies:

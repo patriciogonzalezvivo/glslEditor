@@ -26,6 +26,6 @@ export default class Shader {
         }
         this.container.appendChild(this.canvasDOM);
         
-        this.canvas = new GlslCanvas(this.canvasDOM, {preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)'});
+        this.canvas = new GlslCanvas(this.canvasDOM, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)'});
     }
 }
