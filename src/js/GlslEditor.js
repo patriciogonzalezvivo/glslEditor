@@ -12,11 +12,13 @@ import FileDrop from 'app/io/FileDrop';
 import HashWatch from 'app/io/HashWatch';
 import BufferManager from 'app/io/BufferManager';
 
-
 // Import Utils
 import xhr from 'xhr';
 import { subscribeMixin } from 'app/tools/mixin';
+
+// 3er Parties
 import { saveAs } from 'app/vendor/FileSaver.min.js';
+// import GIF from 'app/vendor/gif.js'
 
 const EMPTY_FRAG_SHADER = `// Author: 
 // Title: 
@@ -208,6 +210,35 @@ class GlslEditor {
         const blob = new Blob([content], { type: 'text/plain' });
         saveAs(blob, name+'.frag');
         this.editor.doc.markClean();
+    }
+
+    makeGif () {
+        let gif = new GIF({
+            workers: 2,
+            quality: 10
+        });
+
+        gif.setOption('width',this.shader.canvasDOM.width)
+        gif.setOption('height',this.shader.canvasDOM.height);
+
+        let totalFrames = 0;
+        this.shader.canvas.on('render', () => {
+            // add an image element
+            if (totalFrames < 100) {
+                gif.addFrame(this.shader.canvasDOM);
+            } else {
+                this.shader.canvas.off('render');
+            }
+            totalFrames++;
+            console.log(totalFrames);
+        })
+
+        gif.on('finished', function(blob) {
+
+            window.open(URL.createObjectURL(blob));
+        });
+
+        gif.render();
     }
 }
 

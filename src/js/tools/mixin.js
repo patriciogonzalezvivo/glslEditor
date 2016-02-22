@@ -3,13 +3,18 @@ export function subscribeMixin (target) {
 
     return Object.assign(target, {
 
-        subscribe(listener) {
-            listeners.add(listener);
-        },
-
         on(type, f) {
             let listener = {};
             listener[type] = f;
+            listeners.add(listener);
+        },
+
+        off(type) {
+            let listener = listeners[type];
+            listeners.delete(listener);
+        },
+
+        subscribe(listener) {
             listeners.add(listener);
         },
 
