@@ -5,7 +5,7 @@ Author: Lou Huang (@saikofish)
 
 'use strict';
 
-import {addEvent, removeEvent} from './events'
+import { getDevicePixelRatio, addEvent, removeEvent } from './common'
 import { subscribeMixin } from 'app/tools/mixin';
 
 export default class Picker {
@@ -51,11 +51,18 @@ export default class Picker {
         
         this.canvas = document.createElement('canvas');
         this.canvas.className = this.CSS_PREFIX + 'canvas picker-canvas';
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        // this.canvas.width = this.width;
+        // this.canvas.height = this.width;
 
         this.el.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
+
+        // Sets canvas to the proper dimensions and at the correct pixel density
+        // Thanks Lou https://github.com/louh/bart/blob/gh-pages/main.js#L19-L23
+        let ratio = getDevicePixelRatio(this.ctx)
+        this.canvas.width = this.width * ratio
+        this.canvas.height = this.height * ratio
+        this.ctx.scale(ratio, ratio)
     }
 
     draw () {
@@ -187,4 +194,3 @@ export default class Picker {
         this.onMouseDownHandler = null;
     }
 }
-

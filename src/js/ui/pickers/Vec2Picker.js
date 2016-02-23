@@ -2,7 +2,7 @@
 
 import Picker from './Picker'
 import Vector from './Vector';
-import { addEvent, removeEvent } from './events'
+import { getDevicePixelRatio, addEvent, removeEvent } from './common'
 
 let domCache;
 

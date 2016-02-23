@@ -7,7 +7,7 @@ Author: Lou Huang (@saikofish)
 
 import Picker from './Picker'
 import Color from './Color';
-import { addEvent, removeEvent } from './events'
+import { getDevicePixelRatio, addEvent, removeEvent } from './common'
 
 // Some common use variables
 let currentTarget;
@@ -23,6 +23,9 @@ export default class ColorPicker extends Picker {
         
         this.width = 250;  // in pixels
         this.height = 250; // in pixels
+
+        this.disc = {width: 200, height: 200 };
+        this.barlum = {width: 25, height: 200};
 
         this.setValue(color);
         this.init();
@@ -56,10 +59,10 @@ export default class ColorPicker extends Picker {
             leftcursor.className = this.CSS_PREFIX + 'bar-cursor-left';
             rightcursor.className = this.CSS_PREFIX + 'bar-cursor-right';
             
-            disc.width = 200;
-            disc.height = 200;
-            barlum.width = 25;
-            barlum.height = 200;
+            // disc.width = this.disc.width;
+            // disc.height = this.disc.height;
+            // barlum.width = this.barlum.width;
+            // barlum.height = this.barlum.height;
             map.id = 'cp-map';
             barcursors.id = 'cp-bar';
 
@@ -153,7 +156,7 @@ export default class ColorPicker extends Picker {
 
     presentModal (x, y) {
         super.presentModal(x,y);
-
+    
         // // Listen for interaction on the HSV map
         this.onHsvDownHandler = addEvent(this.dom.hsvMap, 'mousedown', this.onHsvDown, this);
 
@@ -161,10 +164,18 @@ export default class ColorPicker extends Picker {
 
         if (colorDisc.getContext) {
             // HSV color wheel with white center
+            let diskContex = colorDisc.getContext('2d');
+            let ratio = getDevicePixelRatio(diskContex);
+            let width = this.disc.width / ratio;
+            let height = this.disc.height / ratio;
+            this.dom.colorDisc.width = width * ratio;
+            this.dom.colorDisc.height = height* ratio;
+            diskContex.scale(ratio, ratio);
+
             drawDisk(
-                colorDisc.getContext('2d'),
-                [colorDisc.width / 2, colorDisc.height / 2],
-                [colorDisc.width / 2 - 1, colorDisc.height / 2 - 1],
+                diskContex,
+                [width/2, height/2],
+                [width/2 - 1, height/2 - 1],
                 360,
                 function (ctx, angle) {
                     let gradient = ctx.createRadialGradient(1, 1, 1, 1, 1, 0);
@@ -175,18 +186,22 @@ export default class ColorPicker extends Picker {
                     ctx.fill();
                 }
             );
+
             // gray border
             drawCircle(
-                colorDisc.getContext('2d'),
-                [colorDisc.width / 2, colorDisc.height / 2],
-                [colorDisc.width / 2, colorDisc.height / 2],
+                diskContex,
+                [width/2, height/2],
+                [width/2, height/2],
                 '#303030',
-                2
+                2/ratio
             );
 
             // draw the luminanceBar bar
             let ctx = this.dom.luminanceBar.getContext('2d');
-            let gradient = ctx.createLinearGradient(0, 0, 0, 200);
+            this.dom.luminanceBar.width = this.barlum.width ;
+            this.dom.luminanceBar.height = this.barlum.height * ratio;
+            ctx.scale(ratio, ratio);
+            let gradient = ctx.createLinearGradient(0, 0, 0, this.barlum.height/ratio);
 
             gradient.addColorStop(0, 'transparent');
             gradient.addColorStop(1, 'black');

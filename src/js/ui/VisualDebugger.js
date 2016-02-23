@@ -18,7 +18,7 @@ export default class VisualDebugger {
             let match = re.exec(cm.getLine(i));
             if (match) {
                 cm.setGutterMarker(i, 'var-in', makeMarker());
-                console.log(i, match);
+                // console.log(i, match);
                 var_assigned.push(i);
             }
         }

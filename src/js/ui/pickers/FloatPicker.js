@@ -1,7 +1,7 @@
 'use strict';
 
 import Picker from './Picker'
-import { addEvent, removeEvent } from './events'
+import { getDevicePixelRatio, addEvent, removeEvent } from './common'
 
 let domCache;
 const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
