@@ -37,7 +37,6 @@ export default class Color {
 	}
 
 	set (color, type) { // color only full range
-		console.log(color, type);
 		if (typeof color === 'number') {
 			type = type ? type : 'rgb';
 			this.colors[type] = {};

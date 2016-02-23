@@ -6,7 +6,7 @@ import { addEvent, removeEvent } from './events'
 let domCache;
 const MODAL_VIEWPORT_EDGE_BUFFER = 20; // buffer zone at the viewport edge where a modal should not be presented
 
-export default class ValuePicker extends Picker {
+export default class FloatPicker extends Picker {
     constructor (number, properties) {
         super('slider-', properties);
     
@@ -105,9 +105,7 @@ export default class ValuePicker extends Picker {
         this.prevOffset = x;
         
         // fire 'changed'
-        if (this.listeners.changed && typeof this.listeners.changed === 'function') {
-            this.listeners.changed(this.getValue().toFixed(3));
-        }
+        this.trigger('changed', this.getValue().toFixed(3));
     }
 
     setValue (value) {

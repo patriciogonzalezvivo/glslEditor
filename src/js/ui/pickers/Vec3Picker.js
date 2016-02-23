@@ -7,7 +7,7 @@ import { addEvent, removeEvent } from './events'
 
 let domCache;
 
-export default class DirectionPicker extends Picker {
+export default class Vec3Picker extends Picker {
     constructor (dir, properties) {
         super('trackpad-', properties);
 
@@ -97,7 +97,7 @@ export default class DirectionPicker extends Picker {
 
     drawShapeEdges (shape) {
         let nodes = shape.nodes;
-        console.log(nodes);
+
         this.ctx.strokeStyle = shape.edgeColour;
         for (let e in shape.edges) {
             let coord = this.viewFromCamera(nodes[shape.edges[e][0]]);
@@ -154,7 +154,7 @@ export default class DirectionPicker extends Picker {
             let invM = this.camera.getInv();
             let vel = invM.getMult([dx,-dy,-0.00001]);
             this.value.add(vel);
-            this.value.normalize();
+            // this.value.normalize();
             this.point = [this.value.x*this.dragScale, this.value.y*this.dragScale, this.value.z*this.dragScale];
         }
         else {
@@ -165,9 +165,7 @@ export default class DirectionPicker extends Picker {
         this.dragOffset = [x, y];
 
         // fire 'changed'
-        if (this.listeners.changed && typeof this.listeners.changed === 'function') {
-            this.listeners.changed(this.value);
-        }
+        this.trigger('changed', this.value);
     }
 
     onDbClick (event) {
@@ -183,7 +181,7 @@ export default class DirectionPicker extends Picker {
 
     setValue (dir) {
         this.value = new Vector(dir);
-        this.value.normalize();
+        // this.value.normalize();
         this.point = [this.value.x*this.dragScale, this.value.y*this.dragScale, this.value.z*this.dragScale];
     }
 }

@@ -6,20 +6,17 @@ Author: Lou Huang (@saikofish)
 'use strict';
 
 import {addEvent, removeEvent} from './events'
+import { subscribeMixin } from 'app/tools/mixin';
 
 export default class Picker {
     constructor (CSS_PREFIX, properties) {
+        subscribeMixin(this);
         this.CSS_PREFIX = CSS_PREFIX;
-
-        // this.width = 10;
-        // this.height = 10;
 
         properties = properties || {};
         for (let prop in properties) {
             this[prop] = properties[prop];
         }
-
-        this.listeners = {};
 
         /**
          *  This initializes the renderer. It uses requestAnimationFrame() to
@@ -84,10 +81,10 @@ export default class Picker {
 
         // // Check if desired x, y will be outside the viewport.
         // // Do not allow the modal to disappear off the edge of the window.
-        // let modalXPos = (x + this.width < window.innerWidth) ? x : (window.innerWidth - 20 - this.width);
-        // let modalYPos = (y + this.height < window.innerHeight) ? y : (window.innerHeight - 20 - this.height);
+        let modalXPos = (x + this.width < window.innerWidth) ? x : (window.innerWidth - 20 - this.width);
+        let modalYPos = (y + this.height < window.innerHeight) ? y : (window.innerHeight - 20 - this.height);
 
-        this.presentModal(x, y);
+        this.presentModal(modalXPos, modalYPos);
     }
 
     presentModal (x, y) {
@@ -123,13 +120,6 @@ export default class Picker {
 
         this.close();
         this.isVisible = false;
-    }
-
-    /**
-     *  Execute a callback for a fired event listener
-     */
-    on (type, callback) {
-        this.listeners[type] = callback;
     }
 
     onKeyPress (event) {

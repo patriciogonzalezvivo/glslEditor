@@ -6,7 +6,7 @@ import { addEvent, removeEvent } from './events'
 
 let domCache;
 
-export default class PositionPicker extends Picker {
+export default class Vec2Picker extends Picker {
     constructor (pos, properties) {
         super('trackpad-', properties);
 
@@ -110,9 +110,7 @@ export default class PositionPicker extends Picker {
         this.value.y = (((this.range/this.height)*y)-(this.range-this.max))*-1.;
 
         // fire 'changed'
-        if (this.listeners.changed && typeof this.listeners.changed === 'function') {
-            this.listeners.changed(this.value);
-        }
+        this.trigger('changed', this.value);
     }
 
     setValue (pos) {

@@ -1,9 +1,9 @@
 'use strict';
 
 import ColorPicker from 'app/ui/pickers/ColorPicker';
-import DirectionPicker from 'app/ui/pickers/DirectionPicker';
-import PositionPicker from 'app/ui/pickers/PositionPicker';
-import ValuePicker from 'app/ui/pickers/ValuePicker';
+import Vec3Picker from 'app/ui/pickers/Vec3Picker';
+import Vec2Picker from 'app/ui/pickers/Vec2Picker';
+import FloatPicker from 'app/ui/pickers/FloatPicker';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -42,6 +42,8 @@ export default class Helpers {
             let match = this.getMatch(cursor);
             let token = this.main.editor.getTokenAt(cursor);
             if (match) {
+                console.log(match);
+                
                 // Toggles the trackpad to be off if it's already present.
                 if (this.activeModal && this.activeModal.isVisible) {
                     this.activeModal.removeModal();
@@ -49,16 +51,31 @@ export default class Helpers {
                 }
 
                 if (match.type === 'color') {
-                    // this.activeModal = new ColorPicker(match.string);
-                    // this.activeModal.showAt(this.main.editor);
-                    // this.activeModal.on('changed',(color) => {
-                    //     let newColor = color.getString('vec');
-                    //     let start = {'line':cursor.line, 'ch':match.start};
-                    //     let end = {'line':cursor.line, 'ch':match.end};
-                    //     match.end = match.start+newColor.length;
-                    //     this.main.editor.replaceRange(newColor, start, end);
-                    // });
-                    this.activeModal = new DirectionPicker(match.string);
+                    this.activeModal = new ColorPicker(match.string, { link_button: true });
+                    this.activeModal.showAt(this.main.editor);
+                    this.activeModal.on('changed',(color) => {
+                        let newColor = color.getString('vec');
+                        let start = {'line':cursor.line, 'ch':match.start};
+                        let end = {'line':cursor.line, 'ch':match.end};
+                        match.end = match.start+newColor.length;
+                        this.main.editor.replaceRange(newColor, start, end);
+                    });
+
+                    this.activeModal.on('link_button', (color) => {
+                        this.activeModal = new Vec3Picker( color.getString('vec'));
+                        this.activeModal.showAt(this.main.editor);
+                        this.activeModal.on('changed',(dir) => {
+                            let newDir = dir.getString('vec3');
+                            let start = {'line':cursor.line, 'ch':match.start};
+                            let end = {'line':cursor.line, 'ch':match.end};
+                            match.end = match.start+newDir.length;
+                            this.main.editor.replaceRange(newDir, start, end);
+                        });
+                    });
+                    
+                }
+                if (match.type === 'vec3') {
+                    this.activeModal = new Vec3Picker(match.string);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed',(dir) => {
                         let newDir = dir.getString('vec3');
@@ -68,8 +85,8 @@ export default class Helpers {
                         this.main.editor.replaceRange(newDir, start, end);
                     });
                 }
-                else if (match.type === 'position') {
-                    this.activeModal = new PositionPicker(match.string);
+                else if (match.type === 'vec2') {
+                    this.activeModal = new Vec2Picker(match.string);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed',(pos) => {
                         let newpos = pos.getString();
@@ -80,7 +97,7 @@ export default class Helpers {
                     });
                 }
                 else if (match.type === 'number') {
-                    this.activeModal = new ValuePicker(match.string);
+                    this.activeModal = new FloatPicker(match.string);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed', (string) => {
                         let start = {'line':cursor.line, 'ch':match.start};
@@ -102,7 +119,7 @@ export default class Helpers {
     }
 
     getMatch (cursor) {
-        let types = ['color', 'position', 'number'];
+        let types = ['color', 'vec3' ,'vec2', 'number'];
         let rta = undefined;
         for (let i in types) {
             rta = this.getTypeMatch(cursor, types[i]);
@@ -117,14 +134,17 @@ export default class Helpers {
         if (!type) return;
         let re;
         switch(type.toLowerCase()) {
-            case 'number':
-                re = /[-]?\d*\.\d*/g;
-                break;
-            case 'position':
-                re = /vec2\([-|\d|.|,\s]*\)/g;
-                break;
             case 'color':
                 re = /vec[3|4]\([\d|.|,\s]*\)/g;
+                break;
+            case 'vec3':
+                re = /vec3\([-|\d|.|,\s]*\)/g;
+                break;
+            case 'vec2':
+                re = /vec2\([-|\d|.|,\s]*\)/g;
+                break;
+            case 'number':
+                re = /[-]?\d*\.\d*/g;
                 break;
             default:
                 throw new Error('invalid match selection');

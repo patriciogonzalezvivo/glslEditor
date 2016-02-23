@@ -53,7 +53,6 @@
     "babel": "^5.8.29",
     "babel-runtime": "5.8.29",
     "codemirror": "5.8.0",
-    "gsap": "^1.18.0",
     "xhr": "^2.2.0"
   },
   "browserify-shim": {

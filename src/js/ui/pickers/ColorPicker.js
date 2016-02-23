@@ -21,7 +21,7 @@ export default class ColorPicker extends Picker {
     constructor (color = 'vec3(1.0,0.0,0.0)', properties) {
         super('colorpicker-', properties);
         
-        this.width = 260;  // in pixels
+        this.width = 250;  // in pixels
         this.height = 250; // in pixels
 
         this.setValue(color);
@@ -42,7 +42,7 @@ export default class ColorPicker extends Picker {
             let barcursors = document.createElement('div');
             let leftcursor = document.createElement('div');
             let rightcursor = document.createElement('div');
-
+            
             modal.className = this.CSS_PREFIX + 'modal picker-modal';
             patch.className = this.CSS_PREFIX + 'patch';
             map.className = this.CSS_PREFIX + 'hsv-map';
@@ -55,7 +55,7 @@ export default class ColorPicker extends Picker {
             barcursors.className = this.CSS_PREFIX + 'bar-cursors';
             leftcursor.className = this.CSS_PREFIX + 'bar-cursor-left';
             rightcursor.className = this.CSS_PREFIX + 'bar-cursor-right';
-
+            
             disc.width = 200;
             disc.height = 200;
             barlum.width = 25;
@@ -65,6 +65,7 @@ export default class ColorPicker extends Picker {
 
             modal.appendChild(patch);
             modal.appendChild(map);
+            
             map.appendChild(disc);
             map.appendChild(cover);
             map.appendChild(cursor);
@@ -92,9 +93,24 @@ export default class ColorPicker extends Picker {
         this.dom.hsvBarCursors = this.dom.hsvMap.children[6];
         this.dom.hsvLeftCursor = this.dom.hsvBarCursors.children[0];
         this.dom.hsvRightCursor = this.dom.hsvBarCursors.children[1];
-
+        
         this.dom.colorDisc = this.el.querySelector('.colorpicker-disc');
         this.dom.luminanceBar = this.el.querySelector('.colorpicker-bar-luminance');
+
+        if (this.link_button) {
+            let lbutton = document.createElement('div');
+            lbutton.innerHTML = '+';
+            lbutton.className = this.CSS_PREFIX + 'link-button';
+            this.el.appendChild(lbutton);
+            // this.dom.lbutton = this.el.querySelector('.colorpicker-link-button');
+            lbutton.addEventListener("click", () => {
+                this.trigger('link_button', this.value);
+                if (typeof this.link_button === 'function') {
+                    this.link_button(this.value);
+                }
+                this.removeModal();
+            });
+        }
     }
 
     draw () {     
@@ -233,10 +249,7 @@ export default class ColorPicker extends Picker {
             this.value.set({ v: v }, 'hsv');
         }
 
-        // fire 'changed'
-        if (this.listeners.changed && typeof this.listeners.changed === 'function') {
-            this.listeners.changed(this.value);
-        }
+        this.trigger('changed', this.value);
     }
 
     // Actions when user mouses up on HSV color map
