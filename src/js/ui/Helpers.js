@@ -1,6 +1,7 @@
 'use strict';
 
 import ColorPicker from 'app/ui/pickers/ColorPicker';
+import DirectionPicker from 'app/ui/pickers/DirectionPicker';
 import PositionPicker from 'app/ui/pickers/PositionPicker';
 import ValuePicker from 'app/ui/pickers/ValuePicker';
 
@@ -48,14 +49,23 @@ export default class Helpers {
                 }
 
                 if (match.type === 'color') {
-                    this.activeModal = new ColorPicker(match.string);
+                    // this.activeModal = new ColorPicker(match.string);
+                    // this.activeModal.showAt(this.main.editor);
+                    // this.activeModal.on('changed',(color) => {
+                    //     let newColor = color.getString('vec');
+                    //     let start = {'line':cursor.line, 'ch':match.start};
+                    //     let end = {'line':cursor.line, 'ch':match.end};
+                    //     match.end = match.start+newColor.length;
+                    //     this.main.editor.replaceRange(newColor, start, end);
+                    // });
+                    this.activeModal = new DirectionPicker(match.string);
                     this.activeModal.showAt(this.main.editor);
-                    this.activeModal.on('changed',(color) => {
-                        let newColor = color.getString('vec');
+                    this.activeModal.on('changed',(dir) => {
+                        let newDir = dir.getString('vec3');
                         let start = {'line':cursor.line, 'ch':match.start};
                         let end = {'line':cursor.line, 'ch':match.end};
-                        match.end = match.start+newColor.length;
-                        this.main.editor.replaceRange(newColor, start, end);
+                        match.end = match.start+newDir.length;
+                        this.main.editor.replaceRange(newDir, start, end);
                     });
                 }
                 else if (match.type === 'position') {

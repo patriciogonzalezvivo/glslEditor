@@ -11,8 +11,8 @@ export default class Picker {
     constructor (CSS_PREFIX, properties) {
         this.CSS_PREFIX = CSS_PREFIX;
 
-        this.width = 10;
-        this.height = 10;
+        // this.width = 10;
+        // this.height = 10;
 
         properties = properties || {};
         for (let prop in properties) {

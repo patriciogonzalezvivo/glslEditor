@@ -1,7 +1,7 @@
 'use strict';
 
 import Picker from './Picker'
-import Position from './Position';
+import Vector from './Vector';
 import { addEvent, removeEvent } from './events'
 
 let domCache;
@@ -116,7 +116,7 @@ export default class PositionPicker extends Picker {
     }
 
     setValue (pos) {
-        this.value = new Position(this.pos);
+        this.value = new Vector(pos);
     }
 }
 

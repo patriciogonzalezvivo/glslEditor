@@ -37,13 +37,13 @@ export default class Color {
 	}
 
 	set (color, type) { // color only full range
+		console.log(color, type);
 		if (typeof color === 'number') {
 			type = type ? type : 'rgb';
 			this.colors[type] = {};
 			for (var n = 3; n--; ) {
 				m = type[n] || type.charAt(n); // IE7
-				// this.colors[type][m] = +color[n];
-				this.colors[type][m] = color / valueRanges[type][m][1];
+				this.colors[type][m] = color;
 			}
 		}
 		else if (typeof color === 'string') {
@@ -53,7 +53,7 @@ export default class Color {
 				type = type ? type : (parts[1] ? parts[0].substr(0, 3) : 'rgb');
 				this.set(values,type);
 			} else {
-				this.colors.rgb = ColorConverter.HEX2rgb(parts[0]);
+				this.set(getColorAsRGB(color),'rgb');
 			}
 		}
 		else if (color) {
@@ -65,7 +65,7 @@ export default class Color {
 				for (var n = 3; n--; ) {
 					m = type[n] || type.charAt(n); // IE7
 					let i = color.length >= 3 ? n : 0;
-					this.colors[type][m] = +color[i] / valueRanges[type][m][1];
+					this.colors[type][m] = +color[i];
 				}
 
 				if (color.length === 4) {
@@ -77,6 +77,10 @@ export default class Color {
 					this.colors[type][n] = limitValue(color[n]/valueRanges[type][n][1], 0 ,1)*valueRanges[type][n][1];
 				}
 			}
+		}
+
+		if (!type) {
+			return;
 		}
 
 		if (type !== 'rgb') {
@@ -448,4 +452,33 @@ function getLuminance(rgb, normalized) {
 		RGB[i] = RGB[i] <= 0.03928 ? RGB[i] / 12.92 : Math.pow(((RGB[i] + 0.055) / 1.055), 2.4);
 	}
 	return ((luminance.r * RGB[0]) + (luminance.g * RGB[1]) + (luminance.b * RGB[2]));
+}
+
+function getColorAsRGB (color) {
+    // Create a test element to apply a CSS color and retrieve
+    // a normalized value from.
+    let test = document.createElement('div');
+    test.style.backgroundColor = color;
+
+    // Chrome requires the element to be in DOM for styles to be computed.
+    document.body.appendChild(test);
+
+    // Get the computed style from the browser, in the format of
+    // rgb(x, x, x)
+    let normalized = window.getComputedStyle(test).backgroundColor;
+
+    // In certain cases getComputedStyle() may return
+    // 'transparent' as a value, which is useless(?) for the current
+    // color picker. According to specifications, transparent
+    // is a black with 0 alpha - rgba(0, 0, 0, 0) - but because
+    // the picker does not currently handle alpha, we return the
+    // black value.
+    if (normalized === 'transparent') {
+        normalized = 'rgb(0, 0, 0)';
+    }
+
+    // Garbage collection
+    test.parentNode.removeChild(test);
+
+    return normalized;
 }

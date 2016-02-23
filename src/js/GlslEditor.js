@@ -215,30 +215,28 @@ class GlslEditor {
     makeGif () {
         let gif = new GIF({
             workers: 2,
-            quality: 10
+            quality: 10,
+            width: this.shader.canvasDOM.width,
+            height: this.shader.canvasDOM.height
         });
 
-        gif.setOption('width',this.shader.canvasDOM.width)
-        gif.setOption('height',this.shader.canvasDOM.height);
+        gif.on('finished', (blob) => {
+            console.log('Finished');
+            window.open(URL.createObjectURL(blob));
+        });
 
         let totalFrames = 0;
         this.shader.canvas.on('render', () => {
             // add an image element
             if (totalFrames < 100) {
                 gif.addFrame(this.shader.canvasDOM);
-            } else {
+            } if (totalFrames === 100) {
+                gif.render();
                 this.shader.canvas.off('render');
-            }
+            } 
             totalFrames++;
             console.log(totalFrames);
         })
-
-        gif.on('finished', function(blob) {
-
-            window.open(URL.createObjectURL(blob));
-        });
-
-        gif.render();
     }
 }
 
