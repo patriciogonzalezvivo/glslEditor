@@ -142,8 +142,8 @@ class GlslEditor {
                 this.bufferManager.select(tabName);
             } else {
                 this.editor.setValue(shader);
-                this.editor.setSize(null,this.editor.getDoc().height+"px");
-                this.editor.setSize(null,"auto");
+                this.editor.setSize(null,this.editor.getDoc().height+'px');
+                this.editor.setSize(null,'auto');
             }
         }
     }
@@ -212,30 +212,39 @@ class GlslEditor {
         this.editor.doc.markClean();
     }
 
-    makeGif () {
+    makeGif ( settings ) {
+        settings = settings || {};
+        settings.quality = 31 - ( ( settings.quality * 30 / 100 ) || 10 );
+        settings.workers = settings.workers || 4;
+        settings.totalFrames = settings.totalFrames || 100;
+        settings.workersPath =  settings.workersPath || './';
+
         let gif = new GIF({
-            workers: 2,
-            quality: 10,
+            workers: settings.workers,
+            quality: settings.quality,
             width: this.shader.canvasDOM.width,
-            height: this.shader.canvasDOM.height
+            height: this.shader.canvasDOM.height,
+            workerScript: settings.workersPath + 'gif.worker.js'
         });
 
         let totalFrames = 0;
         this.shader.canvas.on('render', () => {
-            // add an image element
-            if (totalFrames < 200) {
-                console.log("adding frame",totalFrames);
-                gif.addFrame(this.shader.canvasDOM, {delay: 100});
-            } else if (totalFrames === 200) {
+            if (totalFrames < settings.totalFrames) {
+                console.log('adding frame',totalFrames,'/',settings.totalFrames);
+                gif.addFrame(this.shader.canvasDOM);
+            } else if (totalFrames === settings.totalFrames) {
                 gif.render();
                 this.shader.canvas.off('render');
-                console.log("render");
             } 
             totalFrames++;
         })
 
+        gif.on( 'progress', (progress) => {
+            console.log('Progress', progress)
+        });
+
         gif.on('finished', (blob) => {
-            console.log('Finished');
+            console.log('Finished', URL.createObjectURL(blob));
             window.open(URL.createObjectURL(blob));
         });
     }
