@@ -40,10 +40,6 @@ export function saveOnServer (ge, callback) {
 }
 
 export function createOpenFrameArtwork(glslEditor, name, url) {
-    glslEditor = glslEditor || window.activeGlslEditor;
-    name = name || window.activeGlslEditorName;
-    url = url || window.activeGlslEditorUrl;
-
     let title = glslEditor.getTitle();
     let author = glslEditor.getAuthor();
 
@@ -55,10 +51,15 @@ export function createOpenFrameArtwork(glslEditor, name, url) {
     // This is essential in order to include auth cookies:
     xhr.withCredentials = true;
     xhr.onload = (event) => {
-        console.log(event.currentTarget.status);
-        if (event.currentTarget.status !== 200) {
-            console.log('request failed... are we logged in?');
-            window.open('http://openframe.io:8888/login-popup?callback=createOpenFrameArtwork', 'login', 'width=500,height=600');
+        if (event.currentTarget.status === 404) {
+            let popup = window.open('http://openframe.io:8888/login-popup', 'login', 'width=500,height=600');
+            let successListener = function(e) {
+                if (e.data === 'success') {
+                    createOpenFrameArtwork(glslEditor, name, url);
+                }
+                window.removeEventListener('message', successListener);
+            }
+            window.addEventListener('message', successListener, false);
         }
     };
     xhr.onerror = (event) => {
