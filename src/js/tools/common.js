@@ -1,3 +1,5 @@
+'use strict';
+
 export function getDomOrigin (el) {
     const box = (el.getBoundingClientRect) ? el.getBoundingClientRect() : { top: 0, left: 0 };
     const doc = el && el.ownerDocument;

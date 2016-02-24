@@ -7,13 +7,14 @@ export default class Vec2Picker extends Picker {
     constructor (pos, properties) {
         super('trackpad-', properties);
 
-        this.width = 200;
-        this.height = 200;
+        this.width = this.width || 200;
+        this.height = this.height || 200;
 
         this.min = this.min || -1;
         this.max = this.max || 1;
         this.size = this.size || 6;
         this.range = this.max - this.min;
+        this.overPoint = false;
 
         let center = ((this.range / 2) - this.max) * -1;
         this.setValue(pos || [center,center]);
@@ -56,14 +57,14 @@ export default class Vec2Picker extends Picker {
         this.ctx.closePath();
         this.ctx.stroke();
 
-        // Triangle line
-        this.ctx.fillStyle = this.dimColor;
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.width * 0.5, 5);
-        this.ctx.lineTo(this.width * 0.48, 0);
-        this.ctx.lineTo(this.width * 0.52, 0);
-        this.ctx.closePath();
-        this.ctx.fill();
+        // // Triangle line
+        // this.ctx.fillStyle = this.dimColor;
+        // this.ctx.beginPath();
+        // this.ctx.moveTo(this.width * 0.5, 5);
+        // this.ctx.lineTo(this.width * 0.48, 0);
+        // this.ctx.lineTo(this.width * 0.52, 0);
+        // this.ctx.closePath();
+        // this.ctx.fill();
 
         let x = Math.round(((this.value.x - this.min) / this.range) * this.width);
         let y = Math.round(((1 - (this.value.y - this.min) / this.range)) * this.height);
@@ -84,10 +85,14 @@ export default class Vec2Picker extends Picker {
         }
 
         // point
-        this.ctx.fillStyle = this.fnColor;
-        this.ctx.fillRect(x - half, y - half, this.size, this.size);
+        this.ctx.fillStyle = this.overPoint ? this.selColor : this.fnColor;
+        this.ctx.beginPath();
+        let radius = this.overPoint ? 4 : 2;
+        this.ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+        this.ctx.fill();
 
         this.ctx.restore();
+        this.overPoint = false;
     }
 
     // Actions when user moves around on HSV color map
@@ -100,6 +105,7 @@ export default class Vec2Picker extends Picker {
 
         // fire 'changed'
         this.trigger('changed', this.value);
+        this.overPoint = true;
     }
 
     setValue (pos) {

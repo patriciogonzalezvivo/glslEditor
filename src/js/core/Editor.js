@@ -1,3 +1,5 @@
+'use strict';
+
 // Import CodeMirror
 import CodeMirror from 'codemirror';
 

@@ -1,0 +1,26 @@
+/* CANVAS */
+
+canvas.ge_canvas {
+    position: fixed;
+    right: 0px;
+    overflow: hidden;
+	z-index: var(--z-shader);
+}
+
+.ghostpane {
+	background: #999;
+	opacity: 0.2;
+
+	position: absolute;
+	right: 0px;
+	margin: 0;
+	padding: 0;
+
+	-webkit-transition: all 0.25s ease-in-out;
+	-moz-transition: all 0.25s ease-in-out;
+	-ms-transition: all 0.25s ease-in-out;
+	-o-transition: all 0.25s ease-in-out;
+	transition: all 0.25s ease-in-out;
+
+	z-index: var(--z-shader-ghost);
+}

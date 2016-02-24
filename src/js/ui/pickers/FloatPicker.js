@@ -6,6 +6,9 @@ export default class FloatPicker extends Picker {
     constructor (number, properties) {
         super('slider-', properties);
 
+        this.width = this.width || 250;
+        this.height = this.height || 40;
+
         this.prevOffset = 0;
         this.scale = 2;
 
@@ -35,7 +38,7 @@ export default class FloatPicker extends Picker {
         this.ctx.stroke();
 
         // Triangle line
-        this.ctx.fillStyle = this.fnColor;
+        this.ctx.fillStyle = this.overPoint ? this.selColor : this.fnColor;
         this.ctx.beginPath();
         this.ctx.moveTo(this.width * 0.5, 5);
         this.ctx.lineTo(this.width * 0.48, 0);
@@ -66,7 +69,7 @@ export default class FloatPicker extends Picker {
         let val = Math.round(((this.value - this.min) / this.range) * this.width);
 
         // point
-        this.ctx.strokeStyle = this.fnColor;
+        this.ctx.strokeStyle = this.overPoint ? this.selColor : this.fnColor;
         this.ctx.lineWidth = 1;
         this.ctx.beginPath();
         this.ctx.moveTo(this.offsetX + val, this.height * 0.5);
@@ -74,7 +77,7 @@ export default class FloatPicker extends Picker {
         this.ctx.closePath();
         this.ctx.stroke();
 
-        this.ctx.restore();
+        this.overPoint = false;
     }
 
     onMouseDown (event) {
@@ -95,6 +98,7 @@ export default class FloatPicker extends Picker {
 
         // fire 'changed'
         this.trigger('changed', this.getValue().toFixed(3));
+        this.overPoint = true;
     }
 
     setValue (value) {

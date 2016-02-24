@@ -85,7 +85,7 @@ export default class Vec3Picker extends Picker {
         });
 
         this.drawShapeNodes({
-            nodeColour: this.overPoint ? '#28A86B' : this.fnColor,
+            nodeColour: this.overPoint ? this.selColor : this.fnColor,
             nodeRadius: this.overPoint ? 4 : 2,
             nodes: [this.point]
         });
@@ -149,6 +149,7 @@ export default class Vec3Picker extends Picker {
         if (this.overPoint) {
             let invM = this.camera.getInv();
             let vel = invM.getMult([dx, -dy, -0.00001]);
+            vel.mult(2);
             this.value.add(vel);
             this.point = [this.value.x * this.scale, this.value.y * this.scale, this.value.z * this.scale];
         }
@@ -164,7 +165,37 @@ export default class Vec3Picker extends Picker {
     }
 
     onDbClick (event) {
+        let mouse = new Vector([event.offsetX, event.offsetY]);
+        let axis = {
+            x: [68, 0, 0],
+            neg_x: [-68, 0, 0],
+            y: [0, 68, 100],
+            neg_y: [0, -68, 0]
+        };
+        let selected = '';
+        for (let i in axis) {
+            let pos = new Vector(this.viewFromCamera(axis[i]));
+            let diff = pos.getSub(mouse);
+            if (diff.getLength() < 10) {
+                selected = i;
+                break;
+            }
+        }
         this.camera = new Matrix();
+
+        if (selected === 'x') {
+            this.camera.rotateY(-1.57079632679);
+        }
+        else if (selected === 'neg_x') {
+            this.camera.rotateY(1.57079632679);
+        }
+        else if (selected === 'y') {
+            this.camera.rotateX(-1.57079632679);
+        }
+        else if (selected === 'neg_y') {
+            this.camera.rotateX(1.57079632679);
+        }
+
         this.draw();
     }
 

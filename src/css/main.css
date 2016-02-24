@@ -19,7 +19,8 @@
 
     /* Z-INDEX SCALE */
     --z-editor: 100;
-    --z-canvas: 200;
+    --z-shader-ghost: 199;
+    --z-shader: 200;
     --z-divider: 250;
     --z-menu: 300;
     --z-helpers: 1000;
@@ -44,7 +45,7 @@
 @import '_divider';
 @import '_panel';
 @import '_editor';
-@import '_canvas';
+@import '_shader';
 
 
 @import '_pickers';

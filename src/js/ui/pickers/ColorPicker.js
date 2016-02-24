@@ -192,7 +192,7 @@ export default class ColorPicker extends Picker {
 
             // draw the luminanceBar bar
             let ctx = this.dom.luminanceBar.getContext('2d');
-            this.dom.luminanceBar.width = this.barlum.width ;
+            this.dom.luminanceBar.width = this.barlum.width;
             this.dom.luminanceBar.height = this.barlum.height * ratio;
             ctx.scale(ratio, ratio);
             let gradient = ctx.createLinearGradient(0, 0, 0, this.barlum.height / ratio);

@@ -1,5 +1,7 @@
 'use strict';
 
+import { subscribeWindow } from 'app/ui/window';
+
 export default class Shader {
     constructor (main) {
         this.options = main.options;
@@ -27,5 +29,7 @@ export default class Shader {
         this.container.appendChild(this.canvasDOM);
 
         this.canvas = new GlslCanvas(this.canvasDOM, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
+
+        subscribeWindow(this.canvasDOM);
     }
 }

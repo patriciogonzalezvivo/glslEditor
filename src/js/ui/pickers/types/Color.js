@@ -38,7 +38,7 @@ export default class Color {
                 for (let n = 3; n--;) {
                     m = type[n] || type.charAt(n); // IE7
                     let i = color.length >= 3 ? n : 0;
-                    this.colors[type][m] = color[i];
+                    this.colors[type][m] = parseFloat(color[i]);
                 }
 
                 if (color.length === 4) {
