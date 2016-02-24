@@ -1,3 +1,5 @@
+'use strict';
+
 export function saveOnServer (ge, callback) {
     let content = ge.getContent();
     let name = ge.getAuthor();
@@ -27,7 +29,6 @@ export function saveOnServer (ge, callback) {
     xhr.onload = (event) => {
         if (typeof callback === 'function') {
             let name = xhr.responseText;
-            createOpenFrameArtwork(ge, name, url);
             callback({
                     content: content,
                     name: name,
@@ -38,24 +39,30 @@ export function saveOnServer (ge, callback) {
     xhr.send(data);
 }
 
-function createOpenFrameArtwork(glslEditor, name, url) {
+export function createOpenFrameArtwork(glslEditor, name, url) {
+    glslEditor = glslEditor || window.activeGlslEditor;
+    name = name || window.activeGlslEditorName;
+    url = url || window.activeGlslEditorUrl;
+
     let title = glslEditor.getTitle();
     let author = glslEditor.getAuthor();
 
     let xhr = new XMLHttpRequest();
     // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
-    xhr.open('POST', 'http://openframe.io:8888/api/users/current/collections/primary/artwork', true);
-
+    xhr.open('POST', 'http://openframe.io:8888/api/users/current/collections/primary/artwork', false);
     // set content type to JSON...
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     // This is essential in order to include auth cookies:
     xhr.withCredentials = true;
     xhr.onload = (event) => {
-        console.log(event);
+        console.log(event.currentTarget.status);
+        if (event.currentTarget.status !== 200) {
+            console.log('request failed... are we logged in?');
+            window.open('http://openframe.io:8888/login-popup?callback=createOpenFrameArtwork', 'login', 'width=500,height=600');
+        }
     };
     xhr.onerror = (event) => {
-        console.log(event);
+        console.log(event.currentTarget.status);
     };
     xhr.send(JSON.stringify({
         title: title,
