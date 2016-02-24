@@ -11,7 +11,7 @@ function setBounds(element, x, y, w, h) {
     element.style.height = h + 'px';
 }
 
-export function subscribeWindow (pane) {
+export function subscribeWindow (pane, callback) {
 
     // Minimum resizable area
     var minWidth = 100;
@@ -119,7 +119,6 @@ export function subscribeWindow (pane) {
         if (!redraw) {
             return;
         }
-
         redraw = false;
 
         if (clicked && clicked.isResizing) {
@@ -148,7 +147,7 @@ export function subscribeWindow (pane) {
             }
 
             hintHide();
-
+            callback({state:'resizing', el: pane});
             return;
         }
 
@@ -189,10 +188,10 @@ export function subscribeWindow (pane) {
             // moving
             pane.style.top = (e.clientY - clicked.y) + 'px';
             pane.style.left = (e.clientX - clicked.x) + 'px';
-            
+
+            callback({state:'moving', el: pane});
             return;
         }
-
         // This code executes when mouse moves without clicking
 
         // style cursor
@@ -221,6 +220,10 @@ export function subscribeWindow (pane) {
     function onUp(e) {
         calc(e);
 
+        if (clicked && clicked.isResizing) {
+            callback({state:'resized', to: 'bottom', el: pane});
+        }
+
         if (clicked && clicked.isMoving) {
             // Snap
             var snapped = {
@@ -232,22 +235,27 @@ export function subscribeWindow (pane) {
                 // hintFull();
                 setBounds(pane, 0, 0, window.innerWidth, window.innerHeight);
                 preSnapped = snapped;
+                callback({state:'snapped', to: 'fullscreen', el: pane});
             } else if (b.top < MARGINS) {
                 // hintTop();
                 setBounds(pane, 0, 0, window.innerWidth, window.innerHeight / 2);
                 preSnapped = snapped;
+                callback({state:'snapped', to: 'top', el: pane});
             } else if (b.left < MARGINS) {
                 // hintLeft();
                 setBounds(pane, 0, 0, window.innerWidth / 2, window.innerHeight);
                 preSnapped = snapped;
+                callback({state:'snapped', to: 'left', el: pane});
             } else if (b.right > rightScreenEdge) {
                 // hintRight();
                 setBounds(pane, window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
                 preSnapped = snapped;
+                callback({state:'snapped', to: 'right', el: pane});
             } else if (b.bottom > bottomScreenEdge) {
                 // hintBottom();
                 setBounds(pane, 0, window.innerHeight / 2, window.innerWidth, window.innerWidth / 2);
                 preSnapped = snapped;
+                callback({state:'snapped', to: 'bottom', el: pane});
             } else {
                 preSnapped = null;
             }

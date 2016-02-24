@@ -42,7 +42,6 @@
 
 /* Elements */
 @import '_menu';
-@import '_divider';
 @import '_panel';
 @import '_editor';
 @import '_shader';
