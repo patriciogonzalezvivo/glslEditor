@@ -50,7 +50,7 @@ export function subscribeWindow (pane, callback) {
 
     function onTouchDown (e) {
         onDown(e.touches[0]);
-        e.preventDefault();
+        // e.preventDefault();
     }
 
     function onTouchMove (e) {
@@ -65,7 +65,7 @@ export function subscribeWindow (pane, callback) {
 
     function onMouseDown (e) {
         onDown(e);
-        e.preventDefault();
+        // e.preventDefault();
     }
 
     function onDown (e) {
