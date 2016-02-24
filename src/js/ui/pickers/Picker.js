@@ -5,7 +5,6 @@ Author: Lou Huang (@saikofish)
 
 'use strict';
 
-import { addEvent, removeEvent } from './events';
 import { getDevicePixelRatio } from 'app/tools/common';
 import { subscribeMixin } from 'app/tools/mixin';
 
@@ -13,6 +12,11 @@ export default class Picker {
     constructor (CSS_PREFIX, properties) {
         subscribeMixin(this);
         this.CSS_PREFIX = CSS_PREFIX;
+
+        this.width = 10;
+        this.height = 10;
+        this.fnColor = 'rgb(230, 230, 230)';
+        this.dimColor = 'rgb(100, 100, 100)';
 
         properties = properties || {};
         for (let prop in properties) {
@@ -184,4 +188,17 @@ export default class Picker {
         this.renderer.stop();
         this.destroyEvents();
     }
+}
+
+/* Event handling */
+export function addEvent (element, event, callback, caller) {
+    let handler;
+    element.addEventListener(event, handler = function (e) {
+        callback.call(caller, e);
+    }, false);
+    return handler;
+}
+
+export function removeEvent (element, event, callback) {
+    element.removeEventListener(event, callback, false);
 }

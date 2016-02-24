@@ -3,7 +3,7 @@
 import Picker from './Picker';
 import Vector from './types/Vector';
 import Matrix from './types/Matrix';
-import { addEvent, removeEvent } from './events';
+import { addEvent, removeEvent } from './Picker';
 
 export default class Vec3Picker extends Picker {
     constructor (dir, properties) {
@@ -11,9 +11,7 @@ export default class Vec3Picker extends Picker {
 
         this.width = this.width || 200;
         this.height = this.width || 200;
-        this.fnColor = this.fnColor || 'rgb(230, 230, 230)';
-        this.dimColor = this.dimColor || 'rgb(100, 100, 100)';
-        this.dragScale = 50;
+        this.scale = 50;
 
         this.setValue(dir || [0, 0, 1]);
         this.create();
@@ -152,7 +150,7 @@ export default class Vec3Picker extends Picker {
             let invM = this.camera.getInv();
             let vel = invM.getMult([dx, -dy, -0.00001]);
             this.value.add(vel);
-            this.point = [this.value.x * this.dragScale, this.value.y * this.dragScale, this.value.z * this.dragScale];
+            this.point = [this.value.x * this.scale, this.value.y * this.scale, this.value.z * this.scale];
         }
         else {
             this.camera.rotateX(dy);
@@ -178,7 +176,7 @@ export default class Vec3Picker extends Picker {
 
     setValue (dir) {
         this.value = new Vector(dir);
-        this.point = [this.value.x * this.dragScale, this.value.y * this.dragScale, this.value.z * this.dragScale];
+        this.point = [this.value.x * this.scale, this.value.y * this.scale, this.value.z * this.scale];
     }
 }
 

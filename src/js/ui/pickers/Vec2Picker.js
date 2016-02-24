@@ -15,9 +15,6 @@ export default class Vec2Picker extends Picker {
         this.size = this.size || 6;
         this.range = this.max - this.min;
 
-        this.fnColor = 'rgb(230, 230, 230)';
-        this.dimColor = 'rgb(100, 100, 100)';
-
         let center = ((this.range / 2) - this.max) * -1;
         this.setValue(pos || [center,center]);
         this.create();

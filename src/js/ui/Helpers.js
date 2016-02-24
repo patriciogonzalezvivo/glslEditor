@@ -12,7 +12,7 @@ RegExp.prototype.execAll = function(string) {
     while (match = this.exec(string)) {
         let matchArray = [];
         for (let i in match) {
-            if (parseInt(i) === i) {
+            if (parseInt(i) == i) {
                 matchArray.push(match[i]);
             }
         }

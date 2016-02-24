@@ -6,12 +6,6 @@ export default class FloatPicker extends Picker {
     constructor (number, properties) {
         super('slider-', properties);
 
-        this.width = 250;
-        this.height = 40;
-
-        this.fnColor = 'rgb(230, 230, 230)';
-        this.dimColor = 'rgb(100, 100, 100)';
-
         this.prevOffset = 0;
         this.scale = 2;
 

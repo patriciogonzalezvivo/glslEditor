@@ -7,7 +7,7 @@ Author: Lou Huang (@saikofish)
 
 import Picker from './Picker';
 import Color from './types/Color';
-import { addEvent, removeEvent } from './events';
+import { addEvent, removeEvent } from './Picker';
 import { getDevicePixelRatio } from 'app/tools/common';
 
 // Some common use variables

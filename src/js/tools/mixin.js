@@ -1,3 +1,28 @@
+/*
+Add events to a class or object:
+    class MyClass {
+        constructor() {
+            subscribeMixin(this); // Add the mixing functions to the class
+            ...
+            this.trigger('something', { owner: this, content: 'that'}); // trigger an event passing some arguments
+
+Subscribe to events by doing:
+    myClass.on('something', (args) => {
+        console.log(args);
+    });
+
+Unsubscribe to events by doing:
+    myClass.off('something');
+
+or more presicelly:
+    myClass.off('something', (args) => {
+        console.log(args);
+    });
+
+Unsubscribe to all events by:
+    myClass.offAll();
+*/
+
 export function subscribeMixin (target) {
     var listeners = new Set();
 
@@ -27,29 +52,21 @@ export function subscribeMixin (target) {
             }
         },
 
-        listSubscriptions () {
-            for (let item of listeners) {
-                console.log(item);
-            }
-        },
-
-        subscribe(listener) {
-            listeners.add(listener);
-        },
-
-        unsubscribe(listener) {
-            listeners.delete(listener);
-        },
-
-        unsubscribeAll() {
+        offAll () {
             listeners.clear();
         },
 
-        trigger(event, ...data) {
+        trigger (event, ...data) {
             for (var listener of listeners) {
                 if (typeof listener[event] === 'function') {
                     listener[event](...data);
                 }
+            }
+        },
+
+        listSubscriptions () {
+            for (let item of listeners) {
+                console.log(item);
             }
         }
     });
