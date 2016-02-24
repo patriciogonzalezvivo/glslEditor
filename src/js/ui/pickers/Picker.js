@@ -83,15 +83,12 @@ export default class Picker {
 
     showAt (cm) {
         let cursor = cm.cursorCoords(true, "page");
-        let x = cursor.left - this.width*.5;
-        let y = cursor.bottom + 20;
+        let x = cursor.left;
+        let y = cursor.top;
 
-        // // Check if desired x, y will be outside the viewport.
-        // // Do not allow the modal to disappear off the edge of the window.
-        let modalXPos = (x + this.width < window.innerWidth) ? x : (window.innerWidth - 20 - this.width);
-        let modalYPos = (y + this.height < window.innerHeight) ? y : (window.innerHeight - 20 - this.height);
-
-        this.presentModal(modalXPos, modalYPos);
+        x -= this.width*.5;
+        y += 30;
+        this.presentModal(x, y);
     }
 
     presentModal (x, y) {
