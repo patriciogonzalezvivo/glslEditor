@@ -6,8 +6,8 @@ Author: Lou Huang (@saikofish)
 'use strict';
 
 export default class FileDrop {
-	constructor (main) {
-		// Set up drag/drop file listeners
+    constructor (main) {
+        // Set up drag/drop file listeners
         main.container.addEventListener('dragenter', (event) => {
             // Check to make sure that dropped items are files.
             // This prevents other drags (e.g. text in editor)
@@ -38,5 +38,5 @@ export default class FileDrop {
                 main.open(file);
             }
         }, false);
-	}
+    }
 }

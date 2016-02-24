@@ -1,14 +1,14 @@
 'use strict';
 
 export default class HashWatch {
-	constructor (main) {
+    constructor (main) {
         this.main = main;
-		this.check();
+        this.check();
 
         window.addEventListener('hashchange', () => {
             this.check();
         }, false);
-	}
+    }
 
     check() {
         if (window.location.hash !== '') {
@@ -36,7 +36,7 @@ export default class HashWatch {
         let query = parseQuery(window.location.search.slice(1));
         if (query) {
             if (query.log) {
-                this.main.open('http://thebookofshaders.com:8080/data/'+query.log+'.frag');
+                this.main.open('http://thebookofshaders.com:8080/data/' + query.log + '.frag');
             }
         }
     }

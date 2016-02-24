@@ -26,11 +26,11 @@ export function initEditor (main) {
     let container = main.container;
     let options = main.options;
 
-	// CREATE AND START CODEMIRROR
+    // CREATE AND START CODEMIRROR
     let editorDOM = document.createElement('div');
     editorDOM.setAttribute('class', 'ge_editor');
     container.appendChild(editorDOM);
-    
+
     let cm = CodeMirror(editorDOM, {
         value: options.frag,
         viewportMargin: Infinity,
@@ -48,6 +48,5 @@ export function initEditor (main) {
         lineWrapping: true,
         autofocus: true,
     });
-
     return cm;
 }

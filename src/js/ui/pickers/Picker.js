@@ -5,7 +5,8 @@ Author: Lou Huang (@saikofish)
 
 'use strict';
 
-import { getDevicePixelRatio, addEvent, removeEvent } from './common'
+import { addEvent, removeEvent } from './events';
+import { getDevicePixelRatio } from 'app/tools/common';
 import { subscribeMixin } from 'app/tools/mixin';
 
 export default class Picker {
@@ -27,7 +28,9 @@ export default class Picker {
             frame: null,
 
             drawFrame: () => {
-                if (!this.el) { return }
+                if (!this.el) {
+                    return;
+                }
                 this.draw();
             },
 
@@ -48,21 +51,17 @@ export default class Picker {
     create () {
         this.el = document.createElement('div');
         this.el.className = this.CSS_PREFIX + 'modal picker-modal';
-        
+
         this.canvas = document.createElement('canvas');
         this.canvas.className = this.CSS_PREFIX + 'canvas picker-canvas';
-        // this.canvas.width = this.width;
-        // this.canvas.height = this.width;
 
         this.el.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
 
-        // Sets canvas to the proper dimensions and at the correct pixel density
-        // Thanks Lou https://github.com/louh/bart/blob/gh-pages/main.js#L19-L23
-        let ratio = getDevicePixelRatio(this.ctx)
-        this.canvas.width = this.width * ratio
-        this.canvas.height = this.height * ratio
-        this.ctx.scale(ratio, ratio)
+        let ratio = getDevicePixelRatio(this.ctx);
+        this.canvas.width = this.width * ratio;
+        this.canvas.height = this.height * ratio;
+        this.ctx.scale(ratio, ratio);
     }
 
     draw () {
@@ -71,6 +70,16 @@ export default class Picker {
 
     close () {
         // Close rutine
+        this.destroyEvents();
+        removeEvent(this.el, 'mousedown', this.onMouseDownHandler);
+        this.onMouseDownHandler = null;
+    }
+
+    destroyEvents () {
+        removeEvent(this.el, 'mousemove', this.onMouseMoveHandler);
+        this.onMouseMoveHandler = null;
+        removeEvent(window, 'mouseup', this.onMouseUpHandler);
+        this.onMouseUpHandler = null;
     }
 
     setValue (value) {
@@ -82,11 +91,11 @@ export default class Picker {
     }
 
     showAt (cm) {
-        let cursor = cm.cursorCoords(true, "page");
+        let cursor = cm.cursorCoords(true, 'page');
         let x = cursor.left;
         let y = cursor.top;
 
-        x -= this.width*.5;
+        x -= this.width * 0.5;
         y += 30;
         this.presentModal(x, y);
     }
@@ -120,7 +129,7 @@ export default class Picker {
         removeEvent(document.body, 'click', this.onClickOutsideHandler);
         this.onClickOutsideHandler = null;
         removeEvent(document.body, 'keypress', this.onKeyPressHandler);
-        this.onKeyPressHandler = null
+        this.onKeyPressHandler = null;
 
         this.close();
         this.isVisible = false;
@@ -147,17 +156,16 @@ export default class Picker {
 
         let target = event.target;
 
-        while (target !== document.documentElement && !target.classList.contains(this.CSS_PREFIX+'modal')) {
+        while (target !== document.documentElement && !target.classList.contains(this.CSS_PREFIX + 'modal')) {
             target = target.parentNode;
         }
 
-        if (!target.classList.contains(this.CSS_PREFIX+'modal')) {
+        if (!target.classList.contains(this.CSS_PREFIX + 'modal')) {
             this.removeModal();
         }
     }
 
     onMouseDown (event) {
-        let target = event.target || event.srcElement;
         event.preventDefault();
 
         // Starts listening for mousemove and mouseup events
@@ -175,19 +183,5 @@ export default class Picker {
     onMouseUp (event) {
         this.renderer.stop();
         this.destroyEvents();
-    }
-
-
-    destroyEvents () {
-        removeEvent(this.el, 'mousemove', this.onMouseMoveHandler);
-        this.onMouseMoveHandler = null;
-        removeEvent(window, 'mouseup', this.onMouseUpHandler);
-        this.onMouseUpHandler = null;
-    }
-
-    close () {
-        this.destroyEvents();
-        removeEvent(this.el, 'mousedown', this.onMouseDownHandler);
-        this.onMouseDownHandler = null;
     }
 }

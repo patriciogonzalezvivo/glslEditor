@@ -11,7 +11,7 @@ export default class Shader {
 
         this.canvasDOM.setAttribute('width', this.options.canvas_width || this.options.canvas_size || '384');
         this.canvasDOM.setAttribute('height', this.options.canvas_height || this.options.canvas_size || '384');
-        
+
         this.canvasDOM.setAttribute('animate', 'true');
         this.canvasDOM.setAttribute('data-fragment', this.options.frag);
 
@@ -25,7 +25,7 @@ export default class Shader {
             this.canvasDOM.log('data-textures: ' + textureList);
         }
         this.container.appendChild(this.canvasDOM);
-        
-        this.canvas = new GlslCanvas(this.canvasDOM, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)'});
+
+        this.canvas = new GlslCanvas(this.canvasDOM, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
     }
 }

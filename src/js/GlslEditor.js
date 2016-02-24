@@ -35,7 +35,7 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     st.x *= u_resolution.x/u_resolution.y;
 
-    st += vec2(.0); 
+    st += vec2(.0);
     vec3 color = vec3(1.);
     color = vec3(st.x,st.y,abs(sin(u_time)));
 
@@ -53,10 +53,10 @@ class GlslEditor {
             this.container = document.querySelector(selector);
         }
         else {
-            console.log('Error, type ' + typeof selector + ' of '+ selector + ' is unknown');
+            console.log('Error, type ' + typeof selector + ' of ' + selector + ' is unknown');
             return;
         }
-        
+
         this.options = {};
 
         if (options) {
@@ -93,7 +93,7 @@ class GlslEditor {
         if (this.options.multipleBuffers) {
             this.bufferManager = new BufferManager(this);
         }
-        
+
         // CORE elements
         this.shader = new Shader(this);
         this.editor = initEditor(this);
@@ -115,17 +115,17 @@ class GlslEditor {
             this.shader.canvasDOM.style.position = 'relative';
             this.shader.canvasDOM.style.float = 'right';
             this.editor.on('cursorActivity', (cm) => {
-                    var height = cm.heightAtLine(cm.getCursor().line+1,'local') - this.shader.canvasDOM.height;
-                    if (height < 0) {
-                        height = 0.0;   
-                    }
-                    this.shader.canvasDOM.style.top = (height).toString()+'px';
+                let height = cm.heightAtLine(cm.getCursor().line + 1, 'local') - this.shader.canvasDOM.height;
+                if (height < 0) {
+                    height = 0.0;
+                }
+                this.shader.canvasDOM.style.top = height.toString() + 'px';
             });
         }
     }
 
     new () {
-        this.setContent(EMPTY_FRAG_SHADER,(new Date().getTime()).toString()+'.frag');
+        this.setContent(EMPTY_FRAG_SHADER, (new Date().getTime()).toString() + '.frag');
         this.trigger('new_content', {});
     }
 
@@ -140,10 +140,11 @@ class GlslEditor {
             if (tabName !== undefined && this.bufferManager !== undefined) {
                 this.bufferManager.open(tabName, shader);
                 this.bufferManager.select(tabName);
-            } else {
+            }
+            else {
                 this.editor.setValue(shader);
-                this.editor.setSize(null,this.editor.getDoc().height+'px');
-                this.editor.setSize(null,'auto');
+                this.editor.setSize(null, this.editor.getDoc().height + 'px');
+                this.editor.setSize(null, 'auto');
             }
         }
     }
@@ -156,7 +157,8 @@ class GlslEditor {
                 ge.setContent(e.target.result, shader.name);
             };
             reader.readAsText(shader);
-        } else if (typeof shader === 'string') {
+        }
+        else if (typeof shader === 'string') {
             if (/\.frag$/.test(shader) || /\.fs$/.test(shader)) {
                 // If the string is an URL
                 xhr.get(shader, (error, response, body) => {
@@ -166,8 +168,9 @@ class GlslEditor {
                     }
                     this.setContent(body, tabName);
                 });
-            } else {
-               this.setContent(shader, tabName);
+            }
+            else {
+                this.setContent(shader, tabName);
             }
         }
     }
@@ -178,7 +181,7 @@ class GlslEditor {
 
     getAuthor() {
         let content = this.getContent();
-        let result = content.match( /\/\/\s*[A|a]uthor:\s*(\w+)/i );
+        let result = content.match(/\/\/\s*[A|a]uthor:\s*(\w+)/i);
         if (result) {
             return result[1];
         }
@@ -189,7 +192,7 @@ class GlslEditor {
 
     getTitle() {
         let content = this.getContent();
-        let result = content.match( /\/\/\s*[T|t]itle:\s*(\w+)/i );
+        let result = content.match(/\/\/\s*[T|t]itle:\s*(\w+)/i);
         if (result) {
             return result[1];
         }
@@ -201,23 +204,23 @@ class GlslEditor {
     download () {
         let content = this.getContent();
         let name = this.getTitle();
-        if (name !== '' ) {
-            name += '-'; 
+        if (name !== '') {
+            name += '-';
         }
         name += new Date().getTime();
 
         // Download code
         const blob = new Blob([content], { type: 'text/plain' });
-        saveAs(blob, name+'.frag');
+        saveAs(blob, name + '.frag');
         this.editor.doc.markClean();
     }
 
-    makeGif ( settings ) {
+    makeGif (settings) {
         settings = settings || {};
-        settings.quality = 31 - ( ( settings.quality * 30 / 100 ) || 10 );
+        settings.quality = 31 - ((settings.quality * 30 / 100) || 10);
         settings.workers = settings.workers || 4;
         settings.totalFrames = settings.totalFrames || 100;
-        settings.workersPath =  settings.workersPath || './';
+        settings.workersPath = settings.workersPath || './';
 
         let gif = new GIF({
             workers: settings.workers,
@@ -230,17 +233,18 @@ class GlslEditor {
         let totalFrames = 0;
         this.shader.canvas.on('render', () => {
             if (totalFrames < settings.totalFrames) {
-                console.log('adding frame',totalFrames,'/',settings.totalFrames);
+                console.log('adding frame', totalFrames, '/', settings.totalFrames);
                 gif.addFrame(this.shader.canvasDOM);
-            } else if (totalFrames === settings.totalFrames) {
+            }
+            else if (totalFrames === settings.totalFrames) {
                 gif.render();
                 this.shader.canvas.off('render');
-            } 
+            }
             totalFrames++;
-        })
+        });
 
-        gif.on( 'progress', (progress) => {
-            console.log('Progress', progress)
+        gif.on('progress', (progress) => {
+            console.log('Progress', progress);
         });
 
         gif.on('finished', (blob) => {

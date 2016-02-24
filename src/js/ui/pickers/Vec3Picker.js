@@ -1,11 +1,9 @@
 'use strict';
 
-import Picker from './Picker'
-import Vector from './Vector';
-import Matrix from './Matrix';
-import { getDevicePixelRatio, addEvent, removeEvent } from './common'
-
-let domCache;
+import Picker from './Picker';
+import Vector from './types/Vector';
+import Matrix from './types/Matrix';
+import { addEvent, removeEvent } from './events';
 
 export default class Vec3Picker extends Picker {
     constructor (dir, properties) {
@@ -17,30 +15,30 @@ export default class Vec3Picker extends Picker {
         this.dimColor = this.dimColor || 'rgb(100, 100, 100)';
         this.dragScale = 50;
 
-        this.setValue(dir || [0,0,1]);
+        this.setValue(dir || [0, 0, 1]);
         this.create();
-        
+
         this.camera = new Matrix();
         this.shapes = [];
         this.center = [0, 0, 0];
 
         this.shapes.push({
             edgeColour: this.dimColor,
-            nodes: [[this.width/2-50, this.height/2, 100], [this.width/2+50,  this.height/2,  100],
-                    [this.width/2, this.height/2-50, 100], [this.width/2, this.height/2+50, 100],
-                    [this.width/2, this.height/2, 50], [this.width/2, this.height/2, 150] ],
+            nodes: [[this.width / 2 - 50, this.height / 2, 100], [this.width / 2 + 50, this.height / 2, 100],
+                    [this.width / 2, this.height / 2 - 50, 100], [this.width / 2, this.height / 2 + 50, 100],
+                    [this.width / 2, this.height / 2, 50], [this.width / 2, this.height / 2, 150] ],
             edges: [[0,1], [2,3], [4,5]]
         });
 
         this.shapes.push({
             textColour: this.fnColor,
-            nodes: [[this.width/2+68, this.height/2, 100], [this.width/2-68, this.height/2, 100], 
-                    [this.width/2, this.height/2+68, 100], [this.width/2, this.height/2-68, 100], 
-                    [this.width/2, this.height/2, 168], [this.width/2, this.height/2, 32] ],
-            text: ["x", "-x", "y", "-y", "z", "-z"]
+            nodes: [[this.width / 2 + 68, this.height / 2, 100], [this.width / 2 - 68, this.height / 2, 100],
+                    [this.width / 2, this.height / 2 + 68, 100], [this.width / 2, this.height / 2 - 68, 100],
+                    [this.width / 2, this.height / 2, 168], [this.width / 2, this.height / 2, 32] ],
+            text: ['x', '-x', 'y', '-y', 'z', '-z']
         });
 
-        this.setCenter(this.width/2,this.height/2,100);
+        this.setCenter(this.width / 2, this.height / 2, 100);
 
         // Mouse events
         this.dragOffset = [0, 0];
@@ -50,7 +48,7 @@ export default class Vec3Picker extends Picker {
     setCenter (x, y, z) {
         for (let s in this.shapes) {
             let shape = this.shapes[s];
-            
+
             for (let n in shape.nodes) {
                 shape.nodes[n][0] -= x;
                 shape.nodes[n][1] -= y;
@@ -64,10 +62,10 @@ export default class Vec3Picker extends Picker {
         let A = this.camera.getMult(node);
         A.add(this.center);
         return [A.x, this.height - A.y];
-    };
+    }
 
-	draw () {    
-        this.ctx.clearRect(0,0,this.width,this.height);
+    draw () {
+        this.ctx.clearRect(0, 0, this.width, this.height);
 
         for (let s in this.shapes) {
             let shape = this.shapes[s];
@@ -89,11 +87,11 @@ export default class Vec3Picker extends Picker {
         });
 
         this.drawShapeNodes({
-            nodeColour: this.overPoint? '#28A86B' : this.fnColor,
-            nodeRadius: this.overPoint? 4 : 2,
+            nodeColour: this.overPoint ? '#28A86B' : this.fnColor,
+            nodeRadius: this.overPoint ? 4 : 2,
             nodes: [this.point]
         });
-	}
+    }
 
     drawShapeEdges (shape) {
         let nodes = shape.nodes;
@@ -121,7 +119,7 @@ export default class Vec3Picker extends Picker {
         }
     }
 
-    drawShapeText (shape) {        
+    drawShapeText (shape) {
         this.ctx.fillStyle = shape.textColour;
         for (let n in shape.nodes) {
             let coord = this.viewFromCamera(shape.nodes[n]);
@@ -152,16 +150,15 @@ export default class Vec3Picker extends Picker {
 
         if (this.overPoint) {
             let invM = this.camera.getInv();
-            let vel = invM.getMult([dx,-dy,-0.00001]);
+            let vel = invM.getMult([dx, -dy, -0.00001]);
             this.value.add(vel);
-            // this.value.normalize();
-            this.point = [this.value.x*this.dragScale, this.value.y*this.dragScale, this.value.z*this.dragScale];
+            this.point = [this.value.x * this.dragScale, this.value.y * this.dragScale, this.value.z * this.dragScale];
         }
         else {
             this.camera.rotateX(dy);
-            this.camera.rotateY(dx); 
+            this.camera.rotateY(dx);
         }
-        
+
         this.dragOffset = [x, y];
 
         // fire 'changed'
@@ -174,15 +171,14 @@ export default class Vec3Picker extends Picker {
     }
 
     destroyEvents () {
-        super.destroyEvents()
+        super.destroyEvents();
         removeEvent(this.el, 'dblclick', this.onDbClick);
         this.onMouseMoveHandler = null;
     }
 
     setValue (dir) {
         this.value = new Vector(dir);
-        // this.value.normalize();
-        this.point = [this.value.x*this.dragScale, this.value.y*this.dragScale, this.value.z*this.dragScale];
+        this.point = [this.value.x * this.dragScale, this.value.y * this.dragScale, this.value.z * this.dragScale];
     }
 }
 

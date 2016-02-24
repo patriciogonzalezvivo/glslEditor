@@ -23,14 +23,14 @@ export function subscribeMixin (target) {
                             return;
                         }
                     }
-                } 
+                }
             }
         },
 
         listSubscriptions () {
             for (let item of listeners) {
                 console.log(item);
-            } 
+            }
         },
 
         subscribe(listener) {

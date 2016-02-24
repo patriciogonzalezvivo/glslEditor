@@ -12,8 +12,8 @@ export default class Menu {
         this.menuDOM.setAttribute('class', 'ge_menu_bar');
 
         // NEW
-        this.menus.new = new MenuItem(this.menuDOM, "New", (event) => {
-            console.log("NEW");
+        this.menus.new = new MenuItem(this.menuDOM, 'New', (event) => {
+            console.log('NEW');
             main.new();
         });
 
@@ -25,31 +25,31 @@ export default class Menu {
         this.fileInput.addEventListener('change', (event) => {
             main.open(event.target.files[0]);
         });
-        this.menus.open = new MenuItem(this.menuDOM, "Open", (event) => {
+        this.menus.open = new MenuItem(this.menuDOM, 'Open', (event) => {
             this.fileInput.click();
         });
-        
+
         // SAVE
-        this.menus.save = new MenuItem(this.menuDOM, "Save", (event) => {
+        this.menus.save = new MenuItem(this.menuDOM, 'Save', (event) => {
             main.download();
         });
 
-        this.menus.save = new MenuItem(this.menuDOM, "Share", (event) => {
-            console.log("SHARE");
-            saveOnServer(this.main,(event) => {
+        this.menus.save = new MenuItem(this.menuDOM, 'Share', (event) => {
+            console.log('SHARE');
+            saveOnServer(this.main, (event) => {
                 console.log(event);
-                prompt('Use this url', 'http://patriciogonzalezvivo.github.io/glslEditor/?log='+event.name);
-            })
+                prompt('Use this url', 'http://patriciogonzalezvivo.github.io/glslEditor/?log=' + event.name);
+            });
         });
-        
+
         main.container.appendChild(this.menuDOM);
     }
 }
 
 export class MenuItem {
-    constructor (container, name, onClick = noop) {
+    constructor (container, name, onClick) {
         this.el = document.createElement('li');
-        this.el.setAttribute('id', 'ge_menu_'+name);
+        this.el.setAttribute('id', 'ge_menu_' + name);
         this.el.setAttribute('class', 'ge_menu');
         this.el.innerHTML = name;
 
