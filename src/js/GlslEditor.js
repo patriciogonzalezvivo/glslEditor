@@ -176,23 +176,25 @@ class GlslEditor {
 
     getAuthor() {
         let content = this.getContent();
-        let result = content.match(/\/\/\s*[A|a]uthor:\s*(\w+)/i);
-        if (result) {
-            return result[1];
+        let result = content.match(/\/\/\s*[A|a]uthor\s*:\s*([\w|\s|\@|\(|\)|\-|\_]*)/i);
+        if (result && !(result[1] === ' ' || result[1] === '')) {
+            let author = result[1].replace(/(\r\n|\n|\r)/gm,'');
+            return author;
         }
         else {
-            return '';
+            return 'unknown';
         }
     }
 
     getTitle() {
         let content = this.getContent();
-        let result = content.match(/\/\/\s*[T|t]itle:\s*(\w+)/i);
-        if (result) {
-            return result[1];
+        let result = content.match(/\/\/\s*[T|t]itle\s*:\s*([\w|\s|\@|\(|\)|\-|\_]*)/i);
+        if (result && !(result[1] === ' ' || result[1] === '')) {
+            let title = result[1].replace(/(\r\n|\n|\r)/gm,'');
+            return title;
         }
         else {
-            return '';
+            return 'unknown';
         }
     }
 
