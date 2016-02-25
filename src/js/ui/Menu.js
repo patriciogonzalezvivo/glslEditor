@@ -39,9 +39,6 @@ export default class Menu {
             saveOnServer(this.main, (event) => {
                 console.log(event);
                 prompt('Use this url', 'http://patriciogonzalezvivo.github.io/glslEditor/?log=' + event.name);
-                window.activeGlslEditor = main;
-                window.activeGlslEditorName = event.name;
-                window.activeGlslEditorUrl = event.url;
                 createOpenFrameArtwork(main, event.name, event.url);
             });
         });
