@@ -7,7 +7,7 @@ canvas.ge_canvas {
 	z-index: var(--z-shader);
 }
 
-.ghostpane {
+.ghostdom {
 	background: #999;
 	opacity: 0.2;
 

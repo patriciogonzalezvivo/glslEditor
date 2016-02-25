@@ -1,6 +1,6 @@
 'use strict';
 
-import { subscribeWindow } from 'app/ui/window';
+import { subscribeInteractiveDom } from 'app/tools/interactiveDom';
 
 export default class Shader {
     constructor (main) {
@@ -30,28 +30,9 @@ export default class Shader {
 
         this.canvas = new GlslCanvas(this.canvasDOM, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
 
-        subscribeWindow(this.canvasDOM, (args) => {
-            if (args.state === 'snapped' || args.state === 'resized') {
-                let realToCSSPixels = window.devicePixelRatio || 1;
-
-                // Lookup the size the browser is displaying the canvas in CSS pixels
-                // and compute a size needed to make our drawingbuffer match it in
-                // device pixels.
-                let displayWidth = Math.floor(this.canvas.gl.canvas.clientWidth * realToCSSPixels);
-                let displayHeight = Math.floor(this.canvas.gl.canvas.clientHeight * realToCSSPixels);
-
-                console.log(displayWidth, displayHeight);
-
-                // Check if the canvas is not the same size.
-                if (this.canvas.gl.canvas.width !== displayWidth ||
-                    this.canvas.gl.canvas.height !== displayHeight) {
-                    // Make the canvas the same size
-                    this.canvas.gl.canvas.width = displayWidth;
-                    this.canvas.gl.canvas.height = displayHeight;
-                    // Set the viewport to match
-                    this.canvas.gl.viewport(0, 0, this.canvas.gl.canvas.width, this.canvas.gl.canvas.height);
-                }
-            }
+        subscribeInteractiveDom(this.canvasDOM);
+        this.canvasDOM.on('resize', (args) => {
+            main.shader.canvas.onResize()
         });
     }
 }

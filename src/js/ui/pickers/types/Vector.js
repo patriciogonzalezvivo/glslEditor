@@ -13,9 +13,9 @@ export default class Vector {
             this.set([vec], type);
         }
         else if (typeof vec === 'string') {
-            let parts = vec.replace(/(?:#|\)|%)/g, '').split('(');
-            let strValues = (parts[1] || '').split(/,\s*/);
-            type = type || (parts[1] ? parts[0].substr(0, 4) : 'vec2');
+            let parts = vec.replace(/(?:#|\)|\]|%)/g, '').split('(');
+            let strValues = (parts[1] || parts[0].replace(/(\[)/g, '') ).split(/,\s*/);
+            type = type || (parts[1] ? parts[0].substr(0, 4) : 'vec'+strValues.length);
             let values = [];
             for (let i in strValues) {
                 values.push(parseFloat(strValues[i]));
@@ -86,14 +86,27 @@ export default class Vector {
     getString(type) {
         type = type || 'vec' + this.dim;
 
-        let str = type + '(';
-        for (let n = 0; n < this.dim; n++) {
-            str += this.value[n].toFixed(3);
-            if (n !== this.dim - 1) {
+        let len = this.dim;
+        let str = '';
+        let head = type + '(';
+        let end = ')';
+
+        if (type === 'array') {
+            head = '[';
+            end = ']';
+            len = this.dim;
+        } else {
+            len = Number(type.substr(3, 4));
+        }
+
+        str = head;
+        for (let i = 0; i < len; i++) {
+            str += this.value[i].toFixed(3);
+            if (i !== len - 1) {
                 str += ',';
             }
         }
-        return str += ')';
+        return str += end;
     }
 
     // VECTOR OPERATIONS
