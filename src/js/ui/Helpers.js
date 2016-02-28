@@ -30,9 +30,7 @@ export default class Helpers {
         this.main = main;
 
         let bgColor = new Color(getStyleProp(main.editor.getWrapperElement(), 'background'));
-        console.log(bgColor,bgColor.getString('rgb'));
         let fgColor = new Color(getStyleProp(main.editor.getWrapperElement(), 'color'));
-        console.log(fgColor,fgColor.getString('rgb'));
 
         this.properties = {
             bgColor: bgColor.getString('rgb'),
