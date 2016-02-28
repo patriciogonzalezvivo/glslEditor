@@ -30,9 +30,11 @@ export default class Shader {
 
         this.canvas = new GlslCanvas(this.canvasDOM, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
 
-        subscribeInteractiveDom(this.canvasDOM);
-        this.canvasDOM.on('resize', (args) => {
-            main.shader.canvas.onResize()
-        });
+        if (main.options.canvas_draggable) {
+            subscribeInteractiveDom(this.canvasDOM);
+            this.canvasDOM.on('resize', (args) => {
+                main.shader.canvas.onResize()
+            });
+        }
     }
 }

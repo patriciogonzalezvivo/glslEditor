@@ -62,16 +62,28 @@ class GlslEditor {
             this.options = options;
         }
 
-        if (this.options.theme === undefined) {
-            this.options.theme = 'monokai';
-        }
-
-        if (this.options.imgs === undefined) {
+        if (!this.options.imgs) {
             this.options.imgs = [];
         }
 
-        if (this.options.frag === undefined) {
+        // Default Theme
+        if (!this.options.theme) {
+            this.options.theme = 'monokai';
+        }
+
+        // Default Context
+        if (!this.options.frag) {
             this.options.frag = EMPTY_FRAG_SHADER;
+        }
+
+        // Default invisible Fragment header
+        if (!this.options.frag_header) {
+            this.options.frag_header = '';
+        }
+
+        // Default invisible Fragment footer
+        if (!this.options.frag_footer) {
+            this.options.frag_footer = '';
         }
 
         // Load UI
@@ -89,6 +101,7 @@ class GlslEditor {
             new FileDrop(this);
         }
 
+        // Support for multiple buffers
         if (this.options.multipleBuffers) {
             this.bufferManager = new BufferManager(this);
         }
@@ -103,7 +116,7 @@ class GlslEditor {
 
         // EVENTS
         this.editor.on('change', () => {
-            this.shader.canvas.load(this.editor.getValue());
+            this.shader.canvas.load( this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
         });
 
         if (this.options.canvas_follow) {
