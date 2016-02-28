@@ -5,6 +5,9 @@ import Vec3Picker from 'app/ui/pickers/Vec3Picker';
 import Vec2Picker from 'app/ui/pickers/Vec2Picker';
 import FloatPicker from 'app/ui/pickers/FloatPicker';
 
+import Color from 'app/ui/pickers/types/Color';
+import { getColorAsRGB } from 'app/ui/pickers/types/ColorConverter';
+
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
     let match = null;
@@ -25,6 +28,21 @@ RegExp.prototype.execAll = function(string) {
 export default class Helpers {
     constructor (main) {
         this.main = main;
+
+        let bgColor = new Color(getStyleProp(main.editor.getWrapperElement(), 'background'));
+        console.log(bgColor,bgColor.getString('rgb'));
+        let fgColor = new Color(getStyleProp(main.editor.getWrapperElement(), 'color'));
+        console.log(fgColor,fgColor.getString('rgb'));
+
+        this.properties = {
+            bgColor: bgColor.getString('rgb'),
+            fnColor: fgColor.getString('rgb'),
+            dimColor: 'rgb(127, 127, 127)',
+            selColor: 'rgb(40, 168, 107)',
+            link_button: true
+        }
+
+        console.log(this.properties);
 
         // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
@@ -49,7 +67,7 @@ export default class Helpers {
                 }
 
                 if (match.type === 'color') {
-                    this.activeModal = new ColorPicker(match.string, { link_button: true });
+                    this.activeModal = new ColorPicker(match.string, this.properties);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed', (color) => {
                         let newColor = color.getString('vec');
@@ -60,7 +78,7 @@ export default class Helpers {
                     });
 
                     this.activeModal.on('link_button', (color) => {
-                        this.activeModal = new Vec3Picker(color.getString('vec'));
+                        this.activeModal = new Vec3Picker(color.getString('vec'), this.properties);
                         this.activeModal.showAt(this.main.editor);
                         this.activeModal.on('changed', (dir) => {
                             let newDir = dir.getString('vec3');
@@ -72,7 +90,7 @@ export default class Helpers {
                     });
                 }
                 if (match.type === 'vec3') {
-                    this.activeModal = new Vec3Picker(match.string);
+                    this.activeModal = new Vec3Picker(match.string, this.properties);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed', (dir) => {
                         let newDir = dir.getString('vec3');
@@ -83,7 +101,7 @@ export default class Helpers {
                     });
                 }
                 else if (match.type === 'vec2') {
-                    this.activeModal = new Vec2Picker(match.string);
+                    this.activeModal = new Vec2Picker(match.string, this.properties);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed', (pos) => {
                         let newpos = pos.getString();
@@ -94,7 +112,7 @@ export default class Helpers {
                     });
                 }
                 else if (match.type === 'number') {
-                    this.activeModal = new FloatPicker(match.string);
+                    this.activeModal = new FloatPicker(match.string, this.properties);
                     this.activeModal.showAt(this.main.editor);
                     this.activeModal.on('changed', (string) => {
                         let start = { line: cursor.line, ch: match.start };
@@ -167,4 +185,10 @@ export default class Helpers {
         }
         return;
     }
+}
+
+function getStyleProp(elem, prop) {
+    if(window.getComputedStyle)
+        return window.getComputedStyle(elem, null).getPropertyValue(prop);
+    else if(elem.currentStyle) return elem.currentStyle[prop]; //IE
 }

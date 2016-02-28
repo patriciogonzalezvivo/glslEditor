@@ -68,7 +68,7 @@ class GlslEditor {
 
         // Default Theme
         if (!this.options.theme) {
-            this.options.theme = 'monokai';
+            this.options.theme = 'default';
         }
 
         // Default Context
@@ -130,6 +130,8 @@ class GlslEditor {
                 this.shader.canvasDOM.style.top = height.toString() + 'px';
             });
         }
+
+        return this;
     }
 
     new () {

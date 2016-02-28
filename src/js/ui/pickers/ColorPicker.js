@@ -45,9 +45,12 @@ export default class ColorPicker extends Picker {
             let rightcursor = document.createElement('div');
 
             modal.className = this.CSS_PREFIX + 'modal picker-modal';
+            modal.style.backgroundColor = this.bgColor;
             patch.className = this.CSS_PREFIX + 'patch';
+            patch.style.backgroundColor = this.bgColor;
             map.className = this.CSS_PREFIX + 'hsv-map';
             disc.className = this.CSS_PREFIX + 'disc';
+            disc.style.backgroundColor = this.bgColor;
             cover.className = this.CSS_PREFIX + 'disc-cover';
             cursor.className = this.CSS_PREFIX + 'disc-cursor';
             barbg.className = this.CSS_PREFIX + 'bar-bg';
@@ -98,6 +101,7 @@ export default class ColorPicker extends Picker {
             let lbutton = document.createElement('div');
             lbutton.innerHTML = '+';
             lbutton.className = this.CSS_PREFIX + 'link-button';
+            lbutton.style.color = this.fgColor;
             this.el.appendChild(lbutton);
 
             lbutton.addEventListener('click', () => {
@@ -186,7 +190,7 @@ export default class ColorPicker extends Picker {
                 diskContext,
                 [width / 2, height / 2],
                 [width / 2, height / 2],
-                '#303030',
+                this.bgColor,// '#303030',
                 2 / ratio
             );
 

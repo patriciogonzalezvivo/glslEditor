@@ -2,7 +2,7 @@
     box-sizing: border-box;
     position: absolute;
     padding: 0px;
-    background-color: var(--ui-component-color);
+    /*background-color: var(--ui-component-color);*/
     overflow: hidden;
     box-shadow: var(--modal-shadow);
     user-select: none;
@@ -12,31 +12,6 @@
 .picker-modal * {
     box-sizing: border-box;
 }
-
-/*.picker-modal:after, .picker-modal:before {
-    bottom: 100%;
-    left: 50%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    z-index: var(--z-helpers);
-}
-
-.picker-modal:after {
-    border-color: rgba(75, 87, 94, 0);
-    border-bottom-color: rgb(230,230,230);
-    border-width: 5px;
-    margin-left: -5px;
-}
-.picker-modal:before {
-    border-color: rgba(75, 87, 94, 0);
-    border-bottom-color: var(--ui-component-color);
-    border-width: 13px;
-    margin-left: -13px;
-}*/
 
 .picker-canvas {
     width: 100%;

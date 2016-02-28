@@ -28,6 +28,10 @@ export function initEditor (main) {
     let container = main.container;
     let options = main.options;
 
+    if (options.lineNumbers !== undefined) {
+        options.lineNumbers = true;
+    }
+
     // CREATE AND START CODEMIRROR
     let editorDOM = document.createElement('div');
     editorDOM.setAttribute('class', 'ge_editor');
@@ -36,7 +40,7 @@ export function initEditor (main) {
     let cm = CodeMirror(editorDOM, {
         value: options.frag,
         viewportMargin: Infinity,
-        lineNumbers: true,
+        lineNumbers: options.lineNumbers,
         matchBrackets: true,
         mode: 'x-shader/x-fragment',
         keyMap: 'sublime',
@@ -46,7 +50,7 @@ export function initEditor (main) {
         theme: options.theme,
         dragDrop: false,
         indentUnit: 4,
-        gutters: ['CodeMirror-linenumbers', 'var-in', 'var-out'],
+        gutters: options.lineNumbers ? ['CodeMirror-linenumbers', 'var-in', 'var-out'] : false,
         lineWrapping: true,
         autofocus: true,
     });

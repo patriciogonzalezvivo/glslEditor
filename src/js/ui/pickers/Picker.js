@@ -13,9 +13,10 @@ export default class Picker {
         subscribeMixin(this);
         this.CSS_PREFIX = CSS_PREFIX;
 
+        this.bgColor = 'rgb(46, 48, 51)';
+        this.dimColor = 'rgb(100, 100, 100)';
         this.fnColor = 'rgb(230, 230, 230)';
         this.selColor = 'rgb(40, 168, 107)';
-        this.dimColor = 'rgb(100, 100, 100)';
 
         properties = properties || {};
         for (let prop in properties) {
@@ -54,9 +55,11 @@ export default class Picker {
     create () {
         this.el = document.createElement('div');
         this.el.className = this.CSS_PREFIX + 'modal picker-modal';
+        this.el.style.backgroundColor = this.bgColor;
 
         this.canvas = document.createElement('canvas');
         this.canvas.className = this.CSS_PREFIX + 'canvas picker-canvas';
+        this.canvas.style.backgroundColor = this.bgColor;
 
         this.el.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
