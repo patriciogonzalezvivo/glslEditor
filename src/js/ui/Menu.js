@@ -34,12 +34,29 @@ export default class Menu {
             main.download();
         });
 
-        this.menus.save = new MenuItem(this.menuDOM, 'Share', (event) => {
+        this.menus.share = new MenuItem(this.menuDOM, 'Share', (event) => {
             console.log('SHARE');
             saveOnServer(this.main, (event) => {
                 console.log(event);
                 prompt('Use this url to share your code', 'http://editor.thebookofshaders.com/?log=' + event.name);
-                createOpenFrameArtwork(main, event.name, event.url);
+            });
+        });
+
+        let of_menu = this.menus.openframe = new MenuItem(this.menuDOM, '[o]', (event) => {
+            console.log('ADD TO OPENFRAME');
+            of_menu.el.innerHTML = '[o]... adding to collection';
+            saveOnServer(this.main, (event) => {
+                console.log(event);
+                createOpenFrameArtwork(main, event.name, event.url, (success) => {
+                    if (success) {
+                        of_menu.el.innerHTML = '[o]... added!';
+                    } else {
+                        of_menu.el.innerHTML = '[o]... failed :(';
+                    }
+                    setTimeout(() => {
+                        of_menu.el.innerHTML = '[o]';
+                    }, 4000);
+                });
             });
         });
 

@@ -39,13 +39,13 @@ export function saveOnServer (ge, callback) {
     xhr.send(data);
 }
 
-export function createOpenFrameArtwork(glslEditor, name, url) {
+export function createOpenFrameArtwork(glslEditor, name, url, callback) {
     let title = glslEditor.getTitle();
     let author = glslEditor.getAuthor();
-
     let xhr = new XMLHttpRequest();
+    callback = callback || () => {};
     // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
-    xhr.open('POST', 'http://openframe.io:8888/api/users/current/collections/primary/artwork', false);
+    xhr.open('POST', 'http://openframe.io:8888/api/users/current/owned_artwork', false);
     // set content type to JSON...
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     // This is essential in order to include auth cookies:
@@ -55,11 +55,15 @@ export function createOpenFrameArtwork(glslEditor, name, url) {
             let popup = window.open('http://openframe.io:8888/login-popup', 'login', 'width=500,height=600');
             let successListener = function(e) {
                 if (e.data === 'success') {
-                    createOpenFrameArtwork(glslEditor, name, url);
+                    createOpenFrameArtwork(glslEditor, name, url, callback);
                 }
                 window.removeEventListener('message', successListener);
             }
             window.addEventListener('message', successListener, false);
+        } else if (event.currentTarget.status === 200) {
+            callback(true);
+        } else {
+            callback(false);
         }
     };
     xhr.onerror = (event) => {
