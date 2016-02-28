@@ -29,8 +29,9 @@ export default class Helpers {
     constructor (main) {
         this.main = main;
 
-        let bgColor = new Color(getStyleProp(main.editor.getWrapperElement(), 'background'));
-        let fgColor = new Color(getStyleProp(main.editor.getWrapperElement(), 'color'));
+        let style = window.getComputedStyle(main.editor.getWrapperElement(), null);
+        let bgColor = new Color(style.background !== '' ? style.background: style.backgroundColor);
+        let fgColor = new Color(style.color);
 
         this.properties = {
             bgColor: bgColor.getString('rgb'),
@@ -39,8 +40,6 @@ export default class Helpers {
             selColor: 'rgb(40, 168, 107)',
             link_button: true
         }
-
-        console.log(this.properties);
 
         // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
@@ -183,10 +182,4 @@ export default class Helpers {
         }
         return;
     }
-}
-
-function getStyleProp(elem, prop) {
-    if(window.getComputedStyle)
-        return window.getComputedStyle(elem, null).getPropertyValue(prop);
-    else if(elem.currentStyle) return elem.currentStyle[prop]; //IE
 }
