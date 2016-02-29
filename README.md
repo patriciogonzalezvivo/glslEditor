@@ -1,3 +1,4 @@
+![](imgs/00.gif)
 
 **GlslEditor** is a friendly shader editor based on [Codemirror](http://codemirror.net/) compatible with [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) (OpenGL ES that runs on MacOS & Linux, also from Raspbian console with the need of X11) and [glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) (WebGL).
 
