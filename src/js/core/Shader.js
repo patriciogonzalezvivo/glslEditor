@@ -11,8 +11,8 @@ export default class Shader {
         this.canvasDOM = document.createElement('canvas');
         this.canvasDOM.setAttribute('class', 'ge_canvas');
 
-        this.canvasDOM.setAttribute('width', this.options.canvas_width || this.options.canvas_size || '384');
-        this.canvasDOM.setAttribute('height', this.options.canvas_height || this.options.canvas_size || '384');
+        this.canvasDOM.setAttribute('width', this.options.canvas_width || this.options.canvas_size || '250');
+        this.canvasDOM.setAttribute('height', this.options.canvas_height || this.options.canvas_size || '250');
 
         this.canvasDOM.setAttribute('animate', 'true');
         this.canvasDOM.setAttribute('data-fragment', this.options.frag);
