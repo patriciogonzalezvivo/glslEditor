@@ -25,32 +25,30 @@ import 'codemirror/mode/clike/clike.js';
 import 'codemirror/keymap/sublime';
 
 export function initEditor (main) {
-    let container = main.container;
-    let options = main.options;
 
-    if (options.lineNumbers !== undefined) {
-        options.lineNumbers = true;
+    if (main.options.lineNumbers === undefined) {
+        main.options.lineNumbers = true;
     }
 
     // CREATE AND START CODEMIRROR
     let editorDOM = document.createElement('div');
     editorDOM.setAttribute('class', 'ge_editor');
-    container.appendChild(editorDOM);
+    main.container.appendChild(editorDOM);
 
     let cm = CodeMirror(editorDOM, {
-        value: options.frag,
+        value: main.options.frag,
         viewportMargin: Infinity,
-        lineNumbers: options.lineNumbers,
+        lineNumbers: main.options.lineNumbers,
         matchBrackets: true,
         mode: 'x-shader/x-fragment',
         keyMap: 'sublime',
         autoCloseBrackets: true,
         extraKeys: { 'Ctrl-Space': 'autocomplete' },
         showCursorWhenSelecting: true,
-        theme: options.theme,
+        theme: main.options.theme,
         dragDrop: false,
         indentUnit: 4,
-        gutters: options.lineNumbers ? ['CodeMirror-linenumbers', 'var-in', 'var-out'] : false,
+        gutters: main.options.lineNumbers ? ['CodeMirror-linenumbers', 'var-in', 'var-out'] : false,
         lineWrapping: true,
         autofocus: true,
     });
