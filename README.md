@@ -53,7 +53,7 @@ This is a list of all the **options**:
 
 ## TODOs
 
-- [ ] Share Modal
+- [x] Share Modal
 - [ ] Twitter sharing options
 - [ ] Facebook sharing options
 
@@ -68,3 +68,7 @@ This is a list of all the **options**:
 
 - [ ] Texture inspector need changes on glslCanvas and glslViewer
 - [ ] Visual debugger
+
+## Acknowledgments
+
+Special thanks to [Lou Huang](@saikofish). glslEditor born from learned leassons on [TangramPlay](http://tangrams.github.io/tangram-play/). His code and wizdom is all arround this project.
