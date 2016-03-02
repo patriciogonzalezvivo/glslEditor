@@ -81,6 +81,7 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
     xhr.send(JSON.stringify({
         title: title,
         author_name: author,
+        is_public: false,
         format: 'openframe-glslviewer',
         url: 'http://thebookofshaders.com/log/' + name + '.frag',
         thumb_url: 'http://thebookofshaders.com/log/' + name + '.png'
