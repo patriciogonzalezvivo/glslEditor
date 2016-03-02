@@ -62,34 +62,36 @@ export function subscribeInteractiveDom (dom, options) {
         ghostdom.style.opacity = 0;
     }
 
-    function onTouchDown (e) {
-        onDown(e.touches[0]);
+    function onTouchDown (event) {
+        onDown(event.touches[0]);
         // e.preventDefault();
     }
 
-    function onTouchMove (e) {
-        onMove(e.touches[0]);
+    function onTouchMove (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        onMove(event.touches[0]);
     }
 
-    function onTouchEnd (e) {
-        if (e.touches.length === 0) {
+    function onTouchEnd (event) {
+        if (event.touches.length === 0) {
             onUp(e.changedTouches[0]);
         }
     }
 
-    function onMouseDown (e) {
-        onDown(e);
+    function onMouseDown (event) {
+        onDown(event);
         // e.preventDefault();
     }
 
-    function onDown (e) {
-        calc(e);
+    function onDown (event) {
+        calc(event);
         var isResizing = options.resize && (onRightEdge || onBottomEdge || onTopEdge || onLeftEdge);
         clicked = {
             x: x,
             y: y,
-            cx: e.clientX,
-            cy: e.clientY,
+            cx: event.clientX,
+            cy: event.clientY,
             w: b.width,
             h: b.height,
             isResizing: isResizing,
@@ -105,10 +107,10 @@ export function subscribeInteractiveDom (dom, options) {
         return options.move && (x > 0 && x < b.width && y > 0 && y < b.height);// && y < 30;
     }
 
-    function calc (e) {
+    function calc (event) {
         b = dom.getBoundingClientRect();
-        x = e.clientX - b.left;
-        y = e.clientY - b.top;
+        x = event.clientX - b.left;
+        y = event.clientY - b.top;
 
         onTopEdge = y < MARGINS;
         onLeftEdge = x < MARGINS;
@@ -121,9 +123,9 @@ export function subscribeInteractiveDom (dom, options) {
 
     var e;
 
-    function onMove(ee) {
-        calc(ee);
-        e = ee;
+    function onMove(event) {
+        calc(event);
+        e = event;
         redraw = true;
     }
 
