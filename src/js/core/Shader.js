@@ -29,7 +29,7 @@ export default class Shader {
         this.canvas = new GlslCanvas(this.canvasDOM, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
 
         if (main.options.canvas_draggable) {
-            subscribeInteractiveDom(this.canvasDOM, { move: false, resize: true, snap: false });
+            subscribeInteractiveDom(this.canvasDOM, { move: true, resize: true, snap: true });
             this.canvasDOM.on('resize', (args) => {
                 main.shader.canvas.onResize();
             });
