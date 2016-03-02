@@ -1,5 +1,3 @@
-'use strict';
-
 import Picker from './Picker';
 
 export default class FloatPicker extends Picker {

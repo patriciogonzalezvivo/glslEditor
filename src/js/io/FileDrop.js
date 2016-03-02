@@ -3,8 +3,6 @@ Original: https://github.com/tangrams/tangram-play/blob/gh-pages/src/js/addons/u
 Author: Lou Huang (@saikofish)
 */
 
-'use strict';
-
 export default class FileDrop {
     constructor (main) {
         // Set up drag/drop file listeners

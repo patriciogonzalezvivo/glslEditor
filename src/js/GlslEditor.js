@@ -117,7 +117,7 @@ class GlslEditor {
 
         // EVENTS
         this.editor.on('change', () => {
-            this.shader.canvas.load( this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+            this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
         });
 
         if (this.options.canvas_follow) {
@@ -195,7 +195,7 @@ class GlslEditor {
         let content = this.getContent();
         let result = content.match(/\/\/\s*[A|a]uthor\s*:\s*([\w|\s|\@|\(|\)|\-|\_]*)/i);
         if (result && !(result[1] === ' ' || result[1] === '')) {
-            let author = result[1].replace(/(\r\n|\n|\r)/gm,'');
+            let author = result[1].replace(/(\r\n|\n|\r)/gm, '');
             return author;
         }
         else {
@@ -207,7 +207,7 @@ class GlslEditor {
         let content = this.getContent();
         let result = content.match(/\/\/\s*[T|t]itle\s*:\s*([\w|\s|\@|\(|\)|\-|\_]*)/i);
         if (result && !(result[1] === ' ' || result[1] === '')) {
-            let title = result[1].replace(/(\r\n|\n|\r)/gm,'');
+            let title = result[1].replace(/(\r\n|\n|\r)/gm, '');
             return title;
         }
         else {

@@ -1,9 +1,11 @@
 .ge_share_modal {
     box-sizing: border-box;
     position: absolute;
-    /*background-color: var(--ui-component-color);*/
     overflow: hidden;
-    box-shadow: var(--modal-shadow);
+    color: var(--ui-component-text-color);
+    background-color: var(--ui-base-color);
+    /*box-shadow: var(--modal-shadow);*/
+    box-shadow: 0 5px 5px 5px rgba(0,0,0,.2),0 5px 0px 0px rgba(0,0,0,.25);
     user-select: none;
     z-index: var(--z-helpers); /* z-index will be modified by Greensock Draggable when dragging */
     cursor: pointer;
@@ -12,8 +14,6 @@
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
-    color: var(--ui-component-text-color);
-    background-color: var(--ui-base-color);
     font-family: Helvetica, Geneva, sans-serif;
     font-weight: 100;
     list-style-type: none;

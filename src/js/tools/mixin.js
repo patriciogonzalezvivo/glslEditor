@@ -1,5 +1,3 @@
-'use strict';
-
 /*
 Add events to a class or object:
     class MyClass {

@@ -1,5 +1,3 @@
-'use strict';
-
 // Import CodeMirror
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/clike/clike.js';

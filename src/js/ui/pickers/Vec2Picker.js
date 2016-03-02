@@ -1,5 +1,3 @@
-'use strict';
-
 import Picker from './Picker';
 import Vector from './types/Vector';
 

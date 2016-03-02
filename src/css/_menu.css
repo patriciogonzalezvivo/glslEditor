@@ -19,3 +19,14 @@ li.ge_menu {
     text-align: center;
     margin-right: 30px;
 }
+
+li.ge_menu:hover {
+    color: rgb(40, 168, 107);
+}
+
+.ge_sub_menu {
+    padding-bottom: 5px;
+}
+li.ge_sub_menu:hover {
+    color: rgb(40, 168, 107);
+}

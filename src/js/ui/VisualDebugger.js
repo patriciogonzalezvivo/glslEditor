@@ -1,5 +1,3 @@
-'use strict';
-
 export default class VisualDebugger {
     constructor (main) {
         this.main = main;

@@ -1,5 +1,3 @@
-'use strict';
-
 import ColorConverter from './ColorConverter';
 import { getColorAsRGB, getValueRanges, getLuminance, limitValue } from './ColorConverter';
 

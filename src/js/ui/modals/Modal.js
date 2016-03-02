@@ -1,18 +1,9 @@
-'use strict';
-
-'use strict';
-
-import { getDevicePixelRatio } from 'app/tools/common';
 import { subscribeMixin } from 'app/tools/mixin';
 
 export default class Modal {
     constructor (CSS_PREFIX, properties) {
         subscribeMixin(this);
         this.CSS_PREFIX = CSS_PREFIX;
-
-        this.bgColor = 'rgb(46, 48, 51)';
-        this.dimColor = 'rgb(100, 100, 100)';
-        this.fnColor = 'rgb(230, 230, 230)';
 
         properties = properties || {};
         for (let prop in properties) {
@@ -29,7 +20,7 @@ export default class Modal {
                 this.el.appendChild(this.elements[i]);
             }
         }
-        
+
         this.isVisible = false;
     }
 

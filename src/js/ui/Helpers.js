@@ -1,12 +1,9 @@
-'use strict';
-
 import ColorPicker from 'app/ui/pickers/ColorPicker';
 import Vec3Picker from 'app/ui/pickers/Vec3Picker';
 import Vec2Picker from 'app/ui/pickers/Vec2Picker';
 import FloatPicker from 'app/ui/pickers/FloatPicker';
 
 import Color from 'app/ui/pickers/types/Color';
-import { getColorAsRGB } from 'app/ui/pickers/types/ColorConverter';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -30,7 +27,7 @@ export default class Helpers {
         this.main = main;
 
         let style = window.getComputedStyle(main.editor.getWrapperElement(), null);
-        let bgColor = new Color(style.background !== '' ? style.background: style.backgroundColor);
+        let bgColor = new Color(style.background !== '' ? style.background : style.backgroundColor);
         let fgColor = new Color(style.color);
 
         this.properties = {
@@ -39,7 +36,7 @@ export default class Helpers {
             dimColor: 'rgb(127, 127, 127)',
             selColor: 'rgb(40, 168, 107)',
             link_button: true
-        }
+        };
 
         // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
@@ -155,7 +152,7 @@ export default class Helpers {
                 re = /vec2\([-|\d|.|,\s]*\)/g;
                 break;
             case 'number':
-                re = /[-]?\d*\.\d*/g;
+                re = /[-]?\d+\.\d+|\d+\.|\.\d+/g;
                 break;
             default:
                 console.error('invalid match selection');

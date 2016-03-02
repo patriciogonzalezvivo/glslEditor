@@ -1,12 +1,9 @@
-'use strict';
-
 // Import CodeMirror
 import CodeMirror from 'codemirror';
 
 // Import CodeMirror addons and modules
 import 'codemirror/addon/search/search';
 import 'codemirror/addon/search/searchcursor';
-// import 'codemirror/addon/search/matchesonscrollbar';
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/matchbrackets';
@@ -25,7 +22,6 @@ import 'codemirror/mode/clike/clike.js';
 import 'codemirror/keymap/sublime';
 
 export function initEditor (main) {
-
     if (main.options.lineNumbers === undefined) {
         main.options.lineNumbers = true;
     }

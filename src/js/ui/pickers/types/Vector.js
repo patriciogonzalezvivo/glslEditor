@@ -1,5 +1,3 @@
-'use strict';
-
 export default class Vector {
     constructor (vec, type) {
         this.value = [0,0];
@@ -14,8 +12,8 @@ export default class Vector {
         }
         else if (typeof vec === 'string') {
             let parts = vec.replace(/(?:#|\)|\]|%)/g, '').split('(');
-            let strValues = (parts[1] || parts[0].replace(/(\[)/g, '') ).split(/,\s*/);
-            type = type || (parts[1] ? parts[0].substr(0, 4) : 'vec'+strValues.length);
+            let strValues = (parts[1] || parts[0].replace(/(\[)/g, '')).split(/,\s*/);
+            type = type || (parts[1] ? parts[0].substr(0, 4) : 'vec' + strValues.length);
             let values = [];
             for (let i in strValues) {
                 values.push(parseFloat(strValues[i]));
@@ -95,7 +93,8 @@ export default class Vector {
             head = '[';
             end = ']';
             len = this.dim;
-        } else {
+        }
+        else {
             len = Number(type.substr(3, 4));
         }
 

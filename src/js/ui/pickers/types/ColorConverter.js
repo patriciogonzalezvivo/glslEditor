@@ -1,5 +1,3 @@
-'use strict';
-
 var valueRanges = {
         rgb: { r: [0, 255], g: [0, 255], b: [0, 255] },
         hsv: { h: [0, 1], s: [0, 1], v: [0, 255] },

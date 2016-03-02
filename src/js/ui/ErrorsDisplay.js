@@ -1,5 +1,3 @@
-'use strict';
-
 export default class ErrorsDisplay {
     constructor(main) {
         this.main = main;

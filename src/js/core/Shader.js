@@ -1,5 +1,3 @@
-'use strict';
-
 import { subscribeInteractiveDom } from 'app/tools/interactiveDom';
 
 export default class Shader {
@@ -31,9 +29,9 @@ export default class Shader {
         this.canvas = new GlslCanvas(this.canvasDOM, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
 
         if (main.options.canvas_draggable) {
-            subscribeInteractiveDom(this.canvasDOM);
+            subscribeInteractiveDom(this.canvasDOM, { move: false, resize: true, snap: false });
             this.canvasDOM.on('resize', (args) => {
-                main.shader.canvas.onResize()
+                main.shader.canvas.onResize();
             });
         }
     }
