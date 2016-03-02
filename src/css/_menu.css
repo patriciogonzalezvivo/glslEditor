@@ -9,7 +9,7 @@
     color: var(--ui-component-text-color);
     background-color: var(--ui-base-color);
     font-family: Helvetica, Geneva, sans-serif;
-    font-weight: 500;
+    font-weight: 300;
 }
 
 li.ge_menu {

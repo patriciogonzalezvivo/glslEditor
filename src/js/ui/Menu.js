@@ -1,5 +1,6 @@
 'use strict';
 
+import Modal from 'app/ui/modals/Modal';
 import { saveOnServer, createOpenFrameArtwork } from 'app/io/share';
 
 export default class Menu {
@@ -12,7 +13,7 @@ export default class Menu {
         this.menuDOM.setAttribute('class', 'ge_menu_bar');
 
         // NEW
-        this.menus.new = new MenuItem(this.menuDOM, 'New', (event) => {
+        this.menus.new = new MenuItem(this.menuDOM, 'ge_menu', 'New', (event) => {
             console.log('NEW');
             main.new();
         });
@@ -25,50 +26,60 @@ export default class Menu {
         this.fileInput.addEventListener('change', (event) => {
             main.open(event.target.files[0]);
         });
-        this.menus.open = new MenuItem(this.menuDOM, 'Open', (event) => {
+        this.menus.open = new MenuItem(this.menuDOM, 'ge_menu', 'Open', (event) => {
             this.fileInput.click();
         });
 
         // SAVE
-        this.menus.save = new MenuItem(this.menuDOM, 'Save', (event) => {
+        this.menus.save = new MenuItem(this.menuDOM, 'ge_menu', 'Save', (event) => {
             main.download();
         });
 
-        this.menus.share = new MenuItem(this.menuDOM, 'Share', (event) => {
-            console.log('SHARE');
-            saveOnServer(this.main, (event) => {
-                console.log(event);
-                prompt('Use this url to share your code', 'http://editor.thebookofshaders.com/?log=' + event.name);
-            });
-        });
+        this.menus.share = new MenuItem(this.menuDOM, 'ge_menu', 'Share', (event) => {
+            console.log('SHARE',event);
 
-        let of_menu = this.menus.openframe = new MenuItem(this.menuDOM, '[o]', (event) => {
-            console.log('ADD TO OPENFRAME');
-            of_menu.el.innerHTML = '[o]... adding to collection';
-            saveOnServer(this.main, (event) => {
-                console.log(event);
-                createOpenFrameArtwork(main, event.name, event.url, (success) => {
-                    if (success) {
-                        of_menu.el.innerHTML = '[o]... added!';
-                    } else {
-                        of_menu.el.innerHTML = '[o]... failed :(';
-                    }
-                    setTimeout(() => {
-                        of_menu.el.innerHTML = '[o]';
-                    }, 4000);
+            if (main.change || !this.shareModal) {
+                let shareModal = new Modal('ge_share');
+                let shareURL = new MenuItem(shareModal.el, 'ge_sub_menu', 'Copy URL...', (event) => {
+                    saveOnServer(this.main, (event) => {
+                        console.log("shareURL", event);
+                        prompt('Use this url to share your code', 'http://editor.thebookofshaders.com/?log=' + event.name);
+                        shareModal.removeModal();
+                    });
                 });
-            });
-        });
 
+                let shareOF = this.menus.openframe = new MenuItem(shareModal.el, 'ge_sub_menu', '[o]', (event) => {
+                    console.log('ADD TO OPENFRAME');
+                    shareOF.el.innerHTML = '[o]... adding to collection';
+                    saveOnServer(this.main, (event) => {
+                        console.log("shareOF",event);
+                        createOpenFrameArtwork(main, event.name, event.url, (success) => {
+                            if (success) {
+                                shareOF.el.innerHTML = '[o]... added!';
+                            } else {
+                                shareOF.el.innerHTML = '[o]... failed :(';
+                            }
+                            setTimeout(() => {
+                                shareOF.el.innerHTML = '[o]';
+                                shareModal.removeModal();
+                            }, 4000);
+                        });
+                    });
+                });
+                this.shareModal = shareModal;
+            }
+
+            this.shareModal.presentModal(event.clientX-20,event.clientY+10);
+        });
         main.container.appendChild(this.menuDOM);
     }
 }
 
 export class MenuItem {
-    constructor (container, name, onClick) {
+    constructor (container, className, name, onClick) {
         this.el = document.createElement('li');
-        this.el.setAttribute('id', 'ge_menu_' + name);
-        this.el.setAttribute('class', 'ge_menu');
+        this.el.setAttribute('id', className + '_' + name.replace(/\s+/g, '_'));
+        this.el.setAttribute('class', className);
         this.el.innerHTML = name;
 
         // Attach listeners, including those for tooltip behavior
@@ -77,6 +88,8 @@ export class MenuItem {
             onClick(event);
         }, true);
 
-        container.appendChild(this.el);
+        if (container) {
+            container.appendChild(this.el);
+        }
     }
 }

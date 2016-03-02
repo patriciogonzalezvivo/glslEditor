@@ -1,6 +1,13 @@
 'use strict';
 
+var lastReplay; 
+
 export function saveOnServer (ge, callback) {
+    if (!ge.change && lastReplay) {
+        callback(lastReplay);
+        return
+    }
+
     let content = ge.getContent();
     let name = ge.getAuthor();
     let title = ge.getTitle();
@@ -29,11 +36,13 @@ export function saveOnServer (ge, callback) {
     xhr.onload = (event) => {
         if (typeof callback === 'function') {
             let name = xhr.responseText;
-            callback({
+            let replay = {
                     content: content,
                     name: name,
                     url: url
-                });
+                };
+            callback(replay);
+            lastReplay = replay;
         }
     };
     xhr.send(data);

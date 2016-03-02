@@ -57,6 +57,7 @@ class GlslEditor {
         }
 
         this.options = {};
+        this.change = false;
 
         if (options) {
             this.options = options;
@@ -140,6 +141,7 @@ class GlslEditor {
     }
 
     setContent(shader, tabName) {
+        this.change = true;
         // If the string is CODE
         this.options.frag = shader;
         if (this.shader && this.shader.canvas) {
@@ -225,44 +227,7 @@ class GlslEditor {
         const blob = new Blob([content], { type: 'text/plain' });
         saveAs(blob, name + '.frag');
         this.editor.doc.markClean();
-    }
-
-    makeGif (settings) {
-        settings = settings || {};
-        settings.quality = 31 - ((settings.quality * 30 / 100) || 10);
-        settings.workers = settings.workers || 4;
-        settings.totalFrames = settings.totalFrames || 100;
-        settings.workersPath = settings.workersPath || './';
-
-        let gif = new GIF({
-            workers: settings.workers,
-            quality: settings.quality,
-            width: this.shader.canvasDOM.width,
-            height: this.shader.canvasDOM.height,
-            workerScript: settings.workersPath + 'gif.worker.js'
-        });
-
-        let totalFrames = 0;
-        this.shader.canvas.on('render', () => {
-            if (totalFrames < settings.totalFrames) {
-                console.log('adding frame', totalFrames, '/', settings.totalFrames);
-                gif.addFrame(this.shader.canvasDOM);
-            }
-            else if (totalFrames === settings.totalFrames) {
-                gif.render();
-                this.shader.canvas.off('render');
-            }
-            totalFrames++;
-        });
-
-        gif.on('progress', (progress) => {
-            console.log('Progress', progress);
-        });
-
-        gif.on('finished', (blob) => {
-            console.log('Finished', URL.createObjectURL(blob));
-            window.open(URL.createObjectURL(blob));
-        });
+        this.change = false;
     }
 }
 

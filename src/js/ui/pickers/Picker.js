@@ -116,7 +116,7 @@ export default class Picker {
         // Listen for interaction outside of the modal
         window.setTimeout(() => {
             this.onClickOutsideHandler = addEvent(document.body, 'click', this.onClickOutside, this);
-            this.onKeyPressHandler = addEvent(document.body, 'keypress', this.onKeyPress, this);
+            this.onKeyPressHandler = addEvent(window, 'keydown', this.onKeyPress, this);
         }, 0);
         this.isVisible = true;
 
@@ -140,7 +140,7 @@ export default class Picker {
         }
         removeEvent(document.body, 'click', this.onClickOutsideHandler);
         this.onClickOutsideHandler = null;
-        removeEvent(document.body, 'keypress', this.onKeyPressHandler);
+        removeEvent(window, 'keydown', this.onKeyPressHandler);
         this.onKeyPressHandler = null;
 
         this.close();
