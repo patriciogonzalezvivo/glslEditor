@@ -12,7 +12,6 @@ export default class Menu {
 
         // NEW
         this.menus.new = new MenuItem(this.menuDOM, 'ge_menu', 'New', (event) => {
-            console.log('NEW');
             main.new();
         });
 

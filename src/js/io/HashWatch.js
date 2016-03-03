@@ -15,18 +15,20 @@ export default class HashWatch {
             let hashes = location.hash.split('&');
             for (let i in hashes) {
                 let ext = hashes[i].substr(hashes[i].lastIndexOf('.') + 1);
-                let filename = hashes[i];
+                let path = hashes[i];
 
                 // Extract hash if is present
-                if (filename.search('#') === 0) {
-                    filename = filename.substr(1);
+                if (path.search('#') === 0) {
+                    path = path.substr(1);
                 }
 
+                let filename = path.split('/').pop();
+
                 if (ext === 'frag') {
-                    this.main.open(filename);
+                    this.main.open(path, filename.replace(/\.[^/.]+$/, ''));
                 }
                 else if (ext === 'png' || ext === 'jpg' || ext === 'PNG' || ext === 'JPG') {
-                    this.main.options.imgs.push(filename);
+                    this.main.options.imgs.push(path);
                 }
             }
         }
@@ -34,7 +36,7 @@ export default class HashWatch {
         let query = parseQuery(window.location.search.slice(1));
         if (query) {
             if (query.log) {
-                this.main.open('http://thebookofshaders.com/log/' + query.log + '.frag');
+                this.main.open('http://thebookofshaders.com/log/' + query.log + '.frag', query.log);
             }
         }
     }

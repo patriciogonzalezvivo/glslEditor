@@ -7,18 +7,21 @@ export default class BufferManager {
         this.main = main;
         this.buffers = {};
         this.tabs = {};
-        this.current = 'untitled.frag';
+        this.current = 'untitled';
     }
 
     open (name, content) {
-        if (this.panel === undefined) {
+        if (!this.el) {
             // Create DOM element
             this.el = document.createElement('ul');
             this.el.className = 'ge_panel';
-            // Create Panel CM element
-            this.panel = this.main.editor.addPanel(this.el, { position: 'top' });
+        }
+
+        if (this.main.change && this.current === 'untitled') {
+            console.log('Open Current in a different tab');
             this.open(this.current, this.main.getContent());
         }
+
         this.buffers[name] = CodeMirror.Doc(content, 'x-shader/x-fragment');
 
         // Create a new tab
@@ -38,6 +41,11 @@ export default class BufferManager {
 
         this.el.appendChild(tab);
         this.tabs[name] = tab;
+
+        if (this.el && !this.panel && this.getLength() > 1) {
+            // Create Panel CM element
+            this.panel = this.main.editor.addPanel(this.el, { position: 'top' });
+        }
     }
 
     select (name) {
@@ -72,8 +80,8 @@ export default class BufferManager {
         this.tabs[name].setAttribute('class', 'ge_panel_tab_active');
         this.current = name;
 
-        this.main.editor.setSize(null, this.main.editor.getDoc().height + 'px');
         this.main.editor.setSize(null, 'auto');
+        this.main.editor.getWrapperElement().style.height = 'auto';
 
         this.main.trigger('new_content', {});
     }

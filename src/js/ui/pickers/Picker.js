@@ -14,7 +14,7 @@ export default class Picker {
         this.bgColor = 'rgb(46, 48, 51)';
         this.dimColor = 'rgb(100, 100, 100)';
         this.fnColor = 'rgb(230, 230, 230)';
-        this.selColor = 'rgb(40, 168, 107)';
+        this.selColor = 'rgb(133, 204, 196)';
 
         properties = properties || {};
         for (let prop in properties) {

@@ -136,12 +136,11 @@ class GlslEditor {
     }
 
     new () {
-        this.setContent(EMPTY_FRAG_SHADER, (new Date().getTime()).toString() + '.frag');
+        this.setContent(EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
         this.trigger('new_content', {});
     }
 
     setContent(shader, tabName) {
-        this.change = true;
         // If the string is CODE
         this.options.frag = shader;
         if (this.shader && this.shader.canvas) {
@@ -157,8 +156,10 @@ class GlslEditor {
                 this.editor.setValue(shader);
                 this.editor.setSize(null, this.editor.getDoc().height + 'px');
                 this.editor.setSize(null, 'auto');
+                this.filename = tabName;
             }
         }
+        this.change = true;
     }
 
     open (shader, tabName) {
@@ -193,7 +194,7 @@ class GlslEditor {
 
     getAuthor() {
         let content = this.getContent();
-        let result = content.match(/\/\/\s*[A|a]uthor\s*:\s*([\w|\s|\@|\(|\)|\-|\_]*)/i);
+        let result = content.match(/\/\/\s*[A|a]uthor\s*[\:]?\s*([\w|\s|\@|\(|\)|\-|\_]*)/i);
         if (result && !(result[1] === ' ' || result[1] === '')) {
             let author = result[1].replace(/(\r\n|\n|\r)/gm, '');
             return author;
@@ -209,6 +210,9 @@ class GlslEditor {
         if (result && !(result[1] === ' ' || result[1] === '')) {
             let title = result[1].replace(/(\r\n|\n|\r)/gm, '');
             return title;
+        }
+        else if (this.bufferManager !== undefined) {
+            return this.bufferManager.current;
         }
         else {
             return 'unknown';

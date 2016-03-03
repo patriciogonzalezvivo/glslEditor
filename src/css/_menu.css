@@ -21,12 +21,12 @@ li.ge_menu {
 }
 
 li.ge_menu:hover {
-    color: rgb(40, 168, 107);
+    color: var(--ui-highlight-color);
 }
 
 .ge_sub_menu {
     padding-bottom: 5px;
 }
 li.ge_sub_menu:hover {
-    color: rgb(40, 168, 107);
+    color: var(--ui-highlight-color);
 }
