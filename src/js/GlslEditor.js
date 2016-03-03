@@ -92,6 +92,11 @@ class GlslEditor {
             this.menu = new Menu(this);
         }
 
+        // Support for multiple buffers
+        if (this.options.multipleBuffers) {
+            this.bufferManager = new BufferManager(this);
+        }
+
         // Listen to hash changes
         if (this.options.watchHash) {
             new HashWatch(this);
@@ -100,11 +105,6 @@ class GlslEditor {
         // Listen to file drops
         if (this.options.fileDrops) {
             new FileDrop(this);
-        }
-
-        // Support for multiple buffers
-        if (this.options.multipleBuffers) {
-            this.bufferManager = new BufferManager(this);
         }
 
         // CORE elements

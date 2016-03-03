@@ -36,7 +36,15 @@ export default class HashWatch {
         let query = parseQuery(window.location.search.slice(1));
         if (query) {
             if (query.log) {
-                this.main.open('http://thebookofshaders.com/log/' + query.log + '.frag', query.log);
+                if (this.main.bufferManager) {
+                    let logs = query.log.split(',');
+                    for (let i in logs) {
+                        this.main.open('http://thebookofshaders.com/log/' + logs[i] + '.frag', logs[i]);
+                    }
+                } 
+                else {
+                    this.main.open('http://thebookofshaders.com/log/' + query.log + '.frag', query.log);
+                } 
             }
         }
     }
