@@ -30,9 +30,6 @@ export default class Shader {
 
         if (main.options.canvas_draggable) {
             subscribeInteractiveDom(this.canvasDOM, { move: true, resize: true, snap: true });
-            this.canvasDOM.on('resize', (args) => {
-                main.shader.canvas.onResize();
-            });
         }
     }
 }
