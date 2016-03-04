@@ -41,7 +41,7 @@ void main() {
     gl_FragColor = vec4(color,1.0);
 }`;
 
-class GlslEditor {
+export default class GlslEditor {
     constructor (selector, options) {
         subscribeMixin(this);
 
@@ -65,6 +65,12 @@ class GlslEditor {
 
         if (!this.options.imgs) {
             this.options.imgs = [];
+        }
+        if (this.container.hasAttribute('data-textures')) {
+            let imgList = this.container.getAttribute('data-textures').split(',');
+            for (let i in imgList) {
+                this.options.imgs.push(imgList[i]);
+            }
         }
 
         // Default Theme
