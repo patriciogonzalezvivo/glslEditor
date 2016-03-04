@@ -1,6 +1,10 @@
-**GlslEditor** is a friendly shader editor based on [Codemirror](http://codemirror.net/) compatible with [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) (OpenGL ES that runs on MacOS & Linux, also from Raspbian console with the need of X11) and [glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) (WebGL).
+[**GlslEditor**](https://github.com/patriciogonzalezvivo/glslEditor) is a friendly shader editor based on [Codemirror](http://codemirror.net/) compatible with [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) and [glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) (WebGL).
 
 ![](imgs/00.gif)
+
+Was originaly develop to work as a embebed GLSL Editor for [The Book of Shaders](http://thebookofshaders.com). But now have grown on it's on and could be use as a stand alone Web app. Also thanks to other apps of this ecosystems like [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) that runs in the RaspberryPi directly from console, [GlslEditor](https://github.com/patriciogonzalezvivo/glslEditor) interact with other projects like [OpenFrame](http://openframe.io) allowing the user to export the shaders to frames with only one button.
+
+![](imgs/01.gif)
 
 Depends on [GlslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) to load the WebGL shaders. So on your ```.html``` files you should add:
 
