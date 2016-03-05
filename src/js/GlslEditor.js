@@ -17,7 +17,6 @@ import { subscribeMixin } from 'app/tools/mixin';
 
 // 3er Parties
 import { saveAs } from 'app/vendor/FileSaver.min.js';
-// import GIF from 'app/vendor/gif.js'
 
 const EMPTY_FRAG_SHADER = `// Author: 
 // Title: 

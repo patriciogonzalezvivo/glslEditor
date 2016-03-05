@@ -45,6 +45,10 @@ export default class Modal {
         this.trigger('show');
     }
 
+    getModalClass() {
+        return this.CSS_PREFIX + 'modal';
+    }
+
     onKeyPress (event) {
         this.removeModal();
     }
@@ -66,11 +70,11 @@ export default class Modal {
 
         let target = event.target;
 
-        while (target !== document.documentElement && !target.classList.contains(this.CSS_PREFIX + 'modal')) {
+        while (target !== document.documentElement && !target.classList.contains(this.getModalClass())) {
             target = target.parentNode;
         }
 
-        if (!target.classList.contains(this.CSS_PREFIX + 'modal')) {
+        if (!target.classList.contains(this.getModalClass())) {
             this.removeModal();
         }
     }
