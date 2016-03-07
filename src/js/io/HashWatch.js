@@ -41,10 +41,10 @@ export default class HashWatch {
                     for (let i in logs) {
                         this.main.open('http://thebookofshaders.com/log/' + logs[i] + '.frag', logs[i]);
                     }
-                } 
+                }
                 else {
                     this.main.open('http://thebookofshaders.com/log/' + query.log + '.frag', query.log);
-                } 
+                }
             }
         }
     }

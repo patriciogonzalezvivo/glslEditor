@@ -45,7 +45,7 @@ export function subscribeInteractiveDom (dom, options) {
 
     if (options.snap) {
         dom.parentElement.appendChild(ghostdom);
-    }    
+    }
 
     // Mouse events
     dom.addEventListener('mousedown', onMouseDown);

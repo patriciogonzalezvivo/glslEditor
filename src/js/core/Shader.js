@@ -21,7 +21,6 @@ export default class Shader {
             for (let i in this.options.imgs) {
                 this.canvas.setUniform('u_tex' + i, this.options.imgs[i]);
             }
-            
         }
 
         if (main.options.canvas_draggable) {

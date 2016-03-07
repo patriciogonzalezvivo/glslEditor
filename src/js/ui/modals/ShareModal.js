@@ -14,7 +14,7 @@ export default class ShareModal extends Modal {
             });
         });
 
-        let shareOF = new MenuItem(this.el, 'ge_sub_menu '+this.getModalClass(), '[o]', (event) => {
+        let shareOF = new MenuItem(this.el, 'ge_sub_menu ' + this.getModalClass(), '[o]', (event) => {
             shareOF.el.innerHTML = '[o]... adding to collection';
             saveOnServer(this.main, (event) => {
                 createOpenFrameArtwork(this.main, event.name, event.url, (success) => {

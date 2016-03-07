@@ -248,7 +248,7 @@ export default class ColorPicker extends Picker {
     onHsvMove (event) {
         event.preventDefault();
         event.stopPropagation();
-        
+
         let r, x, y, h, s;
         if (event.target === this.dom.hsvMapCover && currentTarget === this.dom.hsvMap) { // the circle
             r = currentTargetHeight / 2,
