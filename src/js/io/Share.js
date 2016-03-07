@@ -52,14 +52,14 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
     let xhr = new XMLHttpRequest();
     callback = callback || () => {};
     // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
-    xhr.open('POST', 'http://openframe.io:8888/api/users/current/owned_artwork', false);
+    xhr.open('POST', 'http://openframe.io/api/users/current/owned_artwork', false);
     // set content type to JSON...
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     // This is essential in order to include auth cookies:
     xhr.withCredentials = true;
     xhr.onload = (event) => {
         if (event.currentTarget.status === 404) {
-            window.open('http://openframe.io:8888/login-popup', 'login', 'width=500,height=600');
+            window.open('http://openframe.io/login-popup', 'login', 'width=500,height=600');
             let successListener = function(e) {
                 if (e.data === 'success') {
                     createOpenFrameArtwork(glslEditor, name, url, callback);

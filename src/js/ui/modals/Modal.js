@@ -28,6 +28,16 @@ export default class Modal {
         this.trigger('close');
     }
 
+    showAt (cm) {
+        let cursor = cm.cursorCoords(true, 'page');
+        let x = cursor.left;
+        let y = cursor.top;
+
+        y += 30;
+
+        this.presentModal(x, y);
+    }
+    
     presentModal (x, y) {
         // Listen for interaction outside of the modal
         window.setTimeout(() => {

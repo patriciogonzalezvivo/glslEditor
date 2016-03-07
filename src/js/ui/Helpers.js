@@ -5,6 +5,8 @@ import FloatPicker from 'app/ui/pickers/FloatPicker';
 
 import Color from 'app/ui/pickers/types/Color';
 
+import Modal from 'app/ui/modals/Modal';
+
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
     let match = null;
@@ -115,6 +117,11 @@ export default class Helpers {
                         this.main.editor.replaceRange(string, start, end);
                     });
                 }
+            }
+            else if (token.type === 'builtin' || token.type === 'variable-3') {
+                let html = '<p>Learn more about: <a href="http://thebookofshaders.com/glossary/?search=' + token.string + '" target="_blank">' + token.string+'</a></p>';
+                this.activeModal = new Modal('ge_tooltip', { innerHTML: html });
+                this.activeModal.showAt(this.main.editor);
             }
             else if (token.type === 'variable') {
                 if (this.main.visualDebugger) {
