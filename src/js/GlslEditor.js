@@ -6,6 +6,7 @@ import Menu from 'app/ui/Menu';
 import Helpers from 'app/ui/Helpers';
 import ErrorsDisplay from 'app/ui/ErrorsDisplay';
 import VisualDebugger from 'app/ui/VisualDebugger';
+import FloatingShareIcon from 'app/ui/FloatingShareIcon';
 
 import FileDrop from 'app/io/FileDrop';
 import HashWatch from 'app/io/HashWatch';
@@ -119,6 +120,10 @@ export default class GlslEditor {
         this.helpers = new Helpers(this);
         this.errorsDisplay = new ErrorsDisplay(this);
         this.visualDebugger = new VisualDebugger(this);
+
+        if (this.options.shareIcon) {
+            this.shareIcon = new FloatingShareIcon(this);
+        }
 
         // EVENTS
         this.editor.on('change', () => {

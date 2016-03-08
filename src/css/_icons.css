@@ -1,0 +1,21 @@
+.ge_floating_share_icon {
+    box-sizing: border-box;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    /*box-shadow: var(--modal-shadow);*/
+    user-select: none;
+    z-index: var(--z-menu);
+
+    font-size: 22px;
+    color: var(--ui-component-text-color);
+    background-color: var(--ui-base-color);
+    cursor: pointer;
+}
+
+.ge_floating_share_icon:hover {
+    color: var(--ui-highlight-color);
+}
