@@ -26,6 +26,9 @@ li.ge_menu:hover {
 
 .ge_sub_menu {
     padding-bottom: 5px;
+    font-family: Helvetica, Geneva, sans-serif;
+    font-weight: 300;
+    font-size: 14px;
 }
 li.ge_sub_menu:hover {
     color: var(--ui-highlight-color);

@@ -8,14 +8,10 @@ export default class FloatingShareIcon {
         this.el.setAttribute('class', 'ge_floating_share_icon');
         this.el.innerHTML = '&#10547';
         this.el.addEventListener('click', (event) => {
-            console.log(event);
-
             if (main.change || !this.shareModal) {
                 this.shareModal = new ShareModal('ge_share', { main: main });
             }
-
-            let bbox = this.el.getBoundingClientRect();
-            this.shareModal.presentModal(bbox.left, bbox.top);
+            this.shareModal.presentModal(event.target.offsetLeft, event.target.offsetTop);
         }, true);
 
         this.main.container.appendChild(this.el);

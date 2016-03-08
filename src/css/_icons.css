@@ -1,8 +1,9 @@
 .ge_floating_share_icon {
     box-sizing: border-box;
-    position: absolute;
+    position: relative;
+    float: right;
     right: 10px;
-    bottom: 10px;
+    bottom: 40px;
     padding: 0px;
     padding-left: 5px;
     padding-right: 5px;
