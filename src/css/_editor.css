@@ -17,3 +17,7 @@
 .CodeMirror pre {
     padding: 0 8px;
 }
+
+.CodeMirror-vscrollbar {
+	visibility: hidden;
+}
