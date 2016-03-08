@@ -3,7 +3,7 @@ import Vector from './types/Vector';
 
 export default class Vec2Picker extends Picker {
     constructor (pos, properties) {
-        super('trackpad-', properties);
+        super('ge_vec2picker_', properties);
 
         this.width = this.width || 200;
         this.height = this.height || 200;

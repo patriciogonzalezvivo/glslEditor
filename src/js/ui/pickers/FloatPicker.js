@@ -2,7 +2,7 @@ import Picker from './Picker';
 
 export default class FloatPicker extends Picker {
     constructor (number, properties) {
-        super('slider-', properties);
+        super('ge_floatpicker_', properties);
 
         this.width = this.width || 250;
         this.height = this.height || 40;

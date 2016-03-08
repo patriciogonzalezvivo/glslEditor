@@ -17,7 +17,7 @@ let domCache;
 
 export default class ColorPicker extends Picker {
     constructor (color = 'vec3(1.0,0.0,0.0)', properties = {}) {
-        super('colorpicker-', properties);
+        super('ge_colorpicker_', properties);
 
         this.width = 250; // in pixels
         this.height = 250; // in pixels
@@ -44,7 +44,7 @@ export default class ColorPicker extends Picker {
             let leftcursor = document.createElement('div');
             let rightcursor = document.createElement('div');
 
-            modal.className = this.CSS_PREFIX + 'modal picker-modal';
+            modal.className = this.CSS_PREFIX + 'modal ge_picker_modal';
             modal.style.backgroundColor = this.bgColor;
             patch.className = this.CSS_PREFIX + 'patch';
             patch.style.backgroundColor = this.bgColor;
@@ -86,7 +86,7 @@ export default class ColorPicker extends Picker {
         // TODO: Improve these references
         // The caching of references is likely to be important for speed
         this.dom = {};
-        this.dom.hsvMap = this.el.querySelector('.colorpicker-hsv-map');
+        this.dom.hsvMap = this.el.querySelector('.ge_colorpicker_hsv-map');
         this.dom.hsvMapCover = this.dom.hsvMap.children[1]; // well...
         this.dom.hsvMapCursor = this.dom.hsvMap.children[2];
         this.dom.hsvBarBGLayer = this.dom.hsvMap.children[3];
@@ -95,8 +95,8 @@ export default class ColorPicker extends Picker {
         this.dom.hsvLeftCursor = this.dom.hsvBarCursors.children[0];
         this.dom.hsvRightCursor = this.dom.hsvBarCursors.children[1];
 
-        this.dom.colorDisc = this.el.querySelector('.colorpicker-disc');
-        this.dom.luminanceBar = this.el.querySelector('.colorpicker-bar-luminance');
+        this.dom.colorDisc = this.el.querySelector('.ge_colorpicker_disc');
+        this.dom.luminanceBar = this.el.querySelector('.ge_colorpicker_bar-luminance');
 
         if (this.link_button) {
             let lbutton = document.createElement('div');
@@ -117,7 +117,7 @@ export default class ColorPicker extends Picker {
 
     draw () {
         //  Render color patch
-        let patch = this.el.querySelector('.colorpicker-patch');
+        let patch = this.el.querySelector('.ge_colorpicker_patch');
         patch.style.backgroundColor = this.value.getString('rgb');
 
         //  Render HSV picker
@@ -142,10 +142,10 @@ export default class ColorPicker extends Picker {
             'border-color: ' + (color.luminance > 0.22 ? '#333;' : '#ddd');
 
         if (color.luminance > 0.22) {
-            this.dom.hsvBarCursors.classList.add('colorpicker-dark');
+            this.dom.hsvBarCursors.classList.add('ge_colorpicker_dark');
         }
         else {
-            this.dom.hsvBarCursors.classList.remove('colorpicker-dark');
+            this.dom.hsvBarCursors.classList.remove('ge_colorpicker_dark');
         }
 
         if (this.dom.hsvLeftCursor) {
@@ -240,7 +240,7 @@ export default class ColorPicker extends Picker {
         this.onHsvMove(event);
 
         // Hides mouse cursor and begins rendering loop
-        this.dom.hsvMap.classList.add('colorpicker-no-cursor');
+        this.dom.hsvMap.classList.add('ge_colorpicker_no-cursor');
         this.renderer.start();
     }
 
@@ -271,7 +271,7 @@ export default class ColorPicker extends Picker {
     onHsvUp (event) {
         // Stops rendering and returns mouse cursor
         this.renderer.stop();
-        this.dom.hsvMap.classList.remove('colorpicker-no-cursor');
+        this.dom.hsvMap.classList.remove('ge_colorpicker_no-cursor');
         this.destroyEvents();
     }
 

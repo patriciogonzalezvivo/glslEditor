@@ -5,7 +5,7 @@ import { addEvent, removeEvent } from './Picker';
 
 export default class Vec3Picker extends Picker {
     constructor (dir, properties) {
-        super('trackpad-', properties);
+        super('ge_vec3picker_', properties);
 
         this.width = this.width || 200;
         this.height = this.width || 200;

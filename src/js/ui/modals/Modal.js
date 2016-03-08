@@ -11,7 +11,7 @@ export default class Modal {
         }
 
         this.el = document.createElement('div');
-        this.el.className = this.CSS_PREFIX + '_modal';
+        this.el.className = this.CSS_PREFIX + '_modal ge_modal';
         this.el.style.backgroundColor = this.bgColor;
         this.el.innerHTML = this.innerHTML || '';
 

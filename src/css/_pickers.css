@@ -1,4 +1,4 @@
-.picker-modal {
+.ge_picker_modal {
     box-sizing: border-box;
     position: absolute;
     padding: 0px;
@@ -9,17 +9,17 @@
     z-index: var(--z-helpers); /* z-index will be modified by Greensock Draggable when dragging */
 }
 
-.picker-modal * {
+.ge_picker_modal * {
     box-sizing: border-box;
 }
 
-.picker-canvas {
+.ge_picker_canvas {
     width: 100%;
     height: 100%;
     cursor: crosshair;
 }
 
-.colorpicker-patch {
+.ge_colorpicker_patch {
     position: absolute;
     left: 0;
     top: 0;
@@ -27,14 +27,14 @@
     height: 50px;
 }
 
-.colorpicker-hsv-map {
+.ge_colorpicker_hsv-map {
     position: relative;
     height: 200px;
     width: 100%;
     top: 50px;
 }
 
-.colorpicker-disc-cover {
+.ge_colorpicker_disc-cover {
     opacity: 0;
     background-color: #000;
     position: absolute;
@@ -46,7 +46,7 @@
     cursor: crosshair;
 }
 
-.colorpicker-disc-cover::after {
+.ge_colorpicker_disc-cover::after {
     content: '';
     background-color: transparent;
     position: absolute;
@@ -61,8 +61,8 @@
     box-sizing: border-box;
 }
 
-.colorpicker-bar-bg,
-.colorpicker-bar-white {
+.ge_colorpicker_bar-bg,
+.ge_colorpicker_bar-white {
     position: absolute;
     right: 0;
     top: 0;
@@ -70,11 +70,11 @@
     height: 200px;
 }
 
-.colorpicker-bar-white {
+.ge_colorpicker_bar-white {
     background-color: #fff;
 }
 
-.colorpicker-disc-cursor {
+.ge_colorpicker_disc-cursor {
     position: absolute;
     border: 1px solid #eee;
     border-radius: 50%;
@@ -84,24 +84,24 @@
     cursor: crosshair;
 }
 
-.colorpicker-dark .colorpicker-disc-cursor {
+.ge_colorpicker_dark .ge_colorpicker_disc-cursor {
     border-color: #333;
 }
 
-/*.colorpicker-no-cursor,
-.colorpicker-no-cursor .colorpicker-patch,
-.colorpicker-no-cursor .colorpicker-disc-cursor,
-.colorpicker-no-cursor .colorpicker-disc-cover {
+/*.ge_colorpicker_no-cursor,
+.ge_colorpicker_no-cursor .ge_colorpicker_patch,
+.ge_colorpicker_no-cursor .ge_colorpicker_disc-cursor,
+.ge_colorpicker_no-cursor .ge_colorpicker_disc-cover {
     cursor: none;
 }*/
 
-.colorpicker-bar-luminance {
+.ge_colorpicker_bar-luminance {
     position: absolute;
     right: 0;
     top: 0;
 }
 
-.colorpicker-bar-cursors {
+.ge_colorpicker_bar-cursors {
     position: absolute;
     right: 0;
     width: 25px;
@@ -109,31 +109,31 @@
     height: 200px;
     overflow: hidden;
 }
-.colorpicker-bar-cursor-left,
-.colorpicker-bar-cursor-right {
+.ge_colorpicker_bar-cursor-left,
+.ge_colorpicker_bar-cursor-right {
     position: absolute;
     width: 0;
     height: 0;
     border: 4px solid transparent;
     margin-top: -4px;
 }
-.colorpicker-bar-cursor-left {
+.ge_colorpicker_bar-cursor-left {
     left: 0;
     border-left: 4px solid #eee;
 }
-.colorpicker-bar-cursor-right {
+.ge_colorpicker_bar-cursor-right {
     right: 0;
     border-right: 4px solid #eee;
 }
 
-.colorpicker-dark .colorpicker-bar-cursor-left {
+.ge_colorpicker_dark .ge_colorpicker_bar-cursor-left {
     border-left-color: #333;
 }
-.colorpicker-dark .colorpicker-bar-cursor-right {
+.ge_colorpicker_dark .ge_colorpicker_bar-cursor-right {
     border-right-color: #333;
 }
 
-.colorpicker-link-button {
+.ge_colorpicker_link-button {
     position: absolute;
     bottom: 5px;
     left: 5px;

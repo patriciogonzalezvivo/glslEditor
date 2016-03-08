@@ -52,11 +52,11 @@ export default class Picker {
 
     create () {
         this.el = document.createElement('div');
-        this.el.className = this.CSS_PREFIX + 'modal picker-modal';
+        this.el.className = this.CSS_PREFIX + 'modal ge_picker_modal';
         this.el.style.backgroundColor = this.bgColor;
 
         this.canvas = document.createElement('canvas');
-        this.canvas.className = this.CSS_PREFIX + 'canvas picker-canvas';
+        this.canvas.className = this.CSS_PREFIX + 'canvas ge_picker_canvas';
         this.canvas.style.backgroundColor = this.bgColor;
 
         this.el.appendChild(this.canvas);
