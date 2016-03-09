@@ -11,7 +11,7 @@ export default class Menu {
         this.menuDOM.setAttribute('class', 'ge_menu_bar');
 
         // NEW
-        this.menus.new = new MenuItem(this.menuDOM, 'ge_menu', 'New', (event) => {
+        this.menus.new = new MenuItem(this.menuDOM, 'ge_menu', '&#9737; New', (event) => {
             main.new();
         });
 
@@ -23,11 +23,11 @@ export default class Menu {
         this.fileInput.addEventListener('change', (event) => {
             main.open(event.target.files[0]);
         });
-        this.menus.open = new MenuItem(this.menuDOM, 'ge_menu', 'Open', (event) => {
+        this.menus.open = new MenuItem(this.menuDOM, 'ge_menu', '&#8681; Open', (event) => {
             this.fileInput.click();
         });
 
-        this.menus.share = new MenuItem(this.menuDOM, 'ge_menu', 'Export', (event) => {
+        this.menus.share = new MenuItem(this.menuDOM, 'ge_menu', '&#8682; Export', (event) => {
             if (main.change || !this.exportModal) {
                 this.exportModal = new ExportModal('ge_export', { main: main });
             }
