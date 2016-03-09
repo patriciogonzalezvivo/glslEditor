@@ -1,0 +1,11 @@
+.ge_assing_marker {
+	color: var(--ui-element-color);
+}
+
+.ge_assing_marker:hover {
+	color: var(--ui-highlight-color);
+}
+
+.cm-searching {
+	background: rgba(133, 204, 196,0.3);
+}
