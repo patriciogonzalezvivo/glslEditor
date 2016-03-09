@@ -8,7 +8,7 @@
     font-weight: 100;
 }
 
-.ge_share_modal {
+.ge_export_modal {
     overflow: hidden;
     color: var(--ui-component-text-color);
     background-color: var(--ui-base-color);

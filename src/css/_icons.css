@@ -1,4 +1,4 @@
-.ge_floating_share_icon {
+.ge_export_icon {
     box-sizing: border-box;
     position: relative;
     float: right;
@@ -17,6 +17,6 @@
     cursor: pointer;
 }
 
-.ge_floating_share_icon:hover {
+.ge_export_icon:hover {
     color: var(--ui-highlight-color);
 }

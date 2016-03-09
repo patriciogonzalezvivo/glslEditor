@@ -1,5 +1,5 @@
 import MenuItem from 'app/ui/MenuItem';
-import ShareModal from 'app/ui/modals/ShareModal';
+import ExportModal from 'app/ui/modals/ExportModal';
 
 export default class Menu {
     constructor (main) {
@@ -27,18 +27,13 @@ export default class Menu {
             this.fileInput.click();
         });
 
-        // SAVE
-        this.menus.save = new MenuItem(this.menuDOM, 'ge_menu', 'Save', (event) => {
-            main.download();
-        });
-
-        this.menus.share = new MenuItem(this.menuDOM, 'ge_menu', 'Share', (event) => {
-            if (main.change || !this.shareModal) {
-                this.shareModal = new ShareModal('ge_share', { main: main });
+        this.menus.share = new MenuItem(this.menuDOM, 'ge_menu', 'Export', (event) => {
+            if (main.change || !this.exportModal) {
+                this.exportModal = new ExportModal('ge_export', { main: main });
             }
 
             let bbox = this.menus.share.el.getBoundingClientRect();
-            this.shareModal.presentModal(bbox.left - 5, bbox.top + bbox.height + 5);
+            this.exportModal.presentModal(bbox.left - 5, bbox.top + bbox.height + 5);
         });
         main.container.appendChild(this.menuDOM);
     }

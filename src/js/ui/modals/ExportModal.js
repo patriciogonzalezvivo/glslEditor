@@ -2,10 +2,14 @@ import MenuItem from 'app/ui/MenuItem';
 import Modal from './Modal';
 import { saveOnServer, createOpenFrameArtwork } from 'app/io/share';
 
-export default class ShareModal extends Modal {
+export default class ExportModal extends Modal {
     constructor (CSS_PREFIX, properties) {
         super(CSS_PREFIX, properties);
         this.main = properties.main;
+
+        this.save = new MenuItem(this.el, 'ge_sub_menu', 'Download file', (event) => {
+            properties.main.download();
+        });
 
         this.shareURL = new MenuItem(this.el, 'ge_sub_menu', 'Copy URL...', (event) => {
             saveOnServer(this.main, (event) => {
