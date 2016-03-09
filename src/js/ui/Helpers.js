@@ -119,7 +119,7 @@ export default class Helpers {
                 }
             }
             else if (this.main.options.tooltips && (token.type === 'builtin' || token.type === 'variable-3')) {
-                let html = '<p>Learn more about: <a href="http://thebookofshaders.com/glossary/?search=' + token.string + '" target="_blank">' + token.string+'</a></p>';
+                let html = '<p>Learn more about: <a href="http://thebookofshaders.com/glossary/?search=' + token.string + '" target="_blank">' + token.string + '</a></p>';
                 this.activeModal = new Modal('ge_tooltip', { innerHTML: html });
                 this.activeModal.showAt(this.main.editor);
             }

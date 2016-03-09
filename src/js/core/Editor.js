@@ -46,8 +46,7 @@ export function initEditor (main) {
         indentUnit: 4,
         gutters: main.options.lineNumbers ? ['CodeMirror-linenumbers', 'var-in', 'var-out'] : false,
         lineWrapping: true,
-        autofocus: true,
-        scrollbarStyle: "null"
+        autofocus: true
     });
     return cm;
 }

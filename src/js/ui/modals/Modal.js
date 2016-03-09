@@ -37,7 +37,7 @@ export default class Modal {
 
         this.presentModal(x, y);
     }
-    
+
     presentModal (x, y) {
         // Listen for interaction outside of the modal
         window.setTimeout(() => {
