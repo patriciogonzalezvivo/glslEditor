@@ -4,14 +4,15 @@
     float: right;
     right: 10px;
     bottom: 40px;
-    padding: 0px;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding-top: 1px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
     /*box-shadow: var(--modal-shadow);*/
     user-select: none;
     z-index: var(--z-menu);
 
-    font-size: 22px;
+    font-size: 20px;
     color: var(--ui-component-text-color);
     background-color: var(--ui-base-color);
     cursor: pointer;
