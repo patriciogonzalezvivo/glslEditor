@@ -43,7 +43,8 @@ export default class Helpers {
         // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
         wrapper.addEventListener('mouseup', (event) => {
-            this.main.visualDebugger.clean();
+            this.main.visualDebugger.clean(event);
+            
 
             // bail out if we were doing a selection and not a click
             if (this.main.editor.somethingSelected()) {
