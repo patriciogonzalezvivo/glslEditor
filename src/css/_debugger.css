@@ -1,15 +1,15 @@
 .ge_assing_marker {
     margin-left: -15px;
-	color: var(--ui-element-color);
+	color: var(--ui-highlight-color);
 }
 
 .ge_assing_marker_on {
     margin-left: -15px;
-    color: var(--ui-highlight-color);
+    color: red;
 }
 
 .ge_assing_marker:hover {
-	color: var(--ui-highlight-color);
+	color: red;
 }
 
 .cm-searching {
