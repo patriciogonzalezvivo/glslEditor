@@ -125,7 +125,7 @@ export default class VisualDebugger {
             this.main.shader.canvas.load(frag);
             this.debbuging = true;
 
-            if (!glslEditor.shader.canvas.isValid) {
+            if (!this.main.shader.canvas.isValid) {
                 console.log('Something went wrong and the debugger did not work for', this.type, this.variable, ' , so I will stop and clean');
                 this.clean();
                 if (this.main.errorsDisplay) {
