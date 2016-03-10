@@ -61,7 +61,6 @@ This is a list of all the **options**:
 - [ ] Twitter sharing options
 - [ ] Facebook sharing options
 
-- [ ] Save modal to file 
 - [ ] Open modal from url, log or file
 
 - [ ] Uniform widgets
@@ -71,7 +70,7 @@ This is a list of all the **options**:
 - [ ] Remember last open code when opens
 
 - [ ] Texture inspector need changes on glslCanvas and glslViewer
-- [ ] Visual debugger
+- [x] Visual debugger
 
 ## Acknowledgments
 

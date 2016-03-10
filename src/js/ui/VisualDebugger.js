@@ -10,17 +10,30 @@ export default class VisualDebugger {
         let nLines = cm.getDoc().size;
 
         // Show line where the value of the variable is been asigned
+        let voidRE = new RegExp('void main\\s*\\(\\s*[void]?\\)\\s*\\{', 'i');
+        let voidIN = false;
         let constructRE = new RegExp('(float|vec\\d)\\s+(' + variable + ')', 'i');
         let assignRE = new RegExp('[\\s+](' + variable + ')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\-|\\/]?=', 'i');
         for (let i = 0; i < nLines; i++) {
-            let constructMatch = constructRE.exec(cm.getLine(i));
-            if (constructMatch && constructMatch[1]) {
-                this.type = constructMatch[1];
-                cm.setGutterMarker(i, 'var-in', makeMarker(this, i, '&#x2605;'));
-            } else {
-                let assignMatch = assignRE.exec(cm.getLine(i));
-                if (assignMatch) {
-                    cm.setGutterMarker(i, 'var-in', makeMarker(this, i, '&#8676;'));
+            if (!voidIN) {
+                // Do not start until being inside the main function
+                let voidMatch = voidRE.exec(cm.getLine(i));
+                if (voidMatch) {
+                    voidIN = true;
+                }
+            }
+            else {
+                // Search for the constructor
+                let constructMatch = constructRE.exec(cm.getLine(i));
+                if (constructMatch && constructMatch[1]) {
+                    this.type = constructMatch[1];
+                    cm.setGutterMarker(i, 'var-in', makeMarker(this, i, '&#x2605;'));
+                } else {
+                    // Search for changes on tha variable
+                    let assignMatch = assignRE.exec(cm.getLine(i));
+                    if (assignMatch) {
+                        cm.setGutterMarker(i, 'var-in', makeMarker(this, i, '●'));// '<span style="padding-left: 3px;">●</span>'));
+                    }
                 }
             }
         }
@@ -57,9 +70,8 @@ export default class VisualDebugger {
     }
 
     debugLine (nLine) {
+        console.log('Debug untile line', nLine);
         if (this.type && this.variable) {
-            console.log('Debug untile line', nLine);
-
             let cm = this.main.editor;
             let nLines = cm.getDoc().size;
 
@@ -83,6 +95,7 @@ export default class VisualDebugger {
             }
             frag += ';\n}\n';
 
+            console.log(frag);
             this.main.shader.canvas.load(frag);
             this.debbuging = true;
 
@@ -102,6 +115,7 @@ function makeMarker(vd, line, simbol) {
     marker.setAttribute('class', 'ge_assing_marker');
     marker.innerHTML = simbol;
     marker.addEventListener('click', () => {
+        console.log('click')
         vd.debugLine(line);
     });
     return marker;
