@@ -3,24 +3,40 @@ export default class VisualDebugger {
         this.main = main;
         this.debbuging = false;
         this.active = null;
+        this.defaultColor = null;
 
         this.main.editor.on("gutterClick", (cm, n) => {
             let info = cm.lineInfo(n);
             if (info && info.gutterMarkers && info.gutterMarkers.breakpoints) {
                 if (this.active) {
-                    this.active.style.color = 'blue';
+                    this.active.setAttribute('class', 'ge_assing_marker');
                 }
-                info.gutterMarkers.breakpoints.style.color = 'red';
-
+                info.gutterMarkers.breakpoints.setAttribute('class', 'ge_assing_marker_on');
                 this.debugLine(n);
-                // this.active = info.gutterMarkers.breakpoints;
+                this.active = info.gutterMarkers.breakpoints;
             }
         });
     }
 
     iluminate (variable) {
-        this.clean();
+
+        if (this.debbuging && this.variable === this.variable) {
+            return;
+        }
+        // this.clean();
+
         let cm = this.main.editor;
+
+        // Highlight all calls to a variable
+        this.overlay = searchOverlay(variable, true);
+        cm.addOverlay(this.overlay);
+        if (cm.showMatchesOnScrollbar) {
+            if (this.annotate) {
+                this.annotate.clear(); this.annotate = null;
+            }
+            this.annotate = cm.showMatchesOnScrollbar(this.query, queryCaseInsensitive(this.query));
+        }
+
         let nLines = cm.getDoc().size;
 
         // Show line where the value of the variable is been asigned
@@ -52,21 +68,11 @@ export default class VisualDebugger {
             }
         }
 
-        // Highlight all calls to a variable
-        this.overlay = searchOverlay(variable, true);
-        cm.addOverlay(this.overlay);
-        if (cm.showMatchesOnScrollbar) {
-            if (this.annotate) {
-                this.annotate.clear(); this.annotate = null;
-            }
-            this.annotate = cm.showMatchesOnScrollbar(this.query, queryCaseInsensitive(this.query));
-        }
-
         this.variable = variable;
     }
 
     clean (event) {
-        if (event && event.target && event.target.className === 'ge_assing_marker') {
+        if (event && event.target && (event.target.className === 'ge_assing_marker' || event.target.className === 'ge_assing_marker_on' ) ) {
             return;
         }
 
@@ -78,6 +84,7 @@ export default class VisualDebugger {
         this.variable = null;
         this.type = null;
         if (this.debbuging) {
+            console.log('Restoring shader')
              this.main.shader.canvas.load(this.main.options.frag_header + this.main.editor.getValue() + this.main.options.frag_footer);
         }
         this.debbuging = false;
@@ -108,6 +115,7 @@ export default class VisualDebugger {
             }
             frag += ';\n}\n';
 
+            // console.log(frag);
             this.main.shader.canvas.load(frag);
             this.debbuging = true;
 
