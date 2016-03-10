@@ -42,7 +42,8 @@ export default class VisualDebugger {
         // Show line where the value of the variable is been asigned
         let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)\\s*\\{', 'i');
         let voidIN = false;
-        let constructRE = new RegExp('(float|vec\\d)\\s+(' + variable + ')', 'i');
+        let constructRE = new RegExp('(float|vec\\d)\\s+(' + variable + ')\\s+', 'i');
+        let constructIN = false;
         let assignRE = new RegExp('[\\s+](' + variable + ')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\-|\\/]?=', 'i');
         for (let i = 0; i < nLines; i++) {
             if (!voidIN) {
@@ -53,12 +54,16 @@ export default class VisualDebugger {
                 }
             }
             else {
-                // Search for the constructor
-                let constructMatch = constructRE.exec(cm.getLine(i));
-                if (constructMatch && constructMatch[1]) {
-                    this.type = constructMatch[1];
-                    cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '&#x2605;'));
-                } else {
+                if (!constructIN) {
+                    // Search for the constructor
+                    let constructMatch = constructRE.exec(cm.getLine(i));
+                    if (constructMatch && constructMatch[1]) {
+                        this.type = constructMatch[1];
+                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '&#x2605;'));
+                        constructIN = true;
+                    }
+                }
+                else {
                     // Search for changes on tha variable
                     let assignMatch = assignRE.exec(cm.getLine(i));
                     if (assignMatch) {
