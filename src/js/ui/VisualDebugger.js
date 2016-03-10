@@ -55,7 +55,7 @@ export default class VisualDebugger {
                 if (!constructIN) {
                     // Search for the constructor
                     let constructMatch = constructRE.exec(cm.getLine(i));
-                    if (constructMatch && constructMatch[1]) {
+                    if (constructMatch && constructMatch[1] && !isCommented(cm, i, constructMatch)) {
                         this.type = constructMatch[1];
                         cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '+'));//'&#x2605;'));
                         constructIN = true;
@@ -64,7 +64,7 @@ export default class VisualDebugger {
                 else {
                     // Search for changes on tha variable
                     let assignMatch = assignRE.exec(cm.getLine(i));
-                    if (assignMatch) {
+                    if (assignMatch && !isCommented(cm, i, assignMatch)) {
                         cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '●'));// '<span style="padding-left: 3px;">●</span>'));
                     }
                 }
@@ -165,4 +165,12 @@ function searchOverlay(query, caseInsensitive) {
             }
         }
     };
+}
+
+function isCommented(cm, nLine, match) {
+    let token = cm.getTokenAt({ line: nLine, ch: match.index });
+    if (token && token.type) {
+        return token.type === 'comment';
+    }
+    return false;
 }
