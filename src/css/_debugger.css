@@ -1,10 +1,10 @@
 .ge_assing_marker {
-    margin-left: -17px;
+    margin-left: -15px;
 	color: var(--ui-element-color);
 }
 
 .ge_assing_marker_on {
-    margin-left: -17px;
+    margin-left: -15px;
     color: var(--ui-highlight-color);
 }
 
