@@ -89,7 +89,6 @@ export default class VisualDebugger {
         this.variable = null;
         this.type = null;
         if (this.debbuging) {
-            console.log('Restoring shader')
              this.main.shader.canvas.load(this.main.options.frag_header + this.main.editor.getValue() + this.main.options.frag_footer);
         }
         this.debbuging = false;
@@ -120,12 +119,11 @@ export default class VisualDebugger {
             }
             frag += ';\n}\n';
 
-            // console.log(frag);
             this.main.shader.canvas.load(frag);
             this.debbuging = true;
 
             if (!glslEditor.shader.canvas.isValid) {
-                console.log('Debugger did not work for', this.type, this.variable, ' , stoping');
+                console.log('Something went wrong and the debugger did not work for', this.type, this.variable, ' , so I will stop and clean');
                 this.clean();
                 if (this.main.errorsDisplay) {
                     this.main.errorsDisplay.clean();
