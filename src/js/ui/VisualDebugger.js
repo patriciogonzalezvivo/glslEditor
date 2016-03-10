@@ -2,6 +2,20 @@ export default class VisualDebugger {
     constructor (main) {
         this.main = main;
         this.debbuging = false;
+        this.active = null;
+
+        this.main.editor.on("gutterClick", (cm, n) => {
+            let info = cm.lineInfo(n);
+            if (info && info.gutterMarkers && info.gutterMarkers.breakpoints) {
+                if (this.active) {
+                    this.active.style.color = 'blue';
+                }
+                info.gutterMarkers.breakpoints.style.color = 'red';
+
+                this.debugLine(n);
+                // this.active = info.gutterMarkers.breakpoints;
+            }
+        });
     }
 
     iluminate (variable) {
@@ -27,12 +41,12 @@ export default class VisualDebugger {
                 let constructMatch = constructRE.exec(cm.getLine(i));
                 if (constructMatch && constructMatch[1]) {
                     this.type = constructMatch[1];
-                    cm.setGutterMarker(i, 'var-in', makeMarker(this, i, '&#x2605;'));
+                    cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '&#x2605;'));
                 } else {
                     // Search for changes on tha variable
                     let assignMatch = assignRE.exec(cm.getLine(i));
                     if (assignMatch) {
-                        cm.setGutterMarker(i, 'var-in', makeMarker(this, i, '●'));// '<span style="padding-left: 3px;">●</span>'));
+                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '●'));// '<span style="padding-left: 3px;">●</span>'));
                     }
                 }
             }
@@ -57,7 +71,7 @@ export default class VisualDebugger {
         }
 
         let cm = this.main.editor;
-        cm.clearGutter('var-in');
+        cm.clearGutter('breakpoints');
         if (this.overlay) {
             cm.removeOverlay(this.overlay, true);
         }
@@ -70,7 +84,6 @@ export default class VisualDebugger {
     }
 
     debugLine (nLine) {
-        console.log('Debug untile line', nLine);
         if (this.type && this.variable) {
             let cm = this.main.editor;
             let nLines = cm.getDoc().size;
@@ -95,7 +108,6 @@ export default class VisualDebugger {
             }
             frag += ';\n}\n';
 
-            console.log(frag);
             this.main.shader.canvas.load(frag);
             this.debbuging = true;
 
@@ -114,10 +126,6 @@ function makeMarker(vd, line, simbol) {
     let marker = document.createElement('div');
     marker.setAttribute('class', 'ge_assing_marker');
     marker.innerHTML = simbol;
-    marker.addEventListener('click', () => {
-        console.log('click')
-        vd.debugLine(line);
-    });
     return marker;
 }
 
