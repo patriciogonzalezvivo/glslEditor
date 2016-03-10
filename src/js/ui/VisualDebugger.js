@@ -10,7 +10,7 @@ export default class VisualDebugger {
         let nLines = cm.getDoc().size;
 
         // Show line where the value of the variable is been asigned
-        let voidRE = new RegExp('void main\\s*\\(\\s*[void]?\\)\\s*\\{', 'i');
+        let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)\\s*\\{', 'i');
         let voidIN = false;
         let constructRE = new RegExp('(float|vec\\d)\\s+(' + variable + ')', 'i');
         let assignRE = new RegExp('[\\s+](' + variable + ')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\-|\\/]?=', 'i');
