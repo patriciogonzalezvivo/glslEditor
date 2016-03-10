@@ -3,7 +3,6 @@ export default class VisualDebugger {
         this.main = main;
         this.debbuging = false;
         this.active = null;
-        this.defaultColor = null;
 
         this.main.editor.on("gutterClick", (cm, n) => {
             let info = cm.lineInfo(n);
@@ -92,6 +91,10 @@ export default class VisualDebugger {
              this.main.shader.canvas.load(this.main.options.frag_header + this.main.editor.getValue() + this.main.options.frag_footer);
         }
         this.debbuging = false;
+        if (this.active) {
+            this.active.setAttribute('class', 'ge_assing_marker');
+        }
+        this.active = false;
     }
 
     debugLine (nLine) {
