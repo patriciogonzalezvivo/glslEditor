@@ -21,8 +21,8 @@ import { subscribeMixin } from 'app/tools/mixin';
 // 3er Parties
 import { saveAs } from 'app/vendor/FileSaver.min.js';
 
-const EMPTY_FRAG_SHADER = `// Author:\t
-// Title:\t
+const EMPTY_FRAG_SHADER = `// Author: 
+// Title: 
 
 #ifdef GL_ES
 precision mediump float;
