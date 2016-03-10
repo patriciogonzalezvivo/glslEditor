@@ -4,7 +4,7 @@ export default class VisualDebugger {
         this.debbuging = false;
         this.active = null;
 
-        this.main.editor.on("gutterClick", (cm, n) => {
+        this.main.editor.on('gutterClick', (cm, n) => {
             let info = cm.lineInfo(n);
             if (info && info.gutterMarkers && info.gutterMarkers.breakpoints) {
                 if (this.active) {
@@ -18,7 +18,6 @@ export default class VisualDebugger {
     }
 
     iluminate (variable) {
-
         if (this.debbuging && this.variable === this.variable) {
             return;
         }
@@ -33,7 +32,7 @@ export default class VisualDebugger {
             if (this.annotate) {
                 this.annotate.clear(); this.annotate = null;
             }
-            this.annotate = cm.showMatchesOnScrollbar(this.query, queryCaseInsensitive(this.query));
+            this.annotate = cm.showMatchesOnScrollbar(variable, true);
         }
 
         let nLines = cm.getDoc().size;
@@ -76,7 +75,7 @@ export default class VisualDebugger {
     }
 
     clean (event) {
-        if (event && event.target && (event.target.className === 'ge_assing_marker' || event.target.className === 'ge_assing_marker_on' ) ) {
+        if (event && event.target && (event.target.className === 'ge_assing_marker' || event.target.className === 'ge_assing_marker_on')) {
             return;
         }
 
@@ -88,7 +87,7 @@ export default class VisualDebugger {
         this.variable = null;
         this.type = null;
         if (this.debbuging) {
-             this.main.shader.canvas.load(this.main.options.frag_header + this.main.editor.getValue() + this.main.options.frag_footer);
+            this.main.shader.canvas.load(this.main.options.frag_header + this.main.editor.getValue() + this.main.options.frag_footer);
         }
         this.debbuging = false;
         if (this.active) {
@@ -100,22 +99,21 @@ export default class VisualDebugger {
     debugLine (nLine) {
         if (this.type && this.variable) {
             let cm = this.main.editor;
-            let nLines = cm.getDoc().size;
 
             let frag = '';
-            for (let i = 0; i < nLine+1; i++) {
-                frag += cm.getLine(i) + '\n'; 
+            for (let i = 0; i < nLine + 1; i++) {
+                frag += cm.getLine(i) + '\n';
             }
 
             frag += '\tgl_FragColor = ';
             if (this.type === 'float') {
-                frag += 'vec4(vec3('+ this.variable + '),1.)';
+                frag += 'vec4(vec3(' + this.variable + '),1.)';
             }
             else if (this.type === 'vec2') {
-                frag += 'vec4(vec3('+ this.variable + ',0.),1.)';
+                frag += 'vec4(vec3(' + this.variable + ',0.),1.)';
             }
             else if (this.type === 'vec3') {
-                frag += 'vec4('+ this.variable + ',1.)';
+                frag += 'vec4(' + this.variable + ',1.)';
             }
             else if (this.type === 'vec4') {
                 frag += this.variable;
@@ -144,7 +142,7 @@ function makeMarker(vd, line, simbol) {
 }
 
 function searchOverlay(query, caseInsensitive) {
-    if (typeof query == 'string') {
+    if (typeof query === 'string') {
         query = new RegExp(query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'), caseInsensitive ? 'gi' : 'g');
     }
     else if (!query.global) {
@@ -155,7 +153,7 @@ function searchOverlay(query, caseInsensitive) {
         token: function(stream) {
             query.lastIndex = stream.pos;
             var match = query.exec(stream.string);
-            if (match && match.index == stream.pos) {
+            if (match && match.index === stream.pos) {
                 stream.pos += match[0].length || 1;
                 return 'searching';
             }
