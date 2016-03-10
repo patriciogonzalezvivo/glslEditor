@@ -11,6 +11,8 @@ import ExportIcon from 'app/ui/ExportIcon';
 import FileDrop from 'app/io/FileDrop';
 import HashWatch from 'app/io/HashWatch';
 import BufferManager from 'app/io/BufferManager';
+import LocalStorage from 'app/io/LocalStorage';
+const STORAGE_LAST_EDITOR_CONTENT = 'last-content';
 
 // Import Utils
 import xhr from 'xhr';
@@ -140,6 +142,35 @@ export default class GlslEditor {
                 }
                 this.shader.canvasDOM.style.top = height.toString() + 'px';
             });
+        }
+
+        // If the user bails for whatever reason, hastily shove the contents of
+        // the editor into some kind of storage. This overwrites whatever was
+        // there before. Note that there is not really a way of handling unload
+        // with our own UI and logic, since this allows for widespread abuse
+        // of normal browser functionality.
+        window.addEventListener('beforeunload', (event) => {
+            let content = {};
+            if (this.bufferManager && Object.keys(this.bufferManager.buffers).length !== 0) {
+                for (var key in this.bufferManager.buffers) {
+                    content[key] = this.bufferManager.buffers[key].getValue();
+                }
+            }
+            else {
+                content[(new Date().getTime()).toString()] = this.editor.getValue();
+            }
+            LocalStorage.setItem(STORAGE_LAST_EDITOR_CONTENT, JSON.stringify(content));
+        });
+
+        // If there is previus content load it.
+        let oldContent = JSON.parse(LocalStorage.getItem(STORAGE_LAST_EDITOR_CONTENT));
+        if (oldContent) {
+            for (var key in oldContent) {
+                this.open(oldContent[key], key);
+            }
+        }
+        else {
+            this.new();
         }
 
         return this;
