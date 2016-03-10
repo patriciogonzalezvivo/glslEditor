@@ -42,7 +42,7 @@ export default class VisualDebugger {
         let voidIN = false;
         let constructRE = new RegExp('(float|vec\\d)\\s+(' + variable + ')\\s+', 'i');
         let constructIN = false;
-        let assignRE = new RegExp('[\\s+](' + variable + ')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\-|\\/]?=', 'i');
+        let assignRE = new RegExp('[\\s+](' + variable + ')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\\-|\\/]?=', 'i');
         for (let i = 0; i < nLines; i++) {
             if (!voidIN) {
                 // Do not start until being inside the main function
