@@ -92,6 +92,10 @@ This is a list of all the **options** you can set up:
 - [ ] Time widget
 - [ ] Texture inspector
 
+## Author
+
+[Patricio Gonzalez Vivo](http://https://twitter.com/patriciogv): [github](https://github.com/patriciogonzalezvivo) | [twitter](http://https://twitter.com/patriciogv) | [website](http://patriciogonzalezvivo.com)
+
 ## Acknowledgments
 
 Special thanks to [Lou Huang](@saikofish). glslEditor born from learned leassons on [TangramPlay](http://tangrams.github.io/tangram-play/). His code and wizdom is all arround this project.
