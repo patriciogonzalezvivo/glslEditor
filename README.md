@@ -1,12 +1,16 @@
-[**GlslEditor**](https://github.com/patriciogonzalezvivo/glslEditor) is a friendly shader editor based on [Codemirror](http://codemirror.net/) compatible with [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) and [glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) (WebGL).
+[**GlslEditor**](https://github.com/patriciogonzalezvivo/glslEditor)
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4BQMKQJDQ9XH6)
+
+Friendly GLSL Shader editor based on [Codemirror](http://codemirror.net/) compatible with [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) (C++/OpenGL ES) and [glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) (JS/WebGL).
 
 ![](http://patriciogonzalezvivo.com/images/glslEditor/00.gif)
 
-Was originaly develop to work as a embebed GLSL Editor for [The Book of Shaders](http://thebookofshaders.com). But now have grown on it's on and could be use as a stand alone Web app. Also thanks to other apps of this ecosystems like [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) that runs in the RaspberryPi directly from console, [GlslEditor](https://github.com/patriciogonzalezvivo/glslEditor) interact with other projects like [OpenFrame](http://openframe.io) allowing the user to export the shaders to frames with only one button.
+Was originaly develop to work as a embebed editor for [The Book of Shaders](http://thebookofshaders.com). But now have grown as a stand alone Web app. Thanks to their compatibility with other apps of this ecosystems like [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) that runs in the RaspberryPi directly from console, [GlslEditor](https://github.com/patriciogonzalezvivo/glslEditor) interact with other projects like [OpenFrame.io](http://openframe.io) allowing the user to export the shaders to frames with only one button.
 
 ![](http://patriciogonzalezvivo.com/images/glslEditor/01.gif)
 
-Depends on [GlslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) to load the WebGL shaders. So on your ```.html``` files you should add:
+You can use it directly from [editor.thebookofshaders.com](http://editor.thebookofshaders.com/) or host one on your own website. Because depends on [GlslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) to load the WebGL shaders, in your ```.html``` files you should add:
 
 ```
     <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/build/GlslCanvas.min.js"></script>
@@ -38,7 +42,7 @@ And then you are ready to use it by passing an **DOM element** or **query select
     </script>
 ```
 
-This is a list of all the **options**:
+This is a list of all the **options** you can set up:
 
 | Property             | type | description  | default  |
 |----------------------|------|---|-----|
@@ -54,6 +58,7 @@ This is a list of all the **options**:
 | ```watchHash```| bool | Listen to changes on the wash path to load files |```false```|
 | ```frag_header``` | string| Adds a hidden header to every shader before compiling |```""```|
 | ```frag_footer``` | string| Adds a hidden footer to every shader before compiling |```""```|
+| ```theme``` | string| Codemirror Themes |```"default"```|
 
 ## Some of the features features
 
