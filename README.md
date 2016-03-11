@@ -63,7 +63,7 @@ This is a list of all the **options**:
 
 - Inline Trackpad for '''vec2'''
 
- ![](http://patriciogonzalezvivo.com/images/glslEditor/pickers2.gif)
+ ![](http://patriciogonzalezvivo.com/images/glslEditor/picker2.gif)
 
 - Slider for floats
 
