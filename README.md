@@ -1,10 +1,10 @@
-[**GlslEditor**](https://github.com/patriciogonzalezvivo/glslEditor)
+# [GlslEditor](https://github.com/patriciogonzalezvivo/glslEditor)
+
+![](http://patriciogonzalezvivo.com/images/glslEditor/00.gif)
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4BQMKQJDQ9XH6)
 
 Friendly GLSL Shader editor based on [Codemirror](http://codemirror.net/) compatible with [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) (C++/OpenGL ES) and [glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) (JS/WebGL).
-
-![](http://patriciogonzalezvivo.com/images/glslEditor/00.gif)
 
 Was originaly develop to work as a embebed editor for [The Book of Shaders](http://thebookofshaders.com). But now have grown as a stand alone Web app. Thanks to their compatibility with other apps of this ecosystems like [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) that runs in the RaspberryPi directly from console, [GlslEditor](https://github.com/patriciogonzalezvivo/glslEditor) interact with other projects like [OpenFrame.io](http://openframe.io) allowing the user to export the shaders to frames with only one button.
 
