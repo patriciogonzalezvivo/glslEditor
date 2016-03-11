@@ -20,9 +20,9 @@ export function subscribeInteractiveDom (dom, options) {
     subscribeMixin(dom);
 
     options = options || {};
-    options.resize = options.resize !== undefined ? options.resize : true;
-    options.move = options.move !== undefined ? options.move : true;
-    options.snap = options.snap !== undefined ? options.snap : true;
+    options.resize = options.resize !== undefined ? options.resize : false;
+    options.move = options.move !== undefined ? options.move : false;
+    options.snap = options.snap !== undefined ? options.snap : false;
 
     // Minimum resizable area
     var minWidth = 100;

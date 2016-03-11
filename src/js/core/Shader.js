@@ -23,8 +23,13 @@ export default class Shader {
             }
         }
 
-        if (main.options.canvas_draggable) {
-            subscribeInteractiveDom(this.canvasDOM, { move: true, resize: true, snap: true });
+
+        if (main.options.canvas_draggable || main.options.canvas_resizable || main.options.canvas_snapable) {
+            subscribeInteractiveDom(this.canvasDOM, { 
+                                                        move: main.options.canvas_draggable,
+                                                        resize: main.options.canvas_resizable,
+                                                        snap: main.options.canvas_snapable 
+                                                    });
         }
     }
 }
