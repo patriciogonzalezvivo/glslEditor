@@ -1,10 +1,10 @@
 [**GlslEditor**](https://github.com/patriciogonzalezvivo/glslEditor) is a friendly shader editor based on [Codemirror](http://codemirror.net/) compatible with [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) and [glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) (WebGL).
 
-![](http://patriciogonzalezvivo.com/images/glslEditor-00.gif)
+![](http://patriciogonzalezvivo.com/images/glslEditor/00.gif)
 
 Was originaly develop to work as a embebed GLSL Editor for [The Book of Shaders](http://thebookofshaders.com). But now have grown on it's on and could be use as a stand alone Web app. Also thanks to other apps of this ecosystems like [glslViewer](https://github.com/patriciogonzalezvivo/glslViewer) that runs in the RaspberryPi directly from console, [GlslEditor](https://github.com/patriciogonzalezvivo/glslEditor) interact with other projects like [OpenFrame](http://openframe.io) allowing the user to export the shaders to frames with only one button.
 
-![](http://patriciogonzalezvivo.com/images/glslEditor-01.gif)
+![](http://patriciogonzalezvivo.com/images/glslEditor/01.gif)
 
 Depends on [GlslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) to load the WebGL shaders. So on your ```.html``` files you should add:
 
@@ -55,9 +55,29 @@ This is a list of all the **options**:
 | ```frag_header``` | string| Adds a hidden header to every shader before compiling |```""```|
 | ```frag_footer``` | string| Adds a hidden footer to every shader before compiling |```""```|
 
+## Some of the features features
+
+- Inline Color picker and 3D vector picker for '''vec3''
+
+![](http://patriciogonzalezvivo.com/images/glslEditor/pickers1.gif)
+
+- Inline Trackpad for '''vec2'''
+
+ ![](http://patriciogonzalezvivo.com/images/glslEditor/pickers2.gif)
+
+- Slider for floats
+
+- Inline error display
+
+![](http://patriciogonzalezvivo.com/images/glslEditor/error.gif)
+
+- Breakpoints for variables
+
+![](http://patriciogonzalezvivo.com/images/glslEditor/debugger.gif)
+
+
 ## TODOs
 
-- [x] Share Modal
 - [ ] Twitter sharing options
 - [ ] Facebook sharing options
 
@@ -65,12 +85,7 @@ This is a list of all the **options**:
 
 - [ ] Uniform widgets
 - [ ] Time widget
-- [ ] Tooltip modal 
-
-- [ ] Remember last open code when opens
-
-- [ ] Texture inspector need changes on glslCanvas and glslViewer
-- [x] Visual debugger
+- [ ] Texture inspector
 
 ## Acknowledgments
 
