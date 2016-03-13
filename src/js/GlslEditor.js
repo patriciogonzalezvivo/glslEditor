@@ -260,6 +260,18 @@ export default class GlslEditor {
         }
     }
 
+    getChapterNumber() {
+        let content = this.getContent();
+        let result = content.match(/\/\/\s*[C|c]hapter\s*:\s*(\d*)/i);
+        console.log(result);
+        if (result) {
+            return parseInt(result[1]);
+        }
+        else {
+            return 'unknown';
+        }
+    }
+
     download () {
         let content = this.getContent();
         let name = this.getTitle();
