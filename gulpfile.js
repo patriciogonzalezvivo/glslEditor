@@ -35,12 +35,12 @@ gulp.task('css', function () {
         reporter()
     ];
 
-    return gulp.src('./src/css/main.css')
+    return gulp.src('./src/css/glslEditor.css')
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(postcss(plugins))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./build/css'))
+        .pipe(gulp.dest('./build'))
         .pipe(livereload());
 });
 
@@ -71,7 +71,7 @@ gulp.task('js', function () {
             // .pipe(uglify())
             // .on('error', gutil.log)
         // .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./build/js'));
+        .pipe(gulp.dest('./build'));
 });
 
 // Rerun the task when a file changes

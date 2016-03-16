@@ -16,11 +16,11 @@ You can use it directly from [editor.thebookofshaders.com](http://editor.thebook
     <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/build/GlslCanvas.min.js"></script>
 ```
 
-Then is about including the two ```build``` files: ```css/main.css``` and ```js/glslEditor.js```:
+Then is about including the two ```build``` files: ```glslEditor.css``` and ```glslEditor.js```:
 
 ```
-    <link type="text/css" rel="stylesheet" href="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/css/main.css">
-    <script type="application/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/js/glslEditor.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.css">
+    <script type="application/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.js"></script>
 ```
 
 And then you are ready to use it by passing an **DOM element** or **query selector string**, and a set of options;
