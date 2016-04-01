@@ -11,9 +11,16 @@ export default class ExportModal extends Modal {
             properties.main.download();
         });
 
-        this.shareURL = new MenuItem(this.el, 'ge_sub_menu', 'Copy URL...', (event) => {
+        this.codeURL = new MenuItem(this.el, 'ge_sub_menu', 'Code URL...', (event) => {
             saveOnServer(this.main, (event) => {
                 prompt('Use this url to share your code', 'http://editor.thebookofshaders.com/?log=' + event.name);
+                this.removeModal();
+            });
+        });
+
+        this.shaderURL = new MenuItem(this.el, 'ge_sub_menu', 'Artwork URL...', (event) => {
+            saveOnServer(this.main, (event) => {
+                prompt('Use this url to share your artwork', 'http://player.thebookofshaders.com/?log=' + event.name);
                 this.removeModal();
             });
         });
