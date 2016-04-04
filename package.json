@@ -51,10 +51,10 @@
   "dependencies": {
     "babel": "^5.8.29",
     "babel-runtime": "5.8.29",
+    "glslCanvas": "0.0.5",
     "codemirror": "5.8.0",
     "xhr": "^2.2.0"
   },
   "browserify-shim": {
-    "GlslCanvas": "global:GlslCanvas"
   }
 }
