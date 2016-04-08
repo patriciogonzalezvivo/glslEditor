@@ -1,4 +1,4 @@
-import { subscribeMixin } from 'app/tools/mixin';
+import { subscribeMixin } from '../../tools/mixin';
 
 export default class Modal {
     constructor (CSS_PREFIX, properties) {

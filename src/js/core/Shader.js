@@ -1,5 +1,5 @@
 import GlslCanvas from 'glslCanvas';
-import { subscribeInteractiveDom } from 'app/tools/interactiveDom';
+import { subscribeInteractiveDom } from '../tools/interactiveDom';
 
 export default class Shader {
     constructor (main) {

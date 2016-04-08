@@ -1,11 +1,11 @@
-import ColorPicker from 'app/ui/pickers/ColorPicker';
-import Vec3Picker from 'app/ui/pickers/Vec3Picker';
-import Vec2Picker from 'app/ui/pickers/Vec2Picker';
-import FloatPicker from 'app/ui/pickers/FloatPicker';
+import ColorPicker from './pickers/ColorPicker';
+import Vec3Picker from './pickers/Vec3Picker';
+import Vec2Picker from './pickers/Vec2Picker';
+import FloatPicker from './pickers/FloatPicker';
 
-import Color from 'app/ui/pickers/types/Color';
+import Color from './pickers/types/Color';
 
-import Modal from 'app/ui/modals/Modal';
+import Modal from './modals/Modal';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {

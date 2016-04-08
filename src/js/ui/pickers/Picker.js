@@ -3,8 +3,8 @@ Original: https://github.com/tangrams/tangram-play/blob/gh-pages/src/js/addons/u
 Author: Lou Huang (@saikofish)
 */
 
-import { getDevicePixelRatio } from 'app/tools/common';
-import { subscribeMixin } from 'app/tools/mixin';
+import { getDevicePixelRatio } from '../../tools/common';
+import { subscribeMixin } from '../../tools/mixin';
 
 export default class Picker {
     constructor (CSS_PREFIX, properties) {

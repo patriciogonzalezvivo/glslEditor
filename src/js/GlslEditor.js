@@ -1,25 +1,25 @@
 
-import Shader from 'app/core/Shader';
-import { initEditor } from 'app/core/Editor';
+import Shader from './core/Shader';
+import { initEditor } from './core/Editor';
 
-import Menu from 'app/ui/Menu';
-import Helpers from 'app/ui/Helpers';
-import ErrorsDisplay from 'app/ui/ErrorsDisplay';
-import VisualDebugger from 'app/ui/VisualDebugger';
-import ExportIcon from 'app/ui/ExportIcon';
+import Menu from './ui/Menu';
+import Helpers from './ui/Helpers';
+import ErrorsDisplay from './ui/ErrorsDisplay';
+import VisualDebugger from './ui/VisualDebugger';
+import ExportIcon from './ui/ExportIcon';
 
-import FileDrop from 'app/io/FileDrop';
-import HashWatch from 'app/io/HashWatch';
-import BufferManager from 'app/io/BufferManager';
-import LocalStorage from 'app/io/LocalStorage';
+import FileDrop from './io/FileDrop';
+import HashWatch from './io/HashWatch';
+import BufferManager from './io/BufferManager';
+import LocalStorage from './io/LocalStorage';
 const STORAGE_LAST_EDITOR_CONTENT = 'last-content';
 
 // Import Utils
 import xhr from 'xhr';
-import { subscribeMixin } from 'app/tools/mixin';
+import { subscribeMixin } from './tools/mixin';
 
 // 3er Parties
-import { saveAs } from 'app/vendor/FileSaver.min.js';
+import { saveAs } from './vendor/FileSaver.min.js';
 
 const EMPTY_FRAG_SHADER = `// Author: 
 // Title: 

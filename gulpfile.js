@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 // var gutil = require('gulp-util');
+var derequire = require('gulp-derequire');
 var livereload = require('gulp-livereload');
 var plumber = require('gulp-plumber');
 var sourcemaps = require('gulp-sourcemaps');
@@ -55,6 +56,7 @@ gulp.task('js', function () {
 
     var bundle = browserify({
         entries: 'src/js/GlslEditor.js',
+        standalone: 'GlslEditor',
         debug: true,
         transform: [
             babelify.configure({ optional: ['runtime'] }),
@@ -65,6 +67,7 @@ gulp.task('js', function () {
     return bundle.bundle()
         .pipe(plumber())
         .pipe(source('glslEditor.js'))
+        .pipe(derequire())
         .pipe(buffer())
         // .pipe(sourcemaps.init({ loadMaps: true }))
             // Add transformation tasks to the pipeline here.

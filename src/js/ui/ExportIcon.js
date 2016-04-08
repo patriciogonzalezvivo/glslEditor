@@ -1,4 +1,4 @@
-import ExportModal from 'app/ui/modals/ExportModal';
+import ExportModal from './modals/ExportModal';
 
 export default class ExportIcon {
     constructor (main) {

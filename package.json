@@ -31,6 +31,7 @@
     "browserify-shim": "^3.8.11",
     "csswring": "^4.0.0",
     "gulp": "^3.9.0",
+    "gulp-derequire": "^2.1.0",
     "gulp-livereload": "^3.8.1",
     "gulp-plumber": "^1.0.1",
     "gulp-postcss": "^6.0.1",
@@ -51,7 +52,7 @@
   "dependencies": {
     "babel": "^5.8.29",
     "babel-runtime": "5.8.29",
-    "glslCanvas": "0.0.5",
+    "glslCanvas": "0.0.9",
     "codemirror": "5.8.0",
     "xhr": "^2.2.0"
   },

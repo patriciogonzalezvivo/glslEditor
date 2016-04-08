@@ -1,5 +1,5 @@
-import MenuItem from 'app/ui/MenuItem';
-import ExportModal from 'app/ui/modals/ExportModal';
+import MenuItem from './MenuItem';
+import ExportModal from './modals/ExportModal';
 
 export default class Menu {
     constructor (main) {

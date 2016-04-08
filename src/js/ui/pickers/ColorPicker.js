@@ -6,9 +6,9 @@ Author: Lou Huang (@saikofish)
 import Picker from './Picker';
 import Color from './types/Color';
 import { addEvent, removeEvent } from './Picker';
-import { getDevicePixelRatio } from 'app/tools/common';
+import { getDevicePixelRatio } from '../../tools/common';
 
-import { subscribeInteractiveDom } from 'app/tools/interactiveDom';
+import { subscribeInteractiveDom } from '../../tools/interactiveDom';
 
 // Some common use variables
 let currentTarget;
