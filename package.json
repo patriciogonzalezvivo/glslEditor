@@ -1,6 +1,6 @@
 {
   "name": "glslEditor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple GLSL Fragment Shader Editor ",
   "main": "index.js",
   "scripts": {
@@ -56,6 +56,5 @@
     "codemirror": "5.8.0",
     "xhr": "^2.2.0"
   },
-  "browserify-shim": {
-  }
+  "browserify-shim": {}
 }
