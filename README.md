@@ -10,17 +10,17 @@ Was originaly develop to work as a embebed editor for [The Book of Shaders](http
 
 ![](http://patriciogonzalezvivo.com/images/glslEditor/01.gif)
 
-You can use it directly from [editor.thebookofshaders.com](http://editor.thebookofshaders.com/) or host one on your own website. Because depends on [GlslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas) to load the WebGL shaders, in your ```.html``` files you should add:
-
-```
-    <script type="text/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/build/GlslCanvas.min.js"></script>
-```
-
-Then is about including the two ```build``` files: ```glslEditor.css``` and ```glslEditor.js```:
+You can use it directly from [editor.thebookofshaders.com](http://editor.thebookofshaders.com/) or host one on your own website by including the two ```build``` files: ```glslEditor.css``` and ```glslEditor.js```:
 
 ```
     <link type="text/css" rel="stylesheet" href="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.css">
     <script type="application/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.js"></script>
+```
+
+You can also install it through npm:
+
+```bash
+npm install glslEditor
 ```
 
 And then you are ready to use it by passing an **DOM element** or **query selector string**, and a set of options;
