@@ -159,20 +159,28 @@ export default class GlslEditor {
             else {
                 content[(new Date().getTime()).toString()] = this.editor.getValue();
             }
-            LocalStorage.setItem(STORAGE_LAST_EDITOR_CONTENT, JSON.stringify(content));
+
+            if (this.options.menu) {
+                LocalStorage.setItem(STORAGE_LAST_EDITOR_CONTENT, JSON.stringify(content));
+            }
         });
 
-        // If there is previus content load it.
-        let oldContent = JSON.parse(LocalStorage.getItem(STORAGE_LAST_EDITOR_CONTENT));
-        if (oldContent) {
-            for (var key in oldContent) {
-                this.open(oldContent[key], key);
+        if (this.options.menu) {
+            // If there is previus content load it.
+            let oldContent = JSON.parse(LocalStorage.getItem(STORAGE_LAST_EDITOR_CONTENT));
+            if (oldContent) {
+                for (var key in oldContent) {
+                    this.open(oldContent[key], key);
+                }
             }
-        }
+            else {
+                this.new();
+            }
+        } 
         else {
             this.new();
         }
-
+        
         return this;
     }
 
