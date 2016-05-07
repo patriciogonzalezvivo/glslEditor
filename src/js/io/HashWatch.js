@@ -39,11 +39,11 @@ export default class HashWatch {
                 if (this.main.bufferManager) {
                     let logs = query.log.split(',');
                     for (let i in logs) {
-                        this.main.open('http://thebookofshaders.com/log/' + logs[i] + '.frag', logs[i]);
+                        this.main.open('https://thebookofshaders.com/log/' + logs[i] + '.frag', logs[i]);
                     }
                 }
                 else {
-                    this.main.open('http://thebookofshaders.com/log/' + query.log + '.frag', query.log);
+                    this.main.open('https://thebookofshaders.com/log/' + query.log + '.frag', query.log);
                 }
             }
         }

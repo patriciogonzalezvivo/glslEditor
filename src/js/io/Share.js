@@ -83,7 +83,7 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
         author_name: author,
         is_public: false,
         format: 'openframe-glslviewer',
-        url: 'http://thebookofshaders.com/log/' + name + '.frag',
-        thumb_url: 'http://thebookofshaders.com/log/' + name + '.png'
+        url: 'https://thebookofshaders.com/log/' + name + '.frag',
+        thumb_url: 'https://thebookofshaders.com/log/' + name + '.png'
     }));
 }
