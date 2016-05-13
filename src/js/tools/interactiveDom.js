@@ -253,6 +253,8 @@ export function subscribeInteractiveDom (dom, options) {
     }
     animate();
 
+
+
     function onUp(e) {
         calc(e);
 
@@ -295,6 +297,19 @@ export function subscribeInteractiveDom (dom, options) {
             dom.trigger('resize', { finish: true, el: dom });
         }
         clicked = null;
+    }
+
+    dom.snapRight = function () {
+        var snapped = {
+            width: dom.width,
+            height: dom.height
+        };
+
+        setBounds(dom, window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
+        preSnapped = snapped;
+        // hintHide();
+        dom.trigger('move', { finish: true, el: dom });
+        dom.trigger('resize', { finish: true, el: dom });
     }
 
     return dom;

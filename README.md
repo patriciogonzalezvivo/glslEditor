@@ -58,7 +58,6 @@ This is a list of all the **options** you can set up:
 | ```watchHash```| bool | Listen to changes on the wash path to load files |```false```|
 | ```frag_header``` | string| Adds a hidden header to every shader before compiling |```""```|
 | ```frag_footer``` | string| Adds a hidden footer to every shader before compiling |```""```|
-| ```theme``` | string| Codemirror Themes |```"default"```|
 
 ## Some of the features features
 

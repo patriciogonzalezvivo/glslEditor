@@ -68,6 +68,7 @@ export default class GlslEditor {
         if (!this.options.imgs) {
             this.options.imgs = [];
         }
+
         if (this.container.hasAttribute('data-textures')) {
             let imgList = this.container.getAttribute('data-textures').split(',');
             for (let i in imgList) {
@@ -95,6 +96,11 @@ export default class GlslEditor {
             this.options.frag_footer = '';
         }
 
+        // Listen to hash changes
+        if (this.options.watchHash) {
+            new HashWatch(this);
+        }
+
         // Load UI
         if (this.options.menu) {
             this.menu = new Menu(this);
@@ -103,11 +109,6 @@ export default class GlslEditor {
         // Support for multiple buffers
         if (this.options.multipleBuffers) {
             this.bufferManager = new BufferManager(this);
-        }
-
-        // Listen to hash changes
-        if (this.options.watchHash) {
-            new HashWatch(this);
         }
 
         // Listen to file drops

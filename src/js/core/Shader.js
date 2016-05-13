@@ -31,6 +31,10 @@ export default class Shader {
                                                         resize: main.options.canvas_resizable,
                                                         snap: main.options.canvas_snapable 
                                                     });
-        }
+
+            if (main.options.canvas_size === 'halfscreen') {
+                this.canvasDOM.snapRight();
+            }
+        } 
     }
 }
