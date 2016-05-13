@@ -20,7 +20,7 @@ export default class ExportModal extends Modal {
 
         this.shaderURL = new MenuItem(this.el, 'ge_sub_menu', 'Artwork URL...', (event) => {
             saveOnServer(this.main, (event) => {
-                prompt('Use this url to share your artwork', 'http://thebookofshaders.com/glslPlayer/?log=' + event.name);
+                prompt('Use this url to share your artwork', 'http://player.thebookofshaders.com/?log=' + event.name);
                 this.removeModal();
             });
         });
