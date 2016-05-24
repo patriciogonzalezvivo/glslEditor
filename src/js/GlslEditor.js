@@ -60,6 +60,7 @@ export default class GlslEditor {
 
         this.options = {};
         this.change = false;
+        this.autoupdate = true;
 
         if (options) {
             this.options = options;
@@ -130,7 +131,9 @@ export default class GlslEditor {
 
         // EVENTS
         this.editor.on('change', () => {
-            this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+            if (this.autoupdate) {
+                this.update()
+            }
         });
 
         if (this.options.canvas_follow) {
@@ -294,6 +297,10 @@ export default class GlslEditor {
         saveAs(blob, name + '.frag');
         this.editor.doc.markClean();
         this.change = false;
+    }
+
+    update () {
+        this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
     }
 }
 

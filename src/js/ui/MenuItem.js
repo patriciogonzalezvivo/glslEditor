@@ -3,6 +3,8 @@ export default class MenuItem {
         this.el = document.createElement('li');
         this.el.setAttribute('class', className);
         this.el.innerHTML = name;
+        this.className = className;
+        this.hiddenClass = className + '--hidden';
 
         // Attach listeners, including those for tooltip behavior
         this.el.addEventListener('click', (event) => {
@@ -17,5 +19,13 @@ export default class MenuItem {
 
     set name (name) {
         this.el.innerHTML = name;
+    }
+
+    hide () {
+        this.el.setAttribute('class', this.className + ' ' + this.hiddenClass);
+    }
+
+    show () {
+        this.el.setAttribute('class', this.className);
     }
 }

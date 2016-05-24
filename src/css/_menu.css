@@ -20,6 +20,10 @@ li.ge_menu {
     margin-right: 30px;
 }
 
+li.ge_menu--hidden {
+    display: none;
+}
+
 li.ge_menu:hover {
     color: var(--ui-highlight-color);
 }

@@ -46,7 +46,31 @@ export default class Menu {
                 main.shader.canvas.pause();
                 this.menus.playPause.name = 'Play';
             }
-        })
+        });
+
+        // AUTOUPDATE
+        var name = main.autoupdate ? 'Autoupdate: on' : 'Autoupdate: off';
+        this.menus.autoupdate = new MenuItem(this.menuDOM, 'ge_menu', name, (event) => {
+            if (main.autoupdate) {
+                main.autoupdate = false;
+                this.menus.autoupdate.name = 'Autoupdate: off';
+                this.menus.update.show();
+            } else {
+                main.autoupdate = true;
+                main.update();
+                this.menus.autoupdate.name = 'Autoupdate: on';
+                this.menus.update.hide();
+            }
+        });
+
+        this.menus.update = new MenuItem(this.menuDOM, 'ge_menu', 'Update', (event) => {
+            main.update();
+        });
+        if (main.autoupdate) {
+            this.menus.update.hide();
+        }
+
+
         main.container.appendChild(this.menuDOM);
     }
 }
