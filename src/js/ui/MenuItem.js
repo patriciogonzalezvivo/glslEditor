@@ -14,4 +14,8 @@ export default class MenuItem {
             container.appendChild(this.el);
         }
     }
+
+    set name (name) {
+        this.el.innerHTML = name;
+    }
 }
