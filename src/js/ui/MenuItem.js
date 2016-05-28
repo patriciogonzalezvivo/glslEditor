@@ -1,16 +1,16 @@
 export default class MenuItem {
     constructor (container, className, name, onClick) {
         this.el = document.createElement('li');
+        this.button = document.createElement('button');
+        this.button.className = 'ge_menu_button';
+        this.el.appendChild(this.button);
         this.el.setAttribute('class', className);
-        this.el.innerHTML = name;
+        this.button.innerHTML = name;
         this.className = className;
         this.hiddenClass = className + '--hidden';
 
         // Attach listeners, including those for tooltip behavior
-        this.el.addEventListener('click', (event) => {
-            // Execute onClick callback
-            onClick(event);
-        }, true);
+        this.button.addEventListener('click', onClick, true);
 
         if (container) {
             container.appendChild(this.el);
@@ -18,7 +18,7 @@ export default class MenuItem {
     }
 
     set name (name) {
-        this.el.innerHTML = name;
+        this.button.innerHTML = name;
     }
 
     hide () {
