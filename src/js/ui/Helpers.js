@@ -110,11 +110,12 @@ export default class Helpers {
                 else if (match.type === 'number') {
                     this.activeModal = new FloatPicker(match.string, this.properties);
                     this.activeModal.showAt(this.main.editor);
-                    this.activeModal.on('changed', (string) => {
+                    this.activeModal.on('changed', (number) => {
+                        let newNumber = number.getString();
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
-                        match.end = match.start + string.length;
-                        this.main.compiler.liveVariable(string, string, start, end);
+                        match.end = match.start + newNumber.length;
+                        this.main.compiler.liveVariable(number, newNumber, start, end);
                     });
                 }
             }

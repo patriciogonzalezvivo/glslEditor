@@ -1,4 +1,5 @@
 import Picker from './Picker';
+import Float from './types/Float';
 
 export default class FloatPicker extends Picker {
     constructor (number, properties) {
@@ -95,7 +96,8 @@ export default class FloatPicker extends Picker {
         this.prevOffset = x;
 
         // fire 'changed'
-        this.trigger('changed', this.getValue().toFixed(3));
+        var number = new Float(this.getValue());
+        this.trigger('changed', number);
         this.overPoint = true;
     }
 

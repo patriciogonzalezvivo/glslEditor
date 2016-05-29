@@ -18,9 +18,9 @@ export default class Compiler {
                 ch: start.ch + replacement.length
             }
         };
-        var type = this.variableType(value);
-        var newValue = this.variableValue(value);
-        var method = this.variableMethod(type);
+        var type = value.uniformType();
+        var uniformValue = value.uniformValue();
+        var method = value.uniformMethod();
         this.setUniform = function() {
             this.main.shader.canvas.uniform.apply(
                 this.main.shader.canvas,
@@ -28,7 +28,7 @@ export default class Compiler {
                     method,
                     type,
                     this.LIVE_VARIABLE
-                ].concat(newValue)
+                ].concat(uniformValue)
             );
         }
         this.setUniform();
@@ -64,46 +64,5 @@ export default class Compiler {
         var len = end - start;
         delete this.liveVariablePosition;
         return value.substr(0, start) + this.LIVE_VARIABLE + value.substr(end);
-    }
-
-    variableType (value) {
-        if (value instanceof Color) {
-            if (value.colors.alpha) {
-                return 'vec4';
-            }
-            return 'vec3';
-        } else if (value instanceof Vector) {
-            return 'vec' + value.dim;
-        }
-        return 'float';
-    }
-
-    variableValue (value) {
-        if (value instanceof Color) {
-            var vec = value.get('vec')
-            var arr = [vec.v, vec.e, vec.c];
-            if (value.colors.alpha) {
-                arr.push(value.colors.alpha);
-            }
-            return arr;
-        } else if (value instanceof Vector) {
-            var arr = [];
-            for (let i = 0; i < value.dim; i++) {
-                arr.push(value.value[i]);
-            }
-            return arr;
-        }
-        return [value];
-    }
-
-    variableMethod (type) {
-        if (type == 'vec4') {
-            return '4f';
-        } else if (type == 'vec3') {
-            return '3f';
-        } else if (type == 'vec2') {
-            return '2f';
-        }
-        return '1f';
     }
 }

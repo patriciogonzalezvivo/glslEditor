@@ -108,6 +108,22 @@ export default class Vector {
         return str += end;
     }
 
+    uniformType () {
+        return 'vec' + this.dim;
+    }
+
+    uniformValue () {
+        var arr = [];
+        for (let i = 0; i < this.dim; i++) {
+            arr.push(this.value[i]);
+        }
+        return arr;
+    }
+
+    uniformMethod () {
+        return this.dim + 'f';
+    }
+
     // VECTOR OPERATIONS
 
     add (v) {
