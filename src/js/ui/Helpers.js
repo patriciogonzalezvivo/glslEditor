@@ -70,7 +70,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newColor.length;
-                        this.main.editor.replaceRange(newColor, start, end);
+                        this.main.compiler.replaceRange(newColor, start, end);
                     });
 
                     this.activeModal.on('link_button', (color) => {
