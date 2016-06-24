@@ -1,6 +1,6 @@
 {
   "name": "glslEditor",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Simple GLSL Fragment Shader Editor ",
   "main": "index.js",
   "scripts": {
