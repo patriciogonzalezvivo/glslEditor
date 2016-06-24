@@ -35,7 +35,7 @@ export default class Compiler {
         this.header = `#ifdef GL_ES
 precision mediump float;
 #endif
-uniform` + type + ' ' + this.LIVE_VARIABLE + ';';
+uniform ` + type + ' ' + this.LIVE_VARIABLE + ';';
         this.main.editor.replaceRange(replacement, start, end);
     }
 
