@@ -52,7 +52,7 @@
   "dependencies": {
     "babel": "^5.8.29",
     "babel-runtime": "5.8.29",
-    "glslCanvas": "0.0.9",
+    "glslCanvas": "^0.0.10",
     "codemirror": "5.8.0",
     "xhr": "^2.2.0"
   },

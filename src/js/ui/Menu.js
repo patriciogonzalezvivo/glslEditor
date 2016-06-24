@@ -38,13 +38,13 @@ export default class Menu {
         });
 
         // PLAY/PAUSE
-        this.menus.playPause = new MenuItem(this.el, 'ge_menu', 'Pause', (event) => {
+        this.menus.playPause = new MenuItem(this.el, 'ge_menu', '&#9616;&nbsp;&#9612;', (event) => {
             if (main.shader.canvas.paused) {
                 main.shader.canvas.play();
-                this.menus.playPause.name = 'Pause';
+                this.menus.playPause.name = '&#9616;&nbsp;&#9612;';//'Pause';
             } else {
                 main.shader.canvas.pause();
-                this.menus.playPause.name = 'Play';
+                this.menus.playPause.name = '&nbsp;&#9654;&nbsp;';//'Play';
             }
         });
 
@@ -63,7 +63,7 @@ export default class Menu {
             }
         });
 
-        this.menus.update = new MenuItem(this.el, 'ge_menu', 'Update', (event) => {
+        this.menus.update = new MenuItem(this.el, 'ge_menu', '&#8635;', (event) => {
             main.update();
         });
         if (main.autoupdate) {
