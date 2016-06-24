@@ -1,10 +1,9 @@
 /* MENU */
 
 .ge_menu_bar {
-    cursor: pointer;
+    position: fixed;
+    width: 100%;
     margin: 0px;
-    padding-top: 5px;
-    padding-bottom: 5px;
     z-index: var(--z-menu);
     color: var(--ui-component-text-color);
     background-color: var(--ui-base-color);
@@ -12,15 +11,31 @@
     font-weight: 300;
 }
 
-li.ge_menu {
-    cursor: pointer;
-    list-style-type: none;
+.ge_editor {
+    padding-top: 35px;
+}
+
+.ge_menu {
     display: inline;
-    text-align: center;
     margin-right: 30px;
 }
 
-li.ge_menu:hover {
+.ge_menu--hidden {
+    display: none;
+}
+
+.ge_menu_button {
+    height: 35px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+}
+
+.ge_menu_button:hover {
     color: var(--ui-highlight-color);
 }
 
@@ -30,6 +45,7 @@ li.ge_menu:hover {
     font-weight: 300;
     font-size: 14px;
 }
-li.ge_sub_menu:hover {
-    color: var(--ui-highlight-color);
+
+.ge_sub_menu .ge_menu_button {
+    width: 100%;
 }
