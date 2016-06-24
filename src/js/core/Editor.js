@@ -32,7 +32,6 @@ export function initEditor (main) {
     
     // If there is a menu offset the editor to come after it
     if (main.menu) {
-        console.log("OFFSET editor");
         el.style.paddingTop = (main.menu.el.clientHeight || main.menu.el.offsetHeight || main.menu.el.scrollHeight) + "px";
     }
     

@@ -90,12 +90,11 @@ export default class GlslEditor {
 
         // Default invisible Fragment header
         if (!this.options.frag_header) {
-            this.options.frag_header = [
-                '#ifdef GL_ES',
-                'precision mediump float;',
-                '#endif',
-                ''
-            ].join('\n');
+            this.options.frag_header = '';
+//             this.options.frag_header = `#ifdef GL_ES
+// precision mediump float;
+// #endif
+// `;
         }
 
         // Default invisible Fragment footer
