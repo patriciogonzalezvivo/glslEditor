@@ -123,4 +123,27 @@ export default class Color {
             return str += ')';
         }
     }
+
+    uniformType () {
+        if (this.colors.alpha) {
+            return 'vec4';
+        }
+        return 'vec3';
+    }
+
+    uniformValue () {
+        var vec = this.get('vec')
+        var arr = [vec.v, vec.e, vec.c];
+        if (this.colors.alpha) {
+            arr.push(this.colors.alpha);
+        }
+        return arr;
+    }
+
+    uniformMethod (type) {
+        if (this.colors.alpha) {
+            return '4f';
+        }
+        return '3f';
+    }
 }
