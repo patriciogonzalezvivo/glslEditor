@@ -27,11 +27,18 @@ export function initEditor (main) {
     }
 
     // CREATE AND START CODEMIRROR
-    let editorDOM = document.createElement('div');
-    editorDOM.setAttribute('class', 'ge_editor');
-    main.container.appendChild(editorDOM);
+    let el = document.createElement('div');
+    el.setAttribute('class', 'ge_editor');
+    
+    // If there is a menu offset the editor to come after it
+    if (main.menu) {
+        console.log("OFFSET editor");
+        el.style.paddingTop = (main.menu.el.clientHeight || main.menu.el.offsetHeight || main.menu.el.scrollHeight) + "px";
+    }
+    
+    main.container.appendChild(el);
 
-    let cm = CodeMirror(editorDOM, {
+    let cm = CodeMirror(el, {
         value: main.options.frag,
         viewportMargin: Infinity,
         lineNumbers: main.options.lineNumbers,
