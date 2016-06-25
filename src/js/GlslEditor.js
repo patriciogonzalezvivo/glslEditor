@@ -136,14 +136,14 @@ export default class GlslEditor {
         }
 
         if (this.options.canvas_follow) {
-            this.shader.canvasDOM.style.position = 'relative';
-            this.shader.canvasDOM.style.float = 'right';
+            this.shader.el.style.position = 'relative';
+            this.shader.el.style.float = 'right';
             this.editor.on('cursorActivity', (cm) => {
-                let height = cm.heightAtLine(cm.getCursor().line + 1, 'local') - this.shader.canvasDOM.height;
+                let height = cm.heightAtLine(cm.getCursor().line + 1, 'local') - this.shader.el.height;
                 if (height < 0) {
                     height = 0.0;
                 }
-                this.shader.canvasDOM.style.top = height.toString() + 'px';
+                this.shader.el.style.top = height.toString() + 'px';
             });
         }
 

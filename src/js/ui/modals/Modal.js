@@ -50,6 +50,12 @@ export default class Modal {
         this.el.style.top = y + 'px';
         this.el.style.width = this.width + 'px';
         this.el.style.height = this.height + 'px';
+
+        console.log(this.position);
+        if (this.position) {
+            this.el.style.position = this.position;
+        }
+
         document.body.appendChild(this.el);
 
         this.trigger('show');

@@ -30,7 +30,7 @@ export default class Menu {
         // SHARE
         this.menus.share = new MenuItem(this.el, 'ge_menu', '&#8682; Export', (event) => {
             if (main.change || !this.exportModal) {
-                this.exportModal = new ExportModal('ge_export', { main: main });
+                this.exportModal = new ExportModal('ge_export', { main: main, position: 'fixed' });
             }
 
             let bbox = this.menus.share.el.getBoundingClientRect();
