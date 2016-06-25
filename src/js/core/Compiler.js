@@ -8,6 +8,7 @@ export default class Compiler {
         this.header = '';
         this.main = main;
         this.main.editor.on('change', this.onChange.bind(this));
+        this.offset = 1;
     }
 
     liveVariable (value, replacement, start, end) {
@@ -35,7 +36,8 @@ export default class Compiler {
         this.header = `#ifdef GL_ES
 precision mediump float;
 #endif
-uniform ` + type + ' ' + this.LIVE_VARIABLE + ';';
+uniform ` + type + ' ' + this.LIVE_VARIABLE + ';\n ';
+        this.offset = this.header.split('\n').length;
         this.main.editor.replaceRange(replacement, start, end);
     }
 

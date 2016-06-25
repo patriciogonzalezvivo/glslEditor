@@ -29,7 +29,7 @@ export default class ErrorsDisplay {
         let re = /ERROR:\s+\d+:(\d+):\s+('.*)/g;
         let matches = re.exec(args.error);
         if (matches) {
-            let line = parseInt(matches[1]) - 1;
+            let line = parseInt(matches[1]) - this.main.compiler.offset;
             let er = matches[2];
             let msg = document.createElement('div');
 

@@ -15,14 +15,9 @@ export default class Shader {
 
         this.el.setAttribute('data-fragment', this.options.frag);
 
-        // If there is a menu offset the editor to come after it
-        if (main.menu) {
-            this.el.style.paddingTop = (main.menu.el.clientHeight || main.menu.el.offsetHeight || main.menu.el.scrollHeight) + "px";
-        }
-
         this.container.appendChild(this.el);
-
         this.canvas = new GlslCanvas(this.el, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
+        
         
         if (this.options.imgs.length > 0) {
             for (let i in this.options.imgs) {
@@ -41,6 +36,11 @@ export default class Shader {
             if (main.options.canvas_size === 'halfscreen') {
                 this.el.snapRight();
             }
-        } 
+        }
+
+        // If there is a menu offset the editor to come after it
+        if (main.menu) {
+            this.el.style.top = (main.menu.el.clientHeight || main.menu.el.offsetHeight || main.menu.el.scrollHeight) + "px";
+        }
     }
 }
