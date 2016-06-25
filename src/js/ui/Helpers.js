@@ -70,7 +70,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newColor.length;
-                        this.main.compiler.liveVariable(color, newColor, start, end);
+                        this.main.editor.replaceRange(newColor, start, end);
                     });
 
                     this.activeModal.on('link_button', (color) => {
@@ -81,7 +81,7 @@ export default class Helpers {
                             let start = { line: cursor.line, ch: match.start };
                             let end = { line: cursor.line, ch: match.end };
                             match.end = match.start + newDir.length;
-                            this.main.compiler.liveVariable(dir, newDir, start, end);
+                            this.main.editor.replaceRange(newDir, start, end);
                         });
                     });
                 }
@@ -93,7 +93,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newDir.length;
-                        this.main.compiler.liveVariable(dir, newDir, start, end);
+                        this.main.editor.replaceRange(newDir, start, end);
                     });
                 }
                 else if (match.type === 'vec2') {
@@ -104,7 +104,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newpos.length;
-                        this.main.compiler.liveVariable(pos, newpos, start, end);
+                        this.main.editor.replaceRange(newpos, start, end);
                     });
                 }
                 else if (match.type === 'number') {
@@ -115,7 +115,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newNumber.length;
-                        this.main.compiler.liveVariable(number, newNumber, start, end);
+                        this.main.editor.replaceRange(newNumber, start, end);
                     });
                 }
             }
