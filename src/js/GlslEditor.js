@@ -1,5 +1,6 @@
 
 import Shader from './core/Shader';
+import Compiler from './core/Compiler';
 import { initEditor } from './core/Editor';
 
 import Menu from './ui/Menu';
@@ -120,6 +121,7 @@ export default class GlslEditor {
         // CORE elements
         this.shader = new Shader(this);
         this.editor = initEditor(this);
+        this.compiler = new Compiler(this);
 
         this.helpers = new Helpers(this);
         this.errorsDisplay = new ErrorsDisplay(this);
@@ -128,11 +130,6 @@ export default class GlslEditor {
         if (this.options.exportIcon) {
             this.export = new ExportIcon(this);
         }
-
-        // EVENTS
-        this.editor.on('change', () => {
-           this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
-        });
 
         if (this.options.canvas_follow) {
             this.shader.el.style.position = 'relative';
