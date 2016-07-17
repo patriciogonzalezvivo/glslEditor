@@ -33,10 +33,7 @@ export default class Compiler {
             );
         }
         this.setUniform();
-        this.header = `#ifdef GL_ES
-precision mediump float;
-#endif
-uniform ` + type + ' ' + this.LIVE_VARIABLE + ';\n ';
+        this.header ='\nuniform mediump ' + type + ' ' + this.LIVE_VARIABLE + ';\n';
         this.offset = this.header.split('\n').length;
         this.main.editor.replaceRange(replacement, start, end);
     }
