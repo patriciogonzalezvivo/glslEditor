@@ -9,9 +9,11 @@ export default class Compiler {
         this.main = main;
         this.main.editor.on('change', this.onChange.bind(this));
         this.offset = 1;
+        this.placingLiveVariable = false;
     }
 
     liveVariable (value, replacement, start, end) {
+        this.placingLiveVariable = true;
         this.liveVariablePosition = {
             start: start,
             end: {
@@ -45,11 +47,18 @@ export default class Compiler {
             this.getValue(),
             this.main.options.frag_footer
         ].join(''));
+
+        this.placingLiveVariable = false;
+        this.header = '';
+        this.offset = 1;
     }
 
     updateShader (glsl) {
         if (this.glsl !== glsl) {
             this.main.shader.canvas.load(glsl);
+            if (this.placingLiveVariable) {
+                this.main.shader.canvas.animated = true;
+            }
             this.setUniform && this.setUniform();
             this.glsl = glsl;
         }
