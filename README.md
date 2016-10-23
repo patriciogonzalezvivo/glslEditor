@@ -12,34 +12,34 @@ Was originaly develop to work as a embebed editor for [The Book of Shaders](http
 
 You can use it directly from [editor.thebookofshaders.com](http://editor.thebookofshaders.com/) or host one on your own website by including the two ```build``` files: ```glslEditor.css``` and ```glslEditor.js```:
 
-```
-    <link type="text/css" rel="stylesheet" href="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.css">
-    <script type="application/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.js"></script>
+```html
+<link type="text/css" rel="stylesheet" href="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.css">
+<script type="application/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.js"></script>
 ```
 
 You can also install it through npm:
 
 ```bash
-npm install glslEditor
+npm install glslEditor --save
 ```
 
 And then you are ready to use it by passing an **DOM element** or **query selector string**, and a set of options;
 
-```
-    <body>
-        <div id="glsl_editor"></div>
-    </body>
-    <script type="text/javascript">
-        var glslEditor = new GlslEditor('#glsl_editor', { 
-            canvas_size: 500,
-            canvas_draggable: true,
-            theme: 'monokai',
-            multipleBuffers: true,
-            watchHash: true,
-            fileDrops: true,
-            menu: true
-        });
-    </script>
+```html
+<body>
+    <div id="glsl_editor"></div>
+</body>
+<script type="text/javascript">
+    const glslEditor = new GlslEditor('#glsl_editor', { 
+        canvas_size: 500,
+        canvas_draggable: true,
+        theme: 'monokai',
+        multipleBuffers: true,
+        watchHash: true,
+        fileDrops: true,
+        menu: true
+    });
+</script>
 ```
 
 This is a list of all the **options** you can set up:
