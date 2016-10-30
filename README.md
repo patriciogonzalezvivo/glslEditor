@@ -93,7 +93,7 @@ This is a list of all the **options** you can set up:
 
 ## Author
 
-[Patricio Gonzalez Vivo](http://https://twitter.com/patriciogv): [github](https://github.com/patriciogonzalezvivo) | [twitter](http://https://twitter.com/patriciogv) | [website](http://patriciogonzalezvivo.com)
+[Patricio Gonzalez Vivo](https://twitter.com/patriciogv): [github](https://github.com/patriciogonzalezvivo) | [twitter](https://twitter.com/patriciogv) | [website](http://patriciogonzalezvivo.com)
 
 ## Acknowledgments
 
