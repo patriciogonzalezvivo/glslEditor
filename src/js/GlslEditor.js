@@ -124,7 +124,6 @@ export default class GlslEditor {
         this.helpers = new Helpers(this);
         this.errorsDisplay = new ErrorsDisplay(this);
         this.visualDebugger = new VisualDebugger(this);
-        this.validShaderText = "";
         
         if (this.options.exportIcon) {
             this.export = new ExportIcon(this);
@@ -245,12 +244,20 @@ export default class GlslEditor {
     }
 
     getSuccessfullyCompilingContent() {
+        let rtn = '';
         if (this.shader && this.shader.canvas && this.shader.canvas.isValid) {
-            this.validShaderText = this.editor.getValue();
-        } else {
-            this.validShaderText = '';
-        }
-        return this.validShaderText;
+            let validShaderText = this.editor.getValue();
+            console.log(validShaderText);
+            validShaderText = validShaderText.replace(/u_r/gm, 'iR');
+            console.log(validShaderText);
+            validShaderText = validShaderText.replace(/u_tex/gm, 'iChannel');
+            console.log(validShaderText);
+            validShaderText = validShaderText.replace(/u_m/gm, 'iM');
+            console.log(validShaderText);
+            validShaderText = validShaderText.replace(/u_time/gm, 'iGlobalTime');
+            rtn = validShaderText;
+        } 
+        return rtn;
     }
 
     getAuthor() {
