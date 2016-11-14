@@ -247,12 +247,12 @@ export default class GlslEditor {
         let rtn = '';
         if (this.shader && this.shader.canvas && this.shader.canvas.isValid) {
             let validShaderText = this.editor.getValue();
-            validShaderText = validShaderText.replace(/2 u_r/gm, '3 iR');
+            /*validShaderText = validShaderText.replace(/2 u_r/gm, '3 iR');
             validShaderText = validShaderText.replace(/u_r/gm, 'iR');
             validShaderText = validShaderText.replace(/u_tex/gm, 'iChannel');
             validShaderText = validShaderText.replace(/2 u_mouse/gm, '4 iMouse');
             validShaderText = validShaderText.replace(/u_m/gm, 'iM');
-            validShaderText = validShaderText.replace(/u_time/gm, 'iGlobalTime');
+            validShaderText = validShaderText.replace(/u_time/gm, 'iGlobalTime');*/
             rtn = validShaderText;
         } 
         console.log(rtn);
