@@ -84,7 +84,11 @@ export default class GlslEditor {
 
         // Default Context
         if (!this.options.frag) {
-            this.options.frag = EMPTY_FRAG_SHADER;
+            this.options.frag = this.container.innerHTML || EMPTY_FRAG_SHADER;
+
+            if (this.container.innerHTML) {
+                this.container.innerHTML = '';
+            }
         }
 
         // Default invisible Fragment header
@@ -187,7 +191,7 @@ export default class GlslEditor {
     }
 
     new () {
-        this.setContent(EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
+        this.setContent(this.options.frag || EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
         this.trigger('new_content', {});
     }
 
@@ -303,3 +307,41 @@ export default class GlslEditor {
 }
 
 window.GlslEditor = GlslEditor;
+
+// Create a class for the element
+var GlslWebComponent = function() {}
+GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
+GlslWebComponent.prototype.createdCallback = function createdCallback() {
+
+    var options = {
+        canvas_size: 500,
+        canvas_draggable: true,
+        canvas_resizable: true,
+        theme: 'monokai',
+        multipleBuffers: true,
+        watchHash: true,
+        fileDrops: true,
+        menu: true
+    };
+
+    for (var i = 0; i < this.attributes.length; i++) {
+        var attribute = this.attributes[i];
+        if (attribute.specified) {
+            var value = attribute.value;
+
+            if (value === 'true') {
+                value = true;
+            } else if (value === 'false') {
+                value = false;
+            } else if (parseInt(value)) {
+                value = parseInt(value);
+            }
+
+            options[attribute.name] = value;
+        }
+    }
+
+    this.glslEditor = new GlslEditor(this, options);
+}
+
+document.registerElement('glsl-editor', GlslWebComponent);
