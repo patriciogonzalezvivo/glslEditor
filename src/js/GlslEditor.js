@@ -314,14 +314,10 @@ GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
 GlslWebComponent.prototype.createdCallback = function createdCallback() {
 
     var options = {
-        canvas_size: 500,
-        canvas_draggable: true,
-        canvas_resizable: true,
-        theme: 'monokai',
-        multipleBuffers: true,
-        watchHash: true,
-        fileDrops: true,
-        menu: true
+        canvas_size: 250,
+        canvas_follow: true,
+        tooltips: true,
+        exportIcon: true
     };
 
     for (var i = 0; i < this.attributes.length; i++) {
