@@ -18,26 +18,18 @@
 	</head>
 	<body>
 		<glsl-editor menu="false" canvas_size="200">
-			//ABC
-
-			#ifdef GL_ES
-			precision mediump float;
-			#endif
-
-			uniform vec2 u_resolution;
-
-			uniform float u_time;
-
-			void main() {
-			vec2 st = gl_FragCoord.xy/u_resolution.xy;
-			st.x *= u_resolution.x/u_resolution.y;
-
-			st += vec2(.41);
-			vec3 color = vec3(1.);
-			color = vec3(st.x,st.y,abs(sin(u_time)));
-
-			gl_FragColor = vec4(color,1.0);
-			}
+			<br>
+			#ifdef GL_ES<br>
+			precision mediump float;<br>
+			#endif<br>
+			float RADIUS = 20.;<br>
+			vec2 CENTER = vec2(100., 100.);<br>
+			void main() {<br>
+			float distanceToCenter = distance(gl_FragCoord.xy, CENTER);<br>
+			&nbsp; &nbsp; bool inCircle = distanceToCenter &lt; RADIUS;<br>
+			&nbsp; &nbsp; vec3 color = vec3(float(inCircle));<br>
+			&nbsp; &nbsp; gl_FragColor = vec4(color,1.0);<br>
+			}<br>
 		</glsl-editor>
 	</body>
 

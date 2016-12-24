@@ -84,9 +84,14 @@ export default class GlslEditor {
 
         // Default Context
         if (!this.options.frag) {
-            this.options.frag = this.container.innerHTML || EMPTY_FRAG_SHADER;
+            var innerHTML = this.container.innerHTML.replace(/&lt;br&gt;/g,"");
+            innerHTML = innerHTML.replace(/<br>/g,"");
+            innerHTML = innerHTML.replace(/&nbsp;/g,"");
+            innerHTML = innerHTML.replace(/&lt;/g,"<");
+            innerHTML = innerHTML.replace(/&gt;/g,">");
+            this.options.frag = innerHTML || EMPTY_FRAG_SHADER;
 
-            if (this.container.innerHTML) {
+            if (innerHTML) {
                 this.container.innerHTML = '';
             }
         }
@@ -314,10 +319,9 @@ GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
 GlslWebComponent.prototype.createdCallback = function createdCallback() {
 
     var options = {
-        canvas_size: 250,
+        canvas_size: 150,
         canvas_follow: true,
-        tooltips: true,
-        exportIcon: true
+        tooltips: true
     };
 
     for (var i = 0; i < this.attributes.length; i++) {
