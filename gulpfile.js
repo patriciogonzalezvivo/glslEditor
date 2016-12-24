@@ -52,7 +52,8 @@ gulp.task('js', function () {
     var babelify = require('babelify');
     var source = require('vinyl-source-stream');
     var buffer = require('vinyl-buffer');
-    // var uglify = require('gulp-uglify');
+    var uglify = require('gulp-uglify');
+    var rename = require('gulp-rename');
 
     var bundle = browserify({
         entries: 'src/js/GlslEditor.js',
@@ -71,9 +72,11 @@ gulp.task('js', function () {
         .pipe(buffer())
         // .pipe(sourcemaps.init({ loadMaps: true }))
             // Add transformation tasks to the pipeline here.
-            // .pipe(uglify())
             // .on('error', gutil.log)
         // .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./build'))
+        .pipe(uglify())
+        .pipe(rename({ extname: '.min.js' }))
         .pipe(gulp.dest('./build'));
 });
 

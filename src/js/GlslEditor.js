@@ -1,4 +1,4 @@
-
+import 'document-register-element';
 import Shader from './core/Shader';
 import { initEditor } from './core/Editor';
 
