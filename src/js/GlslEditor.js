@@ -313,8 +313,7 @@ export default class GlslEditor {
 
 window.GlslEditor = GlslEditor;
 
-// Create a class for the element
-var GlslWebComponent = function() {}
+var GlslWebComponent = function() {};
 GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
 GlslWebComponent.prototype.createdCallback = function createdCallback() {
 
