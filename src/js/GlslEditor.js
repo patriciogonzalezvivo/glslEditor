@@ -89,6 +89,7 @@ export default class GlslEditor {
             innerHTML = innerHTML.replace(/&nbsp;/g,"");
             innerHTML = innerHTML.replace(/&lt;/g,"<");
             innerHTML = innerHTML.replace(/&gt;/g,">");
+            innerHTML = innerHTML.replace(/&amp;/g,"&");
             this.options.frag = innerHTML || EMPTY_FRAG_SHADER;
 
             if (innerHTML) {

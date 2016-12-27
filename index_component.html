@@ -16,21 +16,14 @@
 			}
 		</style>
 	</head>
-	<body>
-		<glsl-editor menu="false" canvas_size="200">
-			<br>
-			#ifdef GL_ES<br>
-			precision mediump float;<br>
-			#endif<br>
-			float RADIUS = 20.;<br>
-			vec2 CENTER = vec2(100., 100.);<br>
-			void main() {<br>
-			float distanceToCenter = distance(gl_FragCoord.xy, CENTER);<br>
-			&nbsp; &nbsp; bool inCircle = distanceToCenter &lt; RADIUS;<br>
-			&nbsp; &nbsp; vec3 color = vec3(float(inCircle));<br>
-			&nbsp; &nbsp; gl_FragColor = vec4(color,1.0);<br>
-			}<br>
-		</glsl-editor>
+	<body><glsl-editor menu="false" canvas_size="200" frag_header="precision mediump float;">float RADIUS = 20.;
+vec2 CENTER = vec2(100., 100.);
+void main() {
+float distanceToCenter = distance(gl_FragCoord.xy, CENTER);
+	bool inCircle = distanceToCenter < RADIUS;
+	vec3 color = vec3(float(inCircle));
+	gl_FragColor = vec4(color,1.0);
+}</glsl-editor>
 	</body>
 
 	<link type="text/css" rel="stylesheet" href="build/glslEditor.css">
