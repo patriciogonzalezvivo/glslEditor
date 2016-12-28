@@ -1,4 +1,4 @@
-
+import 'document-register-element';
 import Shader from './core/Shader';
 import { initEditor } from './core/Editor';
 
@@ -84,7 +84,17 @@ export default class GlslEditor {
 
         // Default Context
         if (!this.options.frag) {
-            this.options.frag = EMPTY_FRAG_SHADER;
+            var innerHTML = this.container.innerHTML.replace(/&lt;br&gt;/g,"");
+            innerHTML = innerHTML.replace(/<br>/g,"");
+            innerHTML = innerHTML.replace(/&nbsp;/g,"");
+            innerHTML = innerHTML.replace(/&lt;/g,"<");
+            innerHTML = innerHTML.replace(/&gt;/g,">");
+            innerHTML = innerHTML.replace(/&amp;/g,"&");
+            this.options.frag = innerHTML || EMPTY_FRAG_SHADER;
+
+            if (innerHTML) {
+                this.container.innerHTML = '';
+            }
         }
 
         // Default invisible Fragment header
@@ -187,7 +197,7 @@ export default class GlslEditor {
     }
 
     new () {
-        this.setContent(EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
+        this.setContent(this.options.frag || EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
         this.trigger('new_content', {});
     }
 
@@ -303,3 +313,35 @@ export default class GlslEditor {
 }
 
 window.GlslEditor = GlslEditor;
+
+var GlslWebComponent = function() {};
+GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
+GlslWebComponent.prototype.createdCallback = function createdCallback() {
+
+    var options = {
+        canvas_size: 150,
+        canvas_follow: true,
+        tooltips: true
+    };
+
+    for (var i = 0; i < this.attributes.length; i++) {
+        var attribute = this.attributes[i];
+        if (attribute.specified) {
+            var value = attribute.value;
+
+            if (value === 'true') {
+                value = true;
+            } else if (value === 'false') {
+                value = false;
+            } else if (parseInt(value)) {
+                value = parseInt(value);
+            }
+
+            options[attribute.name] = value;
+        }
+    }
+
+    this.glslEditor = new GlslEditor(this, options);
+}
+
+document.registerElement('glsl-editor', GlslWebComponent);
