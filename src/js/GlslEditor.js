@@ -21,8 +21,12 @@ import { subscribeMixin } from './tools/mixin';
 // 3er Parties
 import { saveAs } from './vendor/FileSaver.min.js';
 
-const EMPTY_FRAG_SHADER = `// Author: 
-// Title: 
+// Cross storage for Openframe -- allows restricted access to certain localStorage operations
+// on the openframe domain
+import { CrossStorageClient } from 'cross-storage';
+
+const EMPTY_FRAG_SHADER = `// Author:
+// Title:
 
 #ifdef GL_ES
 precision mediump float;
@@ -188,13 +192,20 @@ export default class GlslEditor {
             else {
                 this.new();
             }
-        } 
+        }
         else {
             this.new();
         }
-        
+
+        // setup CrossStorage client
+        this.storage = new CrossStorageClient('https://openframe.io/hub.html');
+        this.storage.onConnect().then(() => {
+        }.bind(this));
+
         return this;
     }
+
+
 
     new () {
         this.setContent(this.options.frag || EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
@@ -290,6 +301,11 @@ export default class GlslEditor {
         else {
             return 'unknown';
         }
+    }
+
+    // Returns Promise
+    getOfToken() {
+        return this.storage.get('accessToken');
     }
 
     download () {
