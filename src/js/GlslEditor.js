@@ -199,6 +199,7 @@ export default class GlslEditor {
     new () {
         this.setContent(this.options.frag || EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
         this.trigger('new_content', {});
+        this.options.frag = null;
     }
 
     setContent(shader, tabName) {
