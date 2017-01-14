@@ -204,7 +204,6 @@ export default class GlslEditor {
 
     setContent(shader, tabName) {
         // If the string is CODE
-        this.options.frag = shader;
         if (this.shader && this.shader.canvas) {
             this.shader.canvas.load(shader);
         }
