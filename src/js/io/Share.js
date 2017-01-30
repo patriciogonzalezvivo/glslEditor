@@ -47,43 +47,54 @@ export function saveOnServer (ge, callback) {
 }
 
 export function createOpenFrameArtwork(glslEditor, name, url, callback) {
+    const OF_BASE_API_URL = 'https://api.openframe.io/v0';
+    const OF_BASE_APP_URL = 'https://openframe.io';
+    // const OF_BASE_API_URL = 'http://localhost:8888/api'; // for local testing
+    // const OF_BASE_APP_URL = 'http://localhost:8000'; // for local testing
     let title = glslEditor.getTitle();
     let author = glslEditor.getAuthor();
-    let xhr = new XMLHttpRequest();
-    callback = callback || () => {};
-    // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
-    xhr.open('POST', 'http://openframe.io/api/users/current/owned_artwork');
-    // set content type to JSON...
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    // This is essential in order to include auth cookies:
-    xhr.withCredentials = true;
-    xhr.onload = (event) => {
-        if (event.currentTarget.status === 404) {
-            window.open('http://openframe.io/login-popup', 'login', 'width=500,height=600');
-            let successListener = function(e) {
-                if (e.data === 'success') {
-                    createOpenFrameArtwork(glslEditor, name, url, callback);
-                }
-                window.removeEventListener('message', successListener);
-            };
-            window.addEventListener('message', successListener, false);
-        }
-        else if (event.currentTarget.status === 200) {
-            callback(true);
-        }
-        else {
-            callback(false);
-        }
-    };
-    xhr.onerror = (event) => {
-        console.log(event.currentTarget.status);
-    };
-    xhr.send(JSON.stringify({
-        title: title,
-        author_name: author,
-        is_public: false,
-        format: 'openframe-glslviewer',
-        url: 'https://thebookofshaders.com/log/' + name + '.frag',
-        thumb_url: 'https://thebookofshaders.com/log/' + name + '.png'
-    }));
+    glslEditor.getOfToken().then(initiateOfRequest);
+
+    function initiateOfRequest(ofToken) {
+        let xhr = new XMLHttpRequest();
+        callback = callback || () => {};
+        // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
+        xhr.open('POST', `${OF_BASE_API_URL}/users/current/created_artwork`);
+        // set content type to JSON...
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.setRequestHeader('Authorization', ofToken);
+        xhr.setRequestHeader('access_token', ofToken);
+
+        // This is essential in order to include auth cookies:
+        xhr.onload = (event) => {
+            console.log('onload', event);
+            if (event.currentTarget.status >= 400) {
+                window.open(`${OF_BASE_APP_URL}/login`, 'login', 'width=500,height=600');
+                let successListener = function(e) {
+                    if (e.data === 'success') {
+                        createOpenFrameArtwork(glslEditor, name, url, callback);
+                    }
+                    window.removeEventListener('message', successListener);
+                };
+                window.addEventListener('message', successListener, false);
+            }
+            else if (event.currentTarget.status === 200) {
+                callback(true);
+            }
+            else {
+                callback(false);
+            }
+        };
+        xhr.onerror = (event) => {
+            console.log(event.currentTarget.status);
+        };
+        xhr.send(JSON.stringify({
+            title: title,
+            author_name: author,
+            is_public: false,
+            format: 'openframe-glslviewer',
+            url: 'https://thebookofshaders.com/log/' + name + '.frag',
+            thumb_url: 'https://thebookofshaders.com/log/' + name + '.png'
+        }));
+    }
 }
