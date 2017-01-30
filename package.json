@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "ln -nsf ../src/js node_modules/app",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "jshint *.js src/ || true; jscs *.js src/ || true"
+    "lint": "$(npm bin)/jshint *.js src/ || true; jscs *.js src/ || true"
   },
   "repository": {
     "type": "git",

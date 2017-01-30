@@ -86,7 +86,7 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
             }
         };
         xhr.onerror = (event) => {
-            console.log(event.currentTarget.status);
+            console.log('Status:',event.currentTarget.status);
         };
         xhr.send(JSON.stringify({
             title: title,

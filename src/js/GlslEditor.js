@@ -40,8 +40,7 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     st.x *= u_resolution.x/u_resolution.y;
 
-    st += vec2(.0);
-    vec3 color = vec3(1.);
+    vec3 color = vec3(0.);
     color = vec3(st.x,st.y,abs(sin(u_time)));
 
     gl_FragColor = vec4(color,1.0);
@@ -198,14 +197,13 @@ export default class GlslEditor {
         }
 
         // setup CrossStorage client
-        this.storage = new CrossStorageClient('https://openframe.io/hub.html');
-        this.storage.onConnect().then(() => {
-        }.bind(this));
+        // this.storage = new CrossStorageClient('https://openframe.io/hub.html');
+        // this.storage.onConnect().then(() => {
+        //     console.log("Connected to OpenFrame")
+        // }.bind(this));
 
         return this;
     }
-
-
 
     new () {
         this.setContent(this.options.frag || EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
@@ -290,19 +288,7 @@ export default class GlslEditor {
             return 'unknown';
         }
     }
-
-    getChapterNumber() {
-        let content = this.getContent();
-        let result = content.match(/\/\/\s*[C|c]hapter\s*:\s*(\d*)/i);
-        console.log(result);
-        if (result) {
-            return parseInt(result[1]);
-        }
-        else {
-            return 'unknown';
-        }
-    }
-
+    
     // Returns Promise
     getOfToken() {
         return this.storage.get('accessToken');
