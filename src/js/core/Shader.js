@@ -59,6 +59,16 @@ export default class Shader {
             if (main.options.canvas_size === 'halfscreen') {
                 this.el.snapRight();
             }
+
+            this.el.on('move', (event) => {
+                event.el.style.width = event.el.clientWidth+'px';
+                event.el.style.height = event.el.clientHeight+'px';
+            })
+            this.el.on('resize', (event) => {
+                glslcanvas.canvas.style.width = event.el.clientWidth+'px';
+                glslcanvas.canvas.style.height = event.el.clientHeight+'px';
+                glslcanvas.resize();
+            })
         }
 
         // If there is a menu offset the editor to come after it
@@ -80,15 +90,6 @@ export default class Shader {
         this.el_control.addEventListener('mouseleave', (event) => {
             this.hideControls();
         });
-        this.el.on('move', (event) => {
-            event.el.style.width = event.el.clientWidth+'px';
-            event.el.style.height = event.el.clientHeight+'px';
-        })
-        this.el.on('resize', (event) => {
-            glslcanvas.canvas.style.width = event.el.clientWidth+'px';
-            glslcanvas.canvas.style.height = event.el.clientHeight+'px';
-            glslcanvas.resize();
-        })
     }
 
     hideControls () {
