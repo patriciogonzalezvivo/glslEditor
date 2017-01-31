@@ -25,15 +25,15 @@ export default class ExportModal extends Modal {
             });
         });
 
-        let shareOF = new MenuItem(this.el, 'ge_sub_menu ' + this.getModalClass(), '[o]', (event) => {
-            shareOF.el.innerHTML = '[o]... adding to collection';
+        let shareOF = new MenuItem(this.el, 'ge_sub_menu ' + this.getModalClass(), 'Artwork to [o]', (event) => {
+            shareOF.el.innerHTML = 'Artwork to [o]: adding to collection';
             saveOnServer(this.main, (event) => {
                 createOpenFrameArtwork(this.main, event.name, event.url, (success) => {
                     if (success) {
-                        shareOF.el.innerHTML = '[o]... added!';
+                        shareOF.el.innerHTML = 'Artwork to [o]: added!';
                     }
                     else {
-                        shareOF.el.innerHTML = '[o]... failed :(';
+                        shareOF.el.innerHTML = 'Artwork to [o]: failed :(';
                     }
                     setTimeout(() => {
                         shareOF.el.innerHTML = '[o]';

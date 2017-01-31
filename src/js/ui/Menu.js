@@ -38,15 +38,15 @@ export default class Menu {
         });
 
         // PLAY/PAUSE
-        this.menus.playPause = new MenuItem(this.el, 'ge_menu', '&#9616;&nbsp;&#9612;', (event) => {
-            if (main.shader.canvas.paused) {
-                main.shader.canvas.play();
-                this.menus.playPause.name = '&#9616;&nbsp;&#9612;';//'Pause';
-            } else {
-                main.shader.canvas.pause();
-                this.menus.playPause.name = '&nbsp;&#9654;&nbsp;';//'Play';
-            }
-        });
+        // this.menus.playPause = new MenuItem(this.el, 'ge_menu', '&#9616;&nbsp;&#9612;', (event) => {
+        //     if (main.shader.canvas.paused) {
+        //         main.shader.canvas.play();
+        //         this.menus.playPause.name = '&#9616;&nbsp;&#9612;';//'Pause';
+        //     } else {
+        //         main.shader.canvas.pause();
+        //         this.menus.playPause.name = '&nbsp;&#9654;&nbsp;';//'Play';
+        //     }
+        // });
 
         // AUTOUPDATE
         var name = main.autoupdate ? 'Autoupdate: on' : 'Autoupdate: off';

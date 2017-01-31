@@ -1,10 +1,65 @@
 /* CANVAS */
 
-canvas.ge_canvas {
+div.ge_canvas_container {
     position: fixed;
     right: 0px;
     overflow: hidden;
 	z-index: var(--z-shader);
+}
+
+canvas.ge_canvas {
+    /*position: fixed;*/
+    /*right: 0px;*/
+    /*overflow: hidden;*/
+	z-index: var(--z-shader);
+}
+
+.ge_control {
+	margin: 0px;
+	padding: 5px;
+	text-align: center;
+	position: absolute;
+    bottom: 4px;
+    left: 0px;
+    width: 100%;
+    display: inline;
+    background-color: rgba(0,0,0,.5);
+    color: var(--ui-component-text-color);
+    font-family: Helvetica, Geneva, sans-serif;
+    font-weight: 300;
+    opacity: 1;
+	-webkit-transition: opacity .5s;
+	-moz-transition: opacity .5s;     
+	transition: opacity .5s; 
+}
+
+.ge_control_hidden {
+    /*display: none;*/
+    opacity: 0;
+}
+
+.ge_control_button {
+    height: 35px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+
+    -moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.ge_control_button::selection { background: transparent;color:inherit; }
+.ge_control_button::-moz-selection { background: transparent;color:inherit; }
+
+.ge_control_button:hover {
+    color: var(--ui-highlight-color);
 }
 
 .ghostdom {
