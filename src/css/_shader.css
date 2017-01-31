@@ -22,11 +22,7 @@ canvas.ge_canvas {
     bottom: 4px;
     left: 0px;
     width: 100%;
-    display: inline;
     background-color: rgba(0,0,0,.5);
-    color: var(--ui-component-text-color);
-    font-family: Helvetica, Geneva, sans-serif;
-    font-weight: 300;
     opacity: 1;
 	-webkit-transition: opacity .5s;
 	-moz-transition: opacity .5s;     
@@ -38,7 +34,21 @@ canvas.ge_canvas {
     opacity: 0;
 }
 
-.ge_control_button {
+.ge_control_element {
+	background-color: rgba(0,0,0,0);
+	color: var(--ui-component-text-color);
+    font-family: Helvetica, Geneva, sans-serif;
+    font-weight: 300;
+	display: inline;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	margin-right: 20px;
+}
+
+.ge_control_element_button {
     height: 35px;
     cursor: pointer;
     background: none;
@@ -55,10 +65,10 @@ canvas.ge_canvas {
 	user-select: none;
 }
 
-.ge_control_button::selection { background: transparent;color:inherit; }
-.ge_control_button::-moz-selection { background: transparent;color:inherit; }
+.ge_control_element_button::selection { background: transparent;color:inherit; }
+.ge_control_element_button::-moz-selection { background: transparent;color:inherit; }
 
-.ge_control_button:hover {
+.ge_control_element_button:hover {
     color: var(--ui-highlight-color);
 }
 

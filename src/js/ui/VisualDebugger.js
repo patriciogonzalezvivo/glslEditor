@@ -59,7 +59,7 @@ export default class VisualDebugger {
                     let constructMatch = constructRE.exec(cm.getLine(i));
                     if (constructMatch && constructMatch[1] && !isCommented(cm, i, constructMatch)) {
                         this.type = constructMatch[1];
-                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '+'));//'&#x2605;'));
+                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '&#x2605;'));
                         constructIN = true;
                     }
                 }
