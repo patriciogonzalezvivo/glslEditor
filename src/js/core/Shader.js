@@ -111,6 +111,9 @@ export default class Shader {
         }
 
         // Add all this to the main container
+        // glslcanvas.canvas.style.width = this.el.clientWidth+'px';
+        // glslcanvas.canvas.style.height = this.el.clientHeight+'px';
+        // glslcanvas.resize();
         main.container.appendChild(this.el);
     }
 

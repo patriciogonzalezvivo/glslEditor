@@ -3,15 +3,19 @@
 div.ge_canvas_container {
     position: fixed;
     right: 0px;
+    margin: 0px;
+    padding: 0px;
     overflow: hidden;
 	z-index: var(--z-shader);
 }
 
 canvas.ge_canvas {
+    margin: 0px;
+    padding: 0px;
     /*position: fixed;*/
     /*right: 0px;*/
     /*overflow: hidden;*/
-	/*z-index: var(--z-shader);*/
+	z-index: var(--z-shader);
 }
 
 .ge_control {
@@ -27,6 +31,7 @@ canvas.ge_canvas {
 	-webkit-transition: opacity .5s;
 	-moz-transition: opacity .5s;     
 	transition: opacity .5s; 
+    z-index: var(--z-shader);
 }
 
 .ge_control_hidden {
