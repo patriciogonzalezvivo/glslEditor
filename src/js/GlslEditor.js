@@ -197,10 +197,10 @@ export default class GlslEditor {
         }
 
         // setup CrossStorage client
-        // this.storage = new CrossStorageClient('https://openframe.io/hub.html');
-        // this.storage.onConnect().then(() => {
-        //     console.log("Connected to OpenFrame")
-        // }.bind(this));
+        this.storage = new CrossStorageClient('https://openframe.io/hub.html');
+        this.storage.onConnect().then(() => {
+            console.log("Connected to OpenFrame")
+        }.bind(this));
 
         return this;
     }
