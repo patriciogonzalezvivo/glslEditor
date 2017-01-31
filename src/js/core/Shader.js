@@ -111,10 +111,8 @@ export default class Shader {
         }
 
         // Add all this to the main container
-        // glslcanvas.canvas.style.width = this.el.clientWidth+'px';
-        // glslcanvas.canvas.style.height = this.el.clientHeight+'px';
-        // glslcanvas.resize();
         main.container.appendChild(this.el);
+        glslcanvas.resize();
     }
 
     hideControls () {
@@ -155,7 +153,7 @@ export default class Shader {
             this.controls.rec.name = '&#11044;';
             this.controls.rec.button.style.transform = 'translate(0px,-2px)';
             this.media_capture.stopVideoCapture().then((video) => {
-                saveAs(video.blob, `tangram-video-${+new Date()}.webm`);
+                saveAs(video.blob, `${+new Date()}.webm`);
             });
         }
     }
