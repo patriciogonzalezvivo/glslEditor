@@ -90,7 +90,7 @@ export default class Modal {
 
             if (!target.classList.contains(this.getModalClass())) {
                 this.removeModal();
-            }
+            }    
         }
     }
 

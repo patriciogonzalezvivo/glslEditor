@@ -25,7 +25,7 @@ export default class ExportModal extends Modal {
             });
         });
 
-        let shareOF = new MenuItem(this.el, 'ge_sub_menu ' + this.getModalClass(), 'Artwork to [o]', (event) => {
+        let shareOF = new MenuItem(this.el, 'ge_sub_menu', 'Artwork to [o]', (event) => {
             shareOF.el.innerHTML = 'Artwork to [o]: adding to collection';
             saveOnServer(this.main, (event) => {
                 createOpenFrameArtwork(this.main, event.name, event.url, (success) => {

@@ -59,7 +59,9 @@ export default class VisualDebugger {
                     let constructMatch = constructRE.exec(cm.getLine(i));
                     if (constructMatch && constructMatch[1] && !isCommented(cm, i, constructMatch)) {
                         this.type = constructMatch[1];
-                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '&#x2605;'));
+                        let marker = makeMarker(this, i, '&#x2605;');
+                        marker.style.fontSize = '10px';
+                        cm.setGutterMarker(i, 'breakpoints', marker);
                         constructIN = true;
                     }
                 }
@@ -100,7 +102,6 @@ export default class VisualDebugger {
 
     debugLine (nLine) {
         if (this.type && this.variable) {
-
             let cm = this.main.editor;
 
             let frag = getShaderForTypeVarInLine(this.main.editor, this.type, this.variable, nLine);
