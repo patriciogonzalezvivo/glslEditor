@@ -89,8 +89,7 @@ export default class Shader {
         this.controls.rec.button.style.color = 'red';
         this.controls.rec.button.style.transform = 'translate(0px,-2px)';
         // present mode (only if there is a presentation.html file to point to)
-        let folder = getFolder(window.location.pathname);
-        checkURL(folder+'presentation.html', (event) => {
+        checkURL(getFolder(window.location.pathname)+'presentation.html', (event) => {
             if (event.currentTarget && event.currentTarget.status && event.currentTarget.status !== 404) {
                 if (!this.controls.presentationMode) {
                     this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
