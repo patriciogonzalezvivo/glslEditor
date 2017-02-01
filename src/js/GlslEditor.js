@@ -312,6 +312,19 @@ export default class GlslEditor {
     update () {
         this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
     }
+
+    togglePresentationWindow(flag) {
+      this.pWindowOpen = flag;
+      if (flag) {
+        this.shader.openWindow();
+      } else {
+        this.shader.closeWindow();
+      }
+    }
+
+    onClosePresentationWindow() {
+      this.pWindowOpen = false;
+    }
 }
 
 window.GlslEditor = GlslEditor;
