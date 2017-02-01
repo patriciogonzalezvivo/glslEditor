@@ -144,7 +144,9 @@ export default class GlslEditor {
 
         // EVENTS
         this.editor.on('change', () => {
-           this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+            if (this.autoupdate) {
+                this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+            }
         });
 
         if (this.options.canvas_follow) {
