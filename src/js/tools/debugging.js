@@ -41,8 +41,11 @@ export function getVariableType(cm, sVariable) {
 
 export function getShaderForTypeVarInLine(cm, sType, sVariable, nLine) {
     let frag = '';
-    for (let i = 0; i < nLine + 1; i++) {
-        frag += cm.getLine(i) + '\n';
+    let offset = 1;
+    for (let i = 0; i < nLine + 1 && i < cm.getDoc().size; i++) {
+        if (cm.getLine(i)) {
+            frag += cm.getLine(i) + '\n';
+        }
     }
 
     frag += '\tgl_FragColor = ';

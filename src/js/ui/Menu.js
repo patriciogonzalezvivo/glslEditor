@@ -42,6 +42,11 @@ export default class Menu {
         });
         // this.menus.autoupdate.button.style.color = main.autoupdate ? 'white' : 'gray';
 
+        // TEST
+        this.menus.test = new MenuItem(this.el, 'ge_menu', '⟐ Test', (event) => {
+            main.visualDebugger.check();
+        });
+
         // SHARE
         this.menus.share = new MenuItem(this.el, 'ge_menu', '⇨ Export', (event) => {
             if (main.change || !this.exportModal) {

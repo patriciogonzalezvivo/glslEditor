@@ -181,14 +181,17 @@ export default class Shader {
             this.isCapturing = true;
             this.controls.rec.name = '&#9632;';
             this.controls.rec.button.style.color = 'white';
+            this.controls.rec.button.style.transform = 'translate(0px,2px)';
+            this.controls.rec.button.style.fontSize = '28px';
         }
     }
 
     stopVideoCapture () {
         if (this.isCapturing) {
             this.isCapturing = false;
-            this.controls.rec.button.style.color = 'red';
             this.controls.rec.name = '&#11044;';
+            this.controls.rec.button.style.color = 'red';
+            this.controls.rec.button.style.fontSize = '14px';
             this.controls.rec.button.style.transform = 'translate(0px,-2px)';
             this.media_capture.stopVideoCapture().then((video) => {
                 saveAs(video.blob, `${+new Date()}.webm`);
