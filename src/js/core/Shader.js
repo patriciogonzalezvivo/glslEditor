@@ -18,8 +18,8 @@ export default class Shader {
         // CREATE AND START GLSLCANVAS
         this.el_canvas = document.createElement('canvas');
         this.el_canvas.setAttribute('class', 'ge_canvas');
-        this.el_canvas.setAttribute('width', this.options.canvas_width || this.options.canvas_size || '250');
-        this.el_canvas.setAttribute('height', this.options.canvas_height || this.options.canvas_size || '250');
+        this.el_canvas.setAttribute('width', (this.options.canvas_width || this.options.canvas_size || '250') / window.devicePixelRatio);
+        this.el_canvas.setAttribute('height', (this.options.canvas_height || this.options.canvas_size || '250') / window.devicePixelRatio);
         this.el_canvas.setAttribute('data-fragment', this.options.frag);
         this.el.appendChild(this.el_canvas);
         let glslcanvas = new GlslCanvas(this.el_canvas, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
@@ -37,7 +37,7 @@ export default class Shader {
             this.media_capture.completeScreenshot();
         })
 
-        // CONTROLS 
+        // CONTROLS
         this.control_pannel = document.createElement('ul');
         this.control_pannel.className = CONTROLS_CLASSNAME;
         this.el.appendChild(this.control_pannel);
@@ -67,7 +67,7 @@ export default class Shader {
         this.controls.rec = rec;
         this.controls.rec.button.style.color = 'red';
         this.controls.rec.button.style.transform = 'translate(0px,-2px)';
-        
+
         this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
         this.el_control.addEventListener('mouseenter', (event) => { this.showControls(); });
         this.el_control.addEventListener('mouseleave', (event) => { this.hideControls(); });
@@ -77,17 +77,17 @@ export default class Shader {
             }
             else {
                 this.hideControls();
-            } 
+            }
         })
         this.hideControls();
-        
+
         // ========== EVENTS
         // Draggable/resizable/snappable
         if (main.options.canvas_draggable || main.options.canvas_resizable || main.options.canvas_snapable) {
-            subscribeInteractiveDom(this.el, { 
+            subscribeInteractiveDom(this.el, {
                                                 move: main.options.canvas_draggable,
                                                 resize: main.options.canvas_resizable,
-                                                snap: main.options.canvas_snapable 
+                                                snap: main.options.canvas_snapable
                                             });
 
             if (main.options.canvas_size === 'halfscreen') {
