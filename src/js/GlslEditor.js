@@ -145,20 +145,24 @@ export default class GlslEditor {
         // EVENTS
         this.editor.on('change', () => {
             if (this.autoupdate) {
-                this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+                let frag = this.options.frag_header + this.editor.getValue() + this.options.frag_footer;
+                this.shader.canvas.load(frag);
             }
         });
 
         if (this.options.canvas_follow) {
             this.shader.el.style.position = 'relative';
-            this.shader.el.style.float = 'right';
+            if (this.options.canvas_float) {
+                this.shader.el.style.float = this.options.canvas_float;
+            }
             this.editor.on('cursorActivity', (cm) => {
-                let height = cm.heightAtLine(cm.getCursor().line + 1, 'local') - this.shader.el.height;
+                let height = cm.heightAtLine(cm.getCursor().line + 1, 'local') - this.shader.el.clientHeight;
                 if (height < 0) {
                     height = 0.0;
                 }
                 this.shader.el.style.top = height.toString() + 'px';
             });
+
         }
 
         // If the user bails for whatever reason, hastily shove the contents of
@@ -216,7 +220,9 @@ export default class GlslEditor {
     setContent(shader, tabName) {
         // If the string is CODE
         if (this.shader && this.shader.canvas) {
-            this.shader.canvas.load(shader);
+            // this.shader.canvas.load(shader);
+            let frag = this.options.frag_header + shader + this.options.frag_footer;
+            this.shader.canvas.load(frag);
         }
 
         if (this.editor) {
@@ -312,7 +318,8 @@ export default class GlslEditor {
     }
 
     update () {
-        this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+        let frag = this.options.frag_header + this.editor.getValue() + this.options.frag_footer;
+        this.shader.canvas.load(frag);
     }
 
     togglePresentationWindow(flag) {
