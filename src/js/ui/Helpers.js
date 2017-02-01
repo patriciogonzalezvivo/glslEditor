@@ -6,6 +6,7 @@ import FloatPicker from './pickers/FloatPicker';
 import Color from './pickers/types/Color';
 
 import Modal from './modals/Modal';
+import { getVariableType, getShaderForTypeVarInLine } from '../tools/debugging.js';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -42,6 +43,20 @@ export default class Helpers {
 
         // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
+        wrapper.addEventListener('contextmenu', (event) => {
+            let cursor = this.main.editor.getCursor(true);
+            let token = this.main.editor.getTokenAt(cursor);
+            if (token.type === 'variable') {
+                // console.log('Contextmenu', event, cursor, token);
+                var type = getVariableType(main.editor, token.string);
+                if (type !== 'none') {
+                    event.preventDefault();
+                    main.shader.canvas.load(getShaderForTypeVarInLine(main.editor, type, token.string, cursor.line));
+                }
+            } else {
+                main.shader.canvas.load(main.options.frag_header + main.editor.getValue() + main.options.frag_footer);
+            }
+        });
         wrapper.addEventListener('mouseup', (event) => {
             this.main.visualDebugger.clean(event);
 

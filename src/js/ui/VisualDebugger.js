@@ -1,3 +1,5 @@
+import { isCommented, getShaderForTypeVarInLine } from '../tools/debugging';
+
 export default class VisualDebugger {
     constructor (main) {
         this.main = main;
@@ -57,7 +59,9 @@ export default class VisualDebugger {
                     let constructMatch = constructRE.exec(cm.getLine(i));
                     if (constructMatch && constructMatch[1] && !isCommented(cm, i, constructMatch)) {
                         this.type = constructMatch[1];
-                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '+'));//'&#x2605;'));
+                        let marker = makeMarker(this, i, '&#x2605;');
+                        marker.style.fontSize = '10px';
+                        cm.setGutterMarker(i, 'breakpoints', marker);
                         constructIN = true;
                     }
                 }
@@ -100,26 +104,7 @@ export default class VisualDebugger {
         if (this.type && this.variable) {
             let cm = this.main.editor;
 
-            let frag = '';
-            for (let i = 0; i < nLine + 1; i++) {
-                frag += cm.getLine(i) + '\n';
-            }
-
-            frag += '\tgl_FragColor = ';
-            if (this.type === 'float') {
-                frag += 'vec4(vec3(' + this.variable + '),1.)';
-            }
-            else if (this.type === 'vec2') {
-                frag += 'vec4(vec3(' + this.variable + ',0.),1.)';
-            }
-            else if (this.type === 'vec3') {
-                frag += 'vec4(' + this.variable + ',1.)';
-            }
-            else if (this.type === 'vec4') {
-                frag += this.variable;
-            }
-            frag += ';\n}\n';
-
+            let frag = getShaderForTypeVarInLine(this.main.editor, this.type, this.variable, nLine);
             this.main.shader.canvas.load(frag);
             this.debbuging = true;
 
@@ -165,12 +150,4 @@ function searchOverlay(query, caseInsensitive) {
             }
         }
     };
-}
-
-function isCommented(cm, nLine, match) {
-    let token = cm.getTokenAt({ line: nLine, ch: match.index });
-    if (token && token.type) {
-        return token.type === 'comment';
-    }
-    return false;
 }

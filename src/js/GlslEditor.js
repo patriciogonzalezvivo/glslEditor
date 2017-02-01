@@ -1,4 +1,4 @@
-
+import 'document-register-element';
 import Shader from './core/Shader';
 import { initEditor } from './core/Editor';
 
@@ -21,8 +21,12 @@ import { subscribeMixin } from './tools/mixin';
 // 3er Parties
 import { saveAs } from './vendor/FileSaver.min.js';
 
-const EMPTY_FRAG_SHADER = `// Author: 
-// Title: 
+// Cross storage for Openframe -- allows restricted access to certain localStorage operations
+// on the openframe domain
+import { CrossStorageClient } from 'cross-storage';
+
+const EMPTY_FRAG_SHADER = `// Author:
+// Title:
 
 #ifdef GL_ES
 precision mediump float;
@@ -36,8 +40,7 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     st.x *= u_resolution.x/u_resolution.y;
 
-    st += vec2(.0);
-    vec3 color = vec3(1.);
+    vec3 color = vec3(0.);
     color = vec3(st.x,st.y,abs(sin(u_time)));
 
     gl_FragColor = vec4(color,1.0);
@@ -84,7 +87,17 @@ export default class GlslEditor {
 
         // Default Context
         if (!this.options.frag) {
-            this.options.frag = EMPTY_FRAG_SHADER;
+            var innerHTML = this.container.innerHTML.replace(/&lt;br&gt;/g,"");
+            innerHTML = innerHTML.replace(/<br>/g,"");
+            innerHTML = innerHTML.replace(/&nbsp;/g,"");
+            innerHTML = innerHTML.replace(/&lt;/g,"<");
+            innerHTML = innerHTML.replace(/&gt;/g,">");
+            innerHTML = innerHTML.replace(/&amp;/g,"&");
+            this.options.frag = innerHTML || EMPTY_FRAG_SHADER;
+
+            if (innerHTML) {
+                this.container.innerHTML = '';
+            }
         }
 
         // Default invisible Fragment header
@@ -178,22 +191,28 @@ export default class GlslEditor {
             else {
                 this.new();
             }
-        } 
+        }
         else {
             this.new();
         }
-        
+
+        // setup CrossStorage client
+        this.storage = new CrossStorageClient('https://openframe.io/hub.html');
+        this.storage.onConnect().then(() => {
+            console.log("Connected to OpenFrame [o]")
+        }.bind(this));
+
         return this;
     }
 
     new () {
-        this.setContent(EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
+        this.setContent(this.options.frag || EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
         this.trigger('new_content', {});
+        this.options.frag = null;
     }
 
     setContent(shader, tabName) {
         // If the string is CODE
-        this.options.frag = shader;
         if (this.shader && this.shader.canvas) {
             this.shader.canvas.load(shader);
         }
@@ -270,16 +289,9 @@ export default class GlslEditor {
         }
     }
 
-    getChapterNumber() {
-        let content = this.getContent();
-        let result = content.match(/\/\/\s*[C|c]hapter\s*:\s*(\d*)/i);
-        console.log(result);
-        if (result) {
-            return parseInt(result[1]);
-        }
-        else {
-            return 'unknown';
-        }
+    // Returns Promise
+    getOfToken() {
+        return this.storage.get('accessToken');
     }
 
     download () {
@@ -303,3 +315,35 @@ export default class GlslEditor {
 }
 
 window.GlslEditor = GlslEditor;
+
+var GlslWebComponent = function() {};
+GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
+GlslWebComponent.prototype.createdCallback = function createdCallback() {
+
+    var options = {
+        canvas_size: 150,
+        canvas_follow: true,
+        tooltips: true
+    };
+
+    for (var i = 0; i < this.attributes.length; i++) {
+        var attribute = this.attributes[i];
+        if (attribute.specified) {
+            var value = attribute.value;
+
+            if (value === 'true') {
+                value = true;
+            } else if (value === 'false') {
+                value = false;
+            } else if (parseInt(value)) {
+                value = parseInt(value);
+            }
+
+            options[attribute.name] = value;
+        }
+    }
+
+    this.glslEditor = new GlslEditor(this, options);
+}
+
+document.registerElement('glsl-editor', GlslWebComponent);
