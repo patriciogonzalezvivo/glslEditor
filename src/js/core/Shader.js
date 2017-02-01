@@ -9,12 +9,13 @@ var CONTROLS_CLASSNAME = 'ge_control';
 
 export default class Shader {
     constructor (main) {
+        this.main = main;
         this.options = main.options;
+        this.frag = "";
 
         // DOM CONTAINER
         this.el = document.createElement('div');
         this.el.setAttribute('class', 'ge_canvas_container');
-
         // CREATE AND START GLSLCANVAS
         this.el_canvas = document.createElement('canvas');
         this.el_canvas.setAttribute('class', 'ge_canvas');
@@ -23,7 +24,9 @@ export default class Shader {
         this.el_canvas.setAttribute('data-fragment', this.options.frag);
         this.el.appendChild(this.el_canvas);
         let glslcanvas = new GlslCanvas(this.el_canvas, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
+
         this.canvas = glslcanvas;
+
         if (this.options.imgs.length > 0) {
             for (let i in this.options.imgs) {
                 this.canvas.setUniform('u_tex' + i, this.options.imgs[i]);
@@ -156,5 +159,48 @@ export default class Shader {
                 saveAs(video.blob, `${+new Date()}.webm`);
             });
         }
+    }
+
+    openWindow() {
+      this.originalSize = {width: this.canvas.canvas.clientWidth, height: this.canvas.canvas.clientHeight};
+      this.presentationWindow = window.open("presentation.html", "_blank", "presentationWindow");
+      this.presentationWindow.addEventListener('load', this.onPresentationWindowOpen.bind(this));
+    }
+
+    closeWindow() {
+      if (this.presentationWindow) {
+        this.presentationWindow.close();
+      }
+    }
+
+    setCanvasSize(w, h) {
+      this.canvas.canvas.style.width = w + 'px';
+      this.canvas.canvas.style.height = h + 'px';
+    }
+
+    onPresentationWindowOpen() {
+      this.presentationWindow.document.body.appendChild(this.canvas.canvas);
+      setTimeout(()=>{this.presentationWindow.document.getElementById("message").className = "hidden";}, 4000);
+
+      this.setCanvasSize(this.presentationWindow.innerWidth, this.presentationWindow.innerHeight);
+      this.presentationWindow.addEventListener('resize', this.onPresentationWindowResize.bind(this));
+      this.presentationWindow.addEventListener("unload", this.onPresentationWindowClose.bind(this));
+    }
+
+    onPresentationWindowClose() {
+      this.el.appendChild(this.canvas.canvas);
+      this.setCanvasSize(this.originalSize.width, this.originalSize.height);
+      this.canvas.resize();
+
+      this.main.onClosePresentationWindow();
+      this.main.menu.onClosePresentationWindow();
+      this.presentationWindow = null;
+    }
+
+    onPresentationWindowResize() {
+      if (this.presentationWindow) {
+        this.setCanvasSize(this.presentationWindow.innerWidth, this.presentationWindow.innerHeight);
+        this.canvas.resize();
+      }
     }
 }

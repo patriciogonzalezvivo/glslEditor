@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>GLSL Editor</title>
+		<link href="/favicon.gif" rel="shortcut icon"/>
+		<style>
+			body {
+				height: 100%;
+  			margin: 0;
+    		padding: 0;
+  			background: #272822;
+			}
+      .ge_canvas_container {
+        top: 0px !important;
+      }
+      #message {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding:16px;
+        z-index: 9999;
+        color: #ffffff;
+        font-size: 14px;
+        font-family: Helvetica, Geneva, sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.1em;
+        text-align: center;
+
+        opacity: 1;
+      	-webkit-transition: opacity 1.5s;
+      	-moz-transition: opacity 1.5s;
+      	transition: opacity 1.5s;
+      }
+      #message.hidden {
+        opacity: 0;
+      }
+      .hint {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+		</style>
+	</head>
+	<body>
+    <div id="message">Projector Mode | <span class="hint"> If the canvas doesn't update, drag this window and reveal the editor</span></div>
+	</body>
+  <link type="text/css" rel="stylesheet" href="build/glslEditor.css">
+
+</html>

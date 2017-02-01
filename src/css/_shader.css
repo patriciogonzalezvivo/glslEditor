@@ -27,11 +27,11 @@ canvas.ge_canvas {
     left: 0px;
     width: 100%;
     background-color: rgba(0,0,0,.5);
-    
+
     opacity: 1;
 	-webkit-transition: opacity .5s;
-	-moz-transition: opacity .5s;     
-	transition: opacity .5s; 
+	-moz-transition: opacity .5s;
+	transition: opacity .5s;
     z-index: var(--z-shader);
 }
 
