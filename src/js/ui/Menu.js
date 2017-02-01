@@ -52,7 +52,7 @@ export default class Menu {
             }
         });
 
-        var name = main.pWindowOpen ? '&#9587 Finish presentation' : '&#x25A1; Presentation mode';
+        var name = main.pWindowOpen ? '&#9587 Close projector window' : '&#x25A1; Projector mode';
         this.menus.presentationWindow = new MenuItem(this.el, 'ge_menu', name, (event) => {
           if (main.pWindowOpen) {
             this.menus.presentationWindow.name = '&#128468; Open presentation window';
@@ -70,11 +70,11 @@ export default class Menu {
         if (main.autoupdate) {
             this.menus.update.hide();
         }
-        
+
         main.container.appendChild(this.el);
     }
 
     onClosePresentationWindow() {
-      this.menus.presentationWindow.name = '&#x25A1; Presentation mode';
+      this.menus.presentationWindow.name = '&#x25A1; Open canvas window';
     }
 }
