@@ -90,11 +90,9 @@ export default class Shader {
         this.controls.rec.button.style.transform = 'translate(0px,-2px)';
         // present mode (only if there is a presentation.html file to point to)
         let folder = getFolder(window.location.pathname);
-        console.log('folder:',folder);
         checkURL(folder+'presentation.html', (event) => {
-            if (event.currentTarget.status !== 404) {
+            if (event.currentTarget && event.currentTarget.status && event.currentTarget.status !== 404) {
                 if (!this.controls.presentationMode) {
-                    console.log('ADD');
                     this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
                         event.stopPropagation();
                         event.preventDefault();
