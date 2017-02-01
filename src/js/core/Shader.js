@@ -7,6 +7,13 @@ import { saveAs } from '../vendor/FileSaver.min.js';
 
 var CONTROLS_CLASSNAME = 'ge_control';
 
+function checkURL(url,then) {
+    var http = new XMLHttpRequest();
+    http.onreadystatechange = then;
+    http.open('HEAD', url, true);
+    http.send();
+}
+
 export default class Shader {
     constructor (main) {
         this.main = main;
@@ -71,18 +78,23 @@ export default class Shader {
         this.controls.rec = rec;
         this.controls.rec.button.style.color = 'red';
         this.controls.rec.button.style.transform = 'translate(0px,-2px)';
-        // present mode
-        this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            if (main.pWindowOpen) {
-                main.togglePresentationWindow(false);
-            } else {
-                main.togglePresentationWindow(true);
-            }
+        // present mode (only if there is a presentation.html file to point to)
+        checkURL(window.location.pathname+'presentation.html', (event) => {
+            if (!this.controls.presentationMode) {
+                console.log('ADD');
+                this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    if (main.pWindowOpen) {
+                        main.togglePresentationWindow(false);
+                    } else {
+                        main.togglePresentationWindow(true);
+                    }
+                });
+                this.controls.presentationMode.button.style.fontSize = '22px';
+            };
         });
-        this.controls.presentationMode.button.style.fontSize = '22px';
-
+        
         this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
         this.el_control.addEventListener('mouseenter', (event) => { this.showControls(); });
         this.el_control.addEventListener('mouseleave', (event) => { this.hideControls(); });
