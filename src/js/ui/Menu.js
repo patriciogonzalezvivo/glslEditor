@@ -52,6 +52,13 @@ export default class Menu {
             }
         });
 
+        this.menus.update = new MenuItem(this.el, 'ge_menu', '&#8635;', (event) => {
+            main.update();
+        });
+        if (main.autoupdate) {
+            this.menus.update.hide();
+        }
+
         var name = main.pWindowOpen ? '&#9587 Close projector window' : '&#x25A1; Projector mode';
         this.menus.presentationWindow = new MenuItem(this.el, 'ge_menu', name, (event) => {
           if (main.pWindowOpen) {
@@ -62,14 +69,6 @@ export default class Menu {
             main.togglePresentationWindow(true);
           }
         });
-
-
-        this.menus.update = new MenuItem(this.el, 'ge_menu', '&#8635;', (event) => {
-            main.update();
-        });
-        if (main.autoupdate) {
-            this.menus.update.hide();
-        }
 
         main.container.appendChild(this.el);
     }
