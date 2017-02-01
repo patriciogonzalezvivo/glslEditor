@@ -87,19 +87,21 @@ export default class Shader {
         let folder = getFolder(window.location.pathname);
         console.log('folder',folder);
         checkURL(folder+'/presentation.html', (event) => {
-            if (!this.controls.presentationMode) {
-                console.log('ADD');
-                this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    if (main.pWindowOpen) {
-                        main.togglePresentationWindow(false);
-                    } else {
-                        main.togglePresentationWindow(true);
-                    }
-                });
-                this.controls.presentationMode.button.style.fontSize = '22px';
-            };
+            if (event.currentTarget.status !== 404) {
+                if (!this.controls.presentationMode) {
+                    console.log('ADD');
+                    this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        if (main.pWindowOpen) {
+                            main.togglePresentationWindow(false);
+                        } else {
+                            main.togglePresentationWindow(true);
+                        }
+                    });
+                    this.controls.presentationMode.button.style.fontSize = '22px';
+                }
+            }
         });
         
         this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
