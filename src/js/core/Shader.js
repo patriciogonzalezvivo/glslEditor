@@ -8,9 +8,14 @@ import { saveAs } from '../vendor/FileSaver.min.js';
 var CONTROLS_CLASSNAME = 'ge_control';
 
 function getFolder(url) {
-    url = url.split('/')
-    url.pop()
-    return url.join('/')
+    if (url.endsWith('/')) {
+        return url;
+    }
+    else {
+        let e = url.split('/');
+        e.pop();
+        return e.join('/');
+    }
 }
 function checkURL(url,then) {
     var http = new XMLHttpRequest();
@@ -85,8 +90,8 @@ export default class Shader {
         this.controls.rec.button.style.transform = 'translate(0px,-2px)';
         // present mode (only if there is a presentation.html file to point to)
         let folder = getFolder(window.location.pathname);
-        console.log('folder',folder);
-        checkURL(folder+'/presentation.html', (event) => {
+        console.log('folder:',folder);
+        checkURL(folder+'presentation.html', (event) => {
             if (event.currentTarget.status !== 404) {
                 if (!this.controls.presentationMode) {
                     console.log('ADD');
@@ -195,39 +200,44 @@ export default class Shader {
     }
 
     openWindow() {
-      this.originalSize = {width: this.canvas.canvas.clientWidth, height: this.canvas.canvas.clientHeight};
-      this.presentationWindow = window.open("presentation.html", "_blank", "presentationWindow");
-      this.presentationWindow.addEventListener('load', this.onPresentationWindowOpen.bind(this));
+        this.originalSize = {width: this.canvas.canvas.clientWidth, height: this.canvas.canvas.clientHeight};
+        this.presentationWindow = window.open("presentation.html", "_blank", "presentationWindow");
+        this.presentationWindow.addEventListener('load', this.onPresentationWindowOpen.bind(this));
     }
 
     closeWindow() {
-      if (this.presentationWindow) {
-        this.presentationWindow.close();
-      }
+        if (this.presentationWindow) {
+            this.presentationWindow.close();
+        }
     }
 
     setCanvasSize(w, h) {
-      this.canvas.canvas.style.width = w + 'px';
-      this.canvas.canvas.style.height = h + 'px';
+        this.canvas.canvas.style.width = w + 'px';
+        this.canvas.canvas.style.height = h + 'px';
     }
 
     onPresentationWindowOpen() {
-      this.presentationWindow.document.body.appendChild(this.canvas.canvas);
-      setTimeout(()=>{this.presentationWindow.document.getElementById("message").className = "hidden";}, 4000);
+        this.presentationWindow.document.body.appendChild(this.canvas.canvas);
+        setTimeout(()=>{
+            let el = this.presentationWindow.document.getElementById("message");
+            if (el) {
+                el.className = "hidden";
+            }
+        }, 4000);
 
-      this.setCanvasSize(this.presentationWindow.innerWidth, this.presentationWindow.innerHeight);
-      this.presentationWindow.addEventListener('resize', this.onPresentationWindowResize.bind(this));
-      this.presentationWindow.addEventListener("unload", this.onPresentationWindowClose.bind(this));
+        this.setCanvasSize(this.presentationWindow.innerWidth, this.presentationWindow.innerHeight);
+        this.presentationWindow.addEventListener('resize', this.onPresentationWindowResize.bind(this));
+        this.presentationWindow.addEventListener("unload", this.onPresentationWindowClose.bind(this));
     }
 
     onPresentationWindowClose() {
-      this.el.appendChild(this.canvas.canvas);
-      this.setCanvasSize(this.originalSize.width, this.originalSize.height);
-      this.canvas.resize();
+        this.el.appendChild(this.canvas.canvas);
+        this.setCanvasSize(this.originalSize.width, this.originalSize.height);
+        this.canvas.resize();
 
-      this.main.onClosePresentationWindow();
-      this.main.menu.onClosePresentationWindow();
-      this.presentationWindow = null;
+        this.main.onClosePresentationWindow();
+        this.main.menu.onClosePresentationWindow();
+        this.presentationWindow = null;
     }
 
     onPresentationWindowResize() {
