@@ -7,6 +7,11 @@ import { saveAs } from '../vendor/FileSaver.min.js';
 
 var CONTROLS_CLASSNAME = 'ge_control';
 
+function getFolder(url) {
+    url = url.split('/')
+    url.pop()
+    return url.join('/')
+}
 function checkURL(url,then) {
     var http = new XMLHttpRequest();
     http.onreadystatechange = then;
@@ -79,7 +84,9 @@ export default class Shader {
         this.controls.rec.button.style.color = 'red';
         this.controls.rec.button.style.transform = 'translate(0px,-2px)';
         // present mode (only if there is a presentation.html file to point to)
-        checkURL(window.location.pathname+'presentation.html', (event) => {
+        let folder = getFolder(window.location.pathname);
+        console.log('folder',folder);
+        checkURL(folder+'/presentation.html', (event) => {
             if (!this.controls.presentationMode) {
                 console.log('ADD');
                 this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
