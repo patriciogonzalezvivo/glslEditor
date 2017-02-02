@@ -222,7 +222,7 @@ export default class Shader {
         div.style.fontSize = "14px";
         div.style.fontFamily = "Helvetica, Geneva, sans-serif";
         div.style.fontWeight = "400";
-        div.style.letterWpacing = "0.1em";
+        div.style.letterSpacing = "0.1em";
         div.style.textAlign = "center";
         div.style.opacity = "1";
         div.style.zIndex = "9999";
