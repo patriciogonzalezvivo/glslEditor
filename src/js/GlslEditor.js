@@ -1,6 +1,6 @@
 import 'document-register-element';
 import Shader from './core/Shader';
-import { initEditor } from './core/Editor';
+import { initEditor, unhighlightAll } from './core/Editor';
 
 import Menu from './ui/Menu';
 import Helpers from './ui/Helpers';
@@ -145,8 +145,7 @@ export default class GlslEditor {
         // EVENTS
         this.editor.on('change', () => {
             if (this.autoupdate) {
-                let frag = this.options.frag_header + this.editor.getValue() + this.options.frag_footer;
-                this.shader.canvas.load(frag);
+                this.update();
             }
         });
 
@@ -220,9 +219,11 @@ export default class GlslEditor {
     setContent(shader, tabName) {
         // If the string is CODE
         if (this.shader && this.shader.canvas) {
-            // this.shader.canvas.load(shader);
-            let frag = this.options.frag_header + shader + this.options.frag_footer;
-            this.shader.canvas.load(frag);
+            if (this.debugging) {
+                this.debugging = false;
+                unhighlightAll(this.editor);
+            }
+            this.shader.canvas.load(this.options.frag_header + shader + this.options.frag_footer);
         }
 
         if (this.editor) {
@@ -318,8 +319,11 @@ export default class GlslEditor {
     }
 
     update () {
-        let frag = this.options.frag_header + this.editor.getValue() + this.options.frag_footer;
-        this.shader.canvas.load(frag);
+        if (this.debugging) {
+            this.debugging = false;
+            unhighlightAll(this.editor);
+        }
+        this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
     }
 
     togglePresentationWindow(flag) {

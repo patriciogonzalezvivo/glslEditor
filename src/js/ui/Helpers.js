@@ -7,6 +7,7 @@ import Color from './pickers/types/Color';
 
 import Modal from './modals/Modal';
 import { getVariableType, getShaderForTypeVarInLine } from '../tools/debugging.js';
+import { highlightLine, unhighlightAll } from '../core/Editor.js';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -28,6 +29,7 @@ RegExp.prototype.execAll = function(string) {
 export default class Helpers {
     constructor (main) {
         this.main = main;
+        this.main.debugging = false;
 
         let style = window.getComputedStyle(main.editor.getWrapperElement(), null);
         let bgColor = new Color(style.background !== '' ? style.background : style.backgroundColor);
@@ -46,15 +48,19 @@ export default class Helpers {
         wrapper.addEventListener('contextmenu', (event) => {
             let cursor = this.main.editor.getCursor(true);
             let token = this.main.editor.getTokenAt(cursor);
+            unhighlightAll(this.main.editor);
+            this.main.debugging = false;
             if (token.type === 'variable') {
-                // console.log('Contextmenu', event, cursor, token);
                 var type = getVariableType(main.editor, token.string);
                 if (type !== 'none') {
                     event.preventDefault();
                     main.shader.canvas.load(getShaderForTypeVarInLine(main.editor, type, token.string, cursor.line));
+                    highlightLine(this.main.editor, cursor.line);
+                    this.main.debugging = true;
                 }
             } else {
-                main.shader.canvas.load(main.options.frag_header + main.editor.getValue() + main.options.frag_footer);
+                let frag = main.options.frag_header + main.editor.getValue() + main.options.frag_footer;
+                main.shader.canvas.load(frag);
             }
         });
         wrapper.addEventListener('mouseup', (event) => {
