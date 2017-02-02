@@ -9,12 +9,13 @@ var CONTROLS_CLASSNAME = 'ge_control';
 
 export default class Shader {
     constructor (main) {
+        this.main = main;
         this.options = main.options;
+        this.frag = "";
 
         // DOM CONTAINER
         this.el = document.createElement('div');
         this.el.setAttribute('class', 'ge_canvas_container');
-
         // CREATE AND START GLSLCANVAS
         this.el_canvas = document.createElement('canvas');
         this.el_canvas.setAttribute('class', 'ge_canvas');
@@ -23,7 +24,9 @@ export default class Shader {
         this.el_canvas.setAttribute('data-fragment', this.options.frag);
         this.el.appendChild(this.el_canvas);
         let glslcanvas = new GlslCanvas(this.el_canvas, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
+
         this.canvas = glslcanvas;
+
         if (this.options.imgs.length > 0) {
             for (let i in this.options.imgs) {
                 this.canvas.setUniform('u_tex' + i, this.options.imgs[i]);
@@ -42,6 +45,7 @@ export default class Shader {
         this.control_pannel.className = CONTROLS_CLASSNAME;
         this.el.appendChild(this.control_pannel);
         this.controls = {};
+        // play/stop
         this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '&#9616;&nbsp;&#9612;', (event) => {
             event.stopPropagation();
             event.preventDefault();
@@ -53,7 +57,7 @@ export default class Shader {
                 this.controls.playPause.name = '&nbsp;&#9654;&nbsp;';//'Play';
             }
         });
-
+        // rec
         this.isCapturing = false;
         let rec = new MenuItem(this.control_pannel, 'ge_control_element', '&#11044;', (event) => {
             event.stopPropagation();
@@ -67,7 +71,18 @@ export default class Shader {
         this.controls.rec = rec;
         this.controls.rec.button.style.color = 'red';
         this.controls.rec.button.style.transform = 'translate(0px,-2px)';
-
+        // present mode (only if there is a presentation.html file to point to)
+        this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            if (main.pWindowOpen) {
+                main.togglePresentationWindow(false);
+            } else {
+                main.togglePresentationWindow(true);
+            }
+        });
+        this.controls.presentationMode.button.style.fontSize = '22px';
+        
         this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
         this.el_control.addEventListener('mouseenter', (event) => { this.showControls(); });
         this.el_control.addEventListener('mouseleave', (event) => { this.hideControls(); });
@@ -141,20 +156,71 @@ export default class Shader {
         this.requestRedraw();
         if (this.media_capture.startVideoCapture()) {
             this.isCapturing = true;
-            this.controls.rec.name = '&#9726;';
+            this.controls.rec.name = '&#9632;';
             this.controls.rec.button.style.color = 'white';
+            this.controls.rec.button.style.transform = 'translate(0px,2px)';
+            this.controls.rec.button.style.fontSize = '28px';
         }
     }
 
     stopVideoCapture () {
         if (this.isCapturing) {
             this.isCapturing = false;
-            this.controls.rec.button.style.color = 'red';
             this.controls.rec.name = '&#11044;';
+            this.controls.rec.button.style.color = 'red';
+            this.controls.rec.button.style.fontSize = '14px';
             this.controls.rec.button.style.transform = 'translate(0px,-2px)';
             this.media_capture.stopVideoCapture().then((video) => {
                 saveAs(video.blob, `${+new Date()}.webm`);
             });
         }
+    }
+
+    openWindow() {
+        this.originalSize = {width: this.canvas.canvas.clientWidth, height: this.canvas.canvas.clientHeight};
+        this.presentationWindow = window.open("presentation.html", "_blank", "presentationWindow");
+        this.presentationWindow.addEventListener('load', this.onPresentationWindowOpen.bind(this));
+    }
+
+    closeWindow() {
+        if (this.presentationWindow) {
+            this.presentationWindow.close();
+        }
+    }
+
+    setCanvasSize(w, h) {
+        this.canvas.canvas.style.width = w + 'px';
+        this.canvas.canvas.style.height = h + 'px';
+    }
+
+    onPresentationWindowOpen() {
+        this.presentationWindow.document.body.appendChild(this.canvas.canvas);
+        setTimeout(()=>{
+            let el = this.presentationWindow.document.getElementById("message");
+            if (el) {
+                el.className = "hidden";
+            }
+        }, 4000);
+
+        this.setCanvasSize(this.presentationWindow.innerWidth, this.presentationWindow.innerHeight);
+        this.presentationWindow.addEventListener('resize', this.onPresentationWindowResize.bind(this));
+        this.presentationWindow.addEventListener("unload", this.onPresentationWindowClose.bind(this));
+    }
+
+    onPresentationWindowClose() {
+        this.el.appendChild(this.canvas.canvas);
+        this.setCanvasSize(this.originalSize.width, this.originalSize.height);
+        this.canvas.resize();
+
+        this.main.onClosePresentationWindow();
+        this.main.menu.onClosePresentationWindow();
+        this.presentationWindow = null;
+    }
+
+    onPresentationWindowResize() {
+      if (this.presentationWindow) {
+        this.setCanvasSize(this.presentationWindow.innerWidth, this.presentationWindow.innerHeight);
+        this.canvas.resize();
+      }
     }
 }

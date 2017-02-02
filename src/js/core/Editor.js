@@ -21,6 +21,8 @@ import 'codemirror/mode/clike/clike.js';
 // Keymap
 import 'codemirror/keymap/sublime';
 
+const HIGHLIGHT_CLASS = 'ge_editor-highlight';
+
 export function initEditor (main) {
     if (main.options.lineNumbers === undefined) {
         main.options.lineNumbers = true;
@@ -55,4 +57,22 @@ export function initEditor (main) {
         autofocus: true
     });
     return cm;
+}
+
+export function highlightLine(cm, line) {
+    if (line === null) return;
+    cm.getDoc().addLineClass(line, 'gutter', HIGHLIGHT_CLASS);
+    cm.getDoc().addLineClass(line, 'background', HIGHLIGHT_CLASS);
+}
+
+export function unhighlightLine(cm, line) {
+    if (line === null) return;
+    cm.getDoc().removeLineClass(line, 'gutter', HIGHLIGHT_CLASS);
+    cm.getDoc().removeLineClass(line, 'background', HIGHLIGHT_CLASS);
+}
+
+export function unhighlightAll(cm) {
+    for (let i = 0, j = cm.getDoc().lineCount(); i <= j; i++) {
+        unhighlightLine(cm, i);
+    }
 }

@@ -1,22 +1,115 @@
-import { isCommented, getShaderForTypeVarInLine } from '../tools/debugging';
+import { isCommented, getVariableType, getShaderForTypeVarInLine } from '../tools/debugging';
+
+var main_ge = {};
+var frames_counter = 0;
+var frames_max = 100;
 
 export default class VisualDebugger {
     constructor (main) {
         this.main = main;
         this.debbuging = false;
         this.active = null;
+        main_ge = main;
 
-        this.main.editor.on('gutterClick', (cm, n) => {
-            let info = cm.lineInfo(n);
-            if (info && info.gutterMarkers && info.gutterMarkers.breakpoints) {
-                if (this.active) {
-                    this.active.setAttribute('class', 'ge_assing_marker');
-                }
-                info.gutterMarkers.breakpoints.setAttribute('class', 'ge_assing_marker_on');
-                this.debugLine(n);
-                this.active = info.gutterMarkers.breakpoints;
+        this.testing = false;
+        this.testingLine = 0;
+        this.testingLoaded = false;
+        main.shader.canvas.on('load', this.onLoad);
+        main.shader.canvas.on('render', this.onRender);
+    }
+
+    check() {
+        let cm = this.main.editor;
+        let nLines = cm.getDoc().size;
+        let shader = this.main.shader.canvas;
+        let total_delta = shader.timeDelta;
+        console.log('check: ', total_delta);
+
+        let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)\\s*', 'i');
+        let mainStartsAt = 0;
+        for (let i = 0; i < nLines; i++) {
+            // Do not start until being inside the main function
+            let voidMatch = voidRE.exec(cm.getLine(i));
+            if (voidMatch) {
+                mainStartsAt = i;
             }
-        });
+        }
+        this.testLine(mainStartsAt);
+    }
+
+    testLine(nLine) {
+        let cm = main_ge.editor;
+        let shader = main_ge.shader.canvas;
+        let visualDebugger = main_ge.visualDebugger;
+        let nLines = cm.getDoc().size;
+        if (nLine >= nLines) {
+            console.log('End of file');
+            visualDebugger.testingLine = 0;
+            visualDebugger.testing = false;
+            let frag = main_ge.options.frag_header + cm.getValue() + main_ge.options.frag_footer;
+            shader.load(frag);
+            shader.forceRender = true;
+            return;
+        }
+
+        let variableRE = new RegExp('\\s*[float|vec2|vec3|vec4]?\\s+([\\w|\\_]*)[\\.\\w]*?\\s+[\\+|\\-|\\\\|\\*]?\\=', 'i');
+        let match = variableRE.exec(cm.getLine(nLine));
+        if (match) {
+            let variable = match[1];
+            let type = getVariableType(cm, variable)
+            if (type === 'none'){
+                visualDebugger.testLine(nLine+1);
+                return;
+            }
+
+            let frag = getShaderForTypeVarInLine(cm, type, variable, nLine)+'\n\/\/u_time;\n\n';
+            visualDebugger.testing = true;
+            visualDebugger.testingLine = nLine;
+            visualDebugger.testingLoaded = false;
+            shader.load(frag);
+            shader.forceRender = true;
+            // console.log('Loading something to test', type, variable);
+        } else {
+            visualDebugger.testLine(nLine+1);
+        }
+    }
+
+    onLoad() {
+        if (main_ge.visualDebugger.testing) {
+            frames_counter = 0;
+            main_ge.visualDebugger.testingLoaded = true;
+        }
+    }
+
+    onRender() {
+        let shader = main_ge.shader.canvas;
+        let cm = main_ge.editor;
+        let visualDebugger = main_ge.visualDebugger;
+
+        if (visualDebugger.testing && visualDebugger.testingLoaded) {
+            if (shader.isValid) {
+                frames_counter++;
+
+                if (frames_counter > frames_max) {
+                    console.log('Testing line:', visualDebugger.testingLine, shader.timeDelta);
+                    let marker = document.createElement('div');
+                    marker.setAttribute('class', 'ge_assing_marker');
+                    marker.innerHTML = shader.timeDelta.toString();
+                    cm.setGutterMarker( visualDebugger.testingLine, 
+                                        'breakpoints', 
+                                        marker);
+
+                    visualDebugger.testing = false;
+                    visualDebugger.testingLoaded= false;
+                    frames_counter = 0;
+                    visualDebugger.testLine(visualDebugger.testingLine+1);
+                }
+            } else {
+                if (main_ge.errorsDisplay) {
+                    main_ge.errorsDisplay.clean();
+                }
+            }
+        }
     }
 
     iluminate (variable) {
@@ -36,46 +129,6 @@ export default class VisualDebugger {
             }
             this.annotate = cm.showMatchesOnScrollbar(variable, true);
         }
-
-        let nLines = cm.getDoc().size;
-
-        // Show line where the value of the variable is been asigned
-        let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)\\s*\\{', 'i');
-        let voidIN = false;
-        let constructRE = new RegExp('(float|vec\\d)\\s+(' + variable + ')\\s+', 'i');
-        let constructIN = false;
-        let assignRE = new RegExp('[\\s+](' + variable + ')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\\-|\\/]?=', 'i');
-        for (let i = 0; i < nLines; i++) {
-            if (!voidIN) {
-                // Do not start until being inside the main function
-                let voidMatch = voidRE.exec(cm.getLine(i));
-                if (voidMatch) {
-                    voidIN = true;
-                }
-            }
-            else {
-                if (!constructIN) {
-                    // Search for the constructor
-                    let constructMatch = constructRE.exec(cm.getLine(i));
-                    if (constructMatch && constructMatch[1] && !isCommented(cm, i, constructMatch)) {
-                        this.type = constructMatch[1];
-                        let marker = makeMarker(this, i, '&#x2605;');
-                        marker.style.fontSize = '10px';
-                        cm.setGutterMarker(i, 'breakpoints', marker);
-                        constructIN = true;
-                    }
-                }
-                else {
-                    // Search for changes on tha variable
-                    let assignMatch = assignRE.exec(cm.getLine(i));
-                    if (assignMatch && !isCommented(cm, i, assignMatch)) {
-                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '●'));// '<span style="padding-left: 3px;">●</span>'));
-                    }
-                }
-            }
-        }
-
-        this.variable = variable;
     }
 
     clean (event) {
@@ -88,7 +141,7 @@ export default class VisualDebugger {
         if (this.overlay) {
             cm.removeOverlay(this.overlay, true);
         }
-        this.variable = null;
+        // this.variable = null;
         this.type = null;
         if (this.debbuging) {
             this.main.shader.canvas.load(this.main.options.frag_header + this.main.editor.getValue() + this.main.options.frag_footer);
@@ -99,27 +152,9 @@ export default class VisualDebugger {
         }
         this.active = false;
     }
-
-    debugLine (nLine) {
-        if (this.type && this.variable) {
-            let cm = this.main.editor;
-
-            let frag = getShaderForTypeVarInLine(this.main.editor, this.type, this.variable, nLine);
-            this.main.shader.canvas.load(frag);
-            this.debbuging = true;
-
-            if (!this.main.shader.canvas.isValid) {
-                console.log('Something went wrong and the debugger did not work for', this.type, this.variable, ' , so I will stop and clean');
-                this.clean();
-                if (this.main.errorsDisplay) {
-                    this.main.errorsDisplay.clean();
-                }
-            }
-        }
-    }
 }
 
-function makeMarker(vd, line, simbol) {
+function makeMarker(line, simbol) {
     let marker = document.createElement('div');
     marker.setAttribute('class', 'ge_assing_marker');
     marker.innerHTML = simbol;

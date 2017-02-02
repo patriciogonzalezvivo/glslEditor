@@ -23,12 +23,32 @@ export default class Menu {
         this.fileInput.addEventListener('change', (event) => {
             main.open(event.target.files[0]);
         });
-        this.menus.open = new MenuItem(this.el, 'ge_menu', '&#8681; Open', (event) => {
+        this.menus.open = new MenuItem(this.el, 'ge_menu', '⇪ Open', (event) => {
             this.fileInput.click();
         });
 
+        // AUTOUPDATE
+        this.menus.autoupdate = new MenuItem(this.el, 'ge_menu', '↻ Update', (event) => {
+            if (main.autoupdate) {
+                main.autoupdate = false;
+                this.menus.autoupdate.name = '⇥ Update';
+                // this.menus.autoupdate.button.style.color = 'gray';
+            } else {
+                main.autoupdate = true;
+                main.update();
+                this.menus.autoupdate.name = '↻ Update';
+                // this.menus.autoupdate.button.style.color = 'white';
+            }
+        });
+        // this.menus.autoupdate.button.style.color = main.autoupdate ? 'white' : 'gray';
+
+        // TEST
+        // this.menus.test = new MenuItem(this.el, 'ge_menu', '⟐ Test', (event) => {
+        //     main.visualDebugger.check();
+        // });
+
         // SHARE
-        this.menus.share = new MenuItem(this.el, 'ge_menu', '&#8682; Export', (event) => {
+        this.menus.share = new MenuItem(this.el, 'ge_menu', '△ Export', (event) => {
             if (main.change || !this.exportModal) {
                 this.exportModal = new ExportModal('ge_export', { main: main, position: 'fixed' });
             }
@@ -36,29 +56,6 @@ export default class Menu {
             let bbox = this.menus.share.el.getBoundingClientRect();
             this.exportModal.presentModal(bbox.left - 5, bbox.top + bbox.height + 5);
         });
-
-        // AUTOUPDATE
-        var name = main.autoupdate ? 'Autoupdate: on' : 'Autoupdate: off';
-        this.menus.autoupdate = new MenuItem(this.el, 'ge_menu', name, (event) => {
-            if (main.autoupdate) {
-                main.autoupdate = false;
-                this.menus.autoupdate.name = 'Autoupdate: off';
-                this.menus.update.show();
-            } else {
-                main.autoupdate = true;
-                main.update();
-                this.menus.autoupdate.name = 'Autoupdate: on';
-                this.menus.update.hide();
-            }
-        });
-
-        this.menus.update = new MenuItem(this.el, 'ge_menu', '&#8635;', (event) => {
-            main.update();
-        });
-        if (main.autoupdate) {
-            this.menus.update.hide();
-        }
-
 
         main.container.appendChild(this.el);
     }

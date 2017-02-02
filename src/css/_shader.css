@@ -1,6 +1,6 @@
 /* CANVAS */
 
-div.ge_canvas_container {
+.ge_canvas_container {
     position: fixed;
     right: 0px;
     margin: 0px;
@@ -9,12 +9,9 @@ div.ge_canvas_container {
 	z-index: var(--z-shader);
 }
 
-canvas.ge_canvas {
+.ge_canvas {
     margin: 0px;
     padding: 0px;
-    /*position: fixed;*/
-    /*right: 0px;*/
-    /*overflow: hidden;*/
 	z-index: var(--z-shader);
 }
 
@@ -27,11 +24,11 @@ canvas.ge_canvas {
     left: 0px;
     width: 100%;
     background-color: rgba(0,0,0,.5);
-    
+
     opacity: 1;
 	-webkit-transition: opacity .5s;
-	-moz-transition: opacity .5s;     
-	transition: opacity .5s; 
+	-moz-transition: opacity .5s;
+	transition: opacity .5s;
     z-index: var(--z-shader);
 }
 
