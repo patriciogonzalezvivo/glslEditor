@@ -6,8 +6,8 @@ import FloatPicker from './pickers/FloatPicker';
 import Color from './pickers/types/Color';
 
 import Modal from './modals/Modal';
-import { getVariableType, getShaderForTypeVarInLine } from '../tools/debugging.js';
-import { highlightLine, unhighlightAll } from '../core/Editor.js';
+import { isLineAfterMain, getVariableType, getShaderForTypeVarInLine } from '../tools/debugging.js';
+import { unfocusLine, focusLine, unfocusAll, focusAll } from '../core/Editor.js';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -48,14 +48,16 @@ export default class Helpers {
         wrapper.addEventListener('contextmenu', (event) => {
             let cursor = this.main.editor.getCursor(true);
             let token = this.main.editor.getTokenAt(cursor);
-            unhighlightAll(this.main.editor);
+            focusAll(this.main.editor);
             this.main.debugging = false;
-            if (token.type === 'variable') {
+
+            if (token.type === 'variable' && isLineAfterMain(main.editor, cursor.line)) {
                 var type = getVariableType(main.editor, token.string);
                 if (type !== 'none') {
                     event.preventDefault();
                     main.shader.canvas.load(getShaderForTypeVarInLine(main.editor, type, token.string, cursor.line));
-                    highlightLine(this.main.editor, cursor.line);
+                    unfocusAll(this.main.editor);
+                    focusLine(this.main.editor, cursor.line);
                     this.main.debugging = true;
                 }
             } else {
@@ -63,6 +65,7 @@ export default class Helpers {
                 main.shader.canvas.load(frag);
             }
         });
+
         wrapper.addEventListener('mouseup', (event) => {
             this.main.visualDebugger.clean(event);
 

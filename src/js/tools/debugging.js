@@ -7,12 +7,25 @@ export function isCommented(cm, nLine, match) {
     return false;
 }
 
+export function isLineAfterMain(cm, nLine) {
+    let totalLines = cm.getDoc().size;
+    let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)', 'i');
+    for (let i = 0; i < nLine && i < totalLines; i++) {
+        // Do not start until being inside the main function
+        let voidMatch = voidRE.exec(cm.getLine(i));
+        if (voidMatch) {
+            return true;
+        }
+    }
+    return false;
+}
+
 export function getVariableType(cm, sVariable) {
     let nLines = cm.getDoc().size;
 
     // Show line where the value of the variable is been asigned
     let uniformRE = new RegExp('\\s*uniform\\s+(float|vec2|vec3|vec4)\\s+' + sVariable + '\\s*;');
-    let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)\\s*\\{', 'i');
+    let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)', 'i');
     let voidIN = false;
     let constructRE = new RegExp('(float|vec\\d)\\s+(' + sVariable + ')\\s+', 'i');
     for (let i = 0; i < nLines; i++) {

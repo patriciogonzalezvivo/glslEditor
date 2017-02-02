@@ -21,7 +21,7 @@ import 'codemirror/mode/clike/clike.js';
 // Keymap
 import 'codemirror/keymap/sublime';
 
-const HIGHLIGHT_CLASS = 'ge_editor-highlight';
+const UNFOCUS_CLASS = 'ge_editor-unfocus';
 
 export function initEditor (main) {
     if (main.options.lineNumbers === undefined) {
@@ -59,20 +59,26 @@ export function initEditor (main) {
     return cm;
 }
 
-export function highlightLine(cm, line) {
+export function unfocusLine(cm, line) {
     if (line === null) return;
-    cm.getDoc().addLineClass(line, 'gutter', HIGHLIGHT_CLASS);
-    cm.getDoc().addLineClass(line, 'background', HIGHLIGHT_CLASS);
+    cm.getDoc().addLineClass(line, 'gutter', UNFOCUS_CLASS);
+    cm.getDoc().addLineClass(line, 'text', UNFOCUS_CLASS);
 }
 
-export function unhighlightLine(cm, line) {
-    if (line === null) return;
-    cm.getDoc().removeLineClass(line, 'gutter', HIGHLIGHT_CLASS);
-    cm.getDoc().removeLineClass(line, 'background', HIGHLIGHT_CLASS);
-}
-
-export function unhighlightAll(cm) {
+export function unfocusAll(cm) {
     for (let i = 0, j = cm.getDoc().lineCount(); i <= j; i++) {
-        unhighlightLine(cm, i);
+        unfocusLine(cm, i);
+    }
+}
+
+export function focusLine(cm, line) {
+    if (line === null) return;
+    cm.getDoc().removeLineClass(line, 'gutter', UNFOCUS_CLASS);
+    cm.getDoc().removeLineClass(line, 'text', UNFOCUS_CLASS);
+}
+
+export function focusAll(cm) {
+    for (let i = 0, j = cm.getDoc().lineCount(); i <= j; i++) {
+        focusLine(cm, i);
     }
 }

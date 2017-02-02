@@ -1,6 +1,6 @@
 import 'document-register-element';
 import Shader from './core/Shader';
-import { initEditor, unhighlightAll } from './core/Editor';
+import { initEditor, focusAll } from './core/Editor';
 
 import Menu from './ui/Menu';
 import Helpers from './ui/Helpers';
@@ -221,7 +221,7 @@ export default class GlslEditor {
         if (this.shader && this.shader.canvas) {
             if (this.debugging) {
                 this.debugging = false;
-                unhighlightAll(this.editor);
+                focusAll(this.editor);
             }
             this.shader.canvas.load(this.options.frag_header + shader + this.options.frag_footer);
         }
@@ -321,7 +321,7 @@ export default class GlslEditor {
     update () {
         if (this.debugging) {
             this.debugging = false;
-            unhighlightAll(this.editor);
+            focusAll(this.editor);
         }
         this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
     }
