@@ -27,7 +27,7 @@ export function getVariableType(cm, sVariable) {
     let uniformRE = new RegExp('\\s*uniform\\s+(float|vec2|vec3|vec4)\\s+' + sVariable + '\\s*;');
     let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)', 'i');
     let voidIN = false;
-    let constructRE = new RegExp('(float|vec\\d)\\s+(' + sVariable + ')\\s+', 'i');
+    let constructRE = new RegExp('(float|vec\\d)\\s+(' + sVariable + ')\\s*[;]?', 'i');
     for (let i = 0; i < nLines; i++) {
         if (!voidIN) {
             // Do not start until being inside the main function
@@ -48,7 +48,6 @@ export function getVariableType(cm, sVariable) {
             }
         }
     }
-
     return 'none';
 }
 
@@ -78,3 +77,7 @@ export function getShaderForTypeVarInLine(cm, sType, sVariable, nLine) {
 
     return frag;
 }
+
+// export function getSlower(test_results) {
+    
+// }

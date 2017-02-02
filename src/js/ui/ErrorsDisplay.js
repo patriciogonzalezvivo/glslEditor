@@ -7,8 +7,12 @@ export default class ErrorsDisplay {
 
         // EVENTS
         this.main.shader.canvas.on('error', (arg) => {
-            this.clean();
-            this.addError(arg);
+            if (this.main.visualDebugger && this.main.visualDebugger.testing) {
+                this.clean();
+            } else {
+                this.clean();
+                this.addError(arg);
+            }
         });
 
         this.main.editor.on('changes', (cm, changesObjs) => {
