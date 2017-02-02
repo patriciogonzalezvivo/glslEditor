@@ -31,7 +31,7 @@ export default class Menu {
         this.menus.autoupdate = new MenuItem(this.el, 'ge_menu', ' <span class="ge_menu_highlight"><i class="material-icons">autorenew</i></span> Auto Update', (event) => {
             if (main.autoupdate) {
                 main.autoupdate = false;
-                this.menus.autoupdate.name = '<span class="ge_menu_disabled">&#x25CF;</span> Auto Update';
+                this.menus.autoupdate.name = '<span class="ge_menu_disabled"><i class="material-icons">autorenew</i></span> Auto Update';
                 // this.menus.autoupdate.button.style.color = 'gray';
             } else {
                 main.autoupdate = true;
