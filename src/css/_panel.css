@@ -13,25 +13,25 @@ li.ge_panel_tab {
     cursor: pointer;
     list-style-type: none;
     background-color: var(--ui-base-color);
-    color: gray;
-    display: inline;
+    color: #607D8B;
+    display: inline-block;
     text-align: center;
-    padding-top: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 8px 16px 8px 16px;
+    letter-spacing: 0.05em;
+    font-size: 14px;
 }
 
 li.ge_panel_tab_active {
     cursor: pointer;
     background-color: var(--ui-active-color);
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
     list-style-type: none;
-    display: inline;
+    display: inline-block;
     text-align: center;
-    padding-top: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 8px 16px 8px 16px;
+    letter-spacing: 0.05em;
+    font-size: 14px;
 }
 
 li.ge_panel_tab:hover {
@@ -41,6 +41,6 @@ li.ge_panel_tab:hover {
 a.ge_panel_tab_close {
     cursor: pointer;
     font-size: 12px;
-    margin-left: 10px;    
+    margin-left: 10px;
     font-weight: 100;
 }
