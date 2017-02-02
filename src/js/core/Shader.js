@@ -82,7 +82,7 @@ export default class Shader {
             }
         });
         this.controls.presentationMode.button.style.fontSize = '22px';
-        
+
         this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
         this.el_control.addEventListener('mouseenter', (event) => { this.showControls(); });
         this.el_control.addEventListener('mouseleave', (event) => { this.hideControls(); });
@@ -178,8 +178,8 @@ export default class Shader {
 
     openWindow() {
         this.originalSize = {width: this.canvas.canvas.clientWidth, height: this.canvas.canvas.clientHeight};
-        this.presentationWindow = window.open("presentation.html", "_blank", "presentationWindow");
-        this.presentationWindow.addEventListener('load', this.onPresentationWindowOpen.bind(this));
+        this.presentationWindow = window.open("", "_blank", "presentationWindow");
+        this.setUpPresentationWindow();
     }
 
     closeWindow() {
@@ -193,13 +193,47 @@ export default class Shader {
         this.canvas.canvas.style.height = h + 'px';
     }
 
-    onPresentationWindowOpen() {
+    setUpPresentationWindow() {
         this.presentationWindow.document.body.appendChild(this.canvas.canvas);
+        var d = this.presentationWindow.document;
+        var div = d.createElement("div");
+        div.appendChild(d.createTextNode("Projector mode | "));
+        var span = this.presentationWindow.document.createElement("span");
+        div.appendChild(span);
+        span.appendChild(d.createTextNode("If the canvas doesn't update, drag this window and reveal the editor"));
+        d.body.appendChild(div);
+
+
+        d.title = "GLSL Editor"
+        d.body.style.padding = "0";
+        d.body.style.margin = "0";
+  			d.body.style.background = "#272822";
+  			d.body.style.overflow = "hidden";
+
+        div.style.position = "absolute";
+        div.style.width = "100%";
+        div.style.background = "rgba(0, 0, 0, 0.5)";
+        div.style.position = "absolute";
+        div.style.top = "0";
+        div.style.left = "0";
+        div.style.right = "0";
+        div.style.padding = "16px";
+        div.style.color = "#ffffff";
+        div.style.fontSize = "14px";
+        div.style.fontFamily = "Helvetica, Geneva, sans-serif";
+        div.style.fontWeight = "400";
+        div.style.letterSpacing = "0.1em";
+        div.style.textAlign = "center";
+        div.style.opacity = "1";
+        div.style.zIndex = "9999";
+        div.style.setProperty("-webkit-transition", "opacity 1.5s");
+        div.style.setProperty("-moz-transition", "opacity 1.5s");
+        div.style.setProperty("transition", "opacity 1.5s");
+
+        span.style.color = "rgba(255, 255, 255, 0.5)";
+
         setTimeout(()=>{
-            let el = this.presentationWindow.document.getElementById("message");
-            if (el) {
-                el.className = "hidden";
-            }
+            div.style.opacity = 0;
         }, 4000);
 
         this.setCanvasSize(this.presentationWindow.innerWidth, this.presentationWindow.innerHeight);
