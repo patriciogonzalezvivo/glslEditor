@@ -7,12 +7,18 @@
     /*height: 100%;*/
     height: auto;
     z-index: var(--z-editor);
+    background: #171e22 !important;
 }
 
 .CodeMirror-linenumbers {
     padding: 0 8px;
+    font-family: Helvetica, Geneva, sans-serif;
+    background: #171e22 !important;
 }
 
+.CodeMirror-linenumber.CodeMirror-gutter-elt {
+    color: #546E7A;
+}
 /* Slightly more padding around the text content */
 .CodeMirror pre {
     padding: 0 8px;
@@ -49,4 +55,13 @@
     &.CodeMirror-activeline-gutter .CodeMirror-linenumber {
         color: var(--ui-highlight-color);
     }
+}
+
+.ge_editor-highlight .CodeMirror-gutter-background {
+  opacity: 0.5;
+  background: #ff0000;
+}
+
+.CodeMirror {
+  margin-top: 12px;
 }
