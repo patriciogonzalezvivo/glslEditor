@@ -33,11 +33,6 @@
     filter: blur(1px);
 }
 
-.ge_editor-highlight .CodeMirror-gutter-background {
-    opacity: 0.5;
-    background: #ff0000;
-}
-
 .CodeMirror {
     margin-top: 12px;
 }
