@@ -1,4 +1,4 @@
-import { isCommented, isLineAfterMain, getVariableType, getShaderForTypeVarInLine } from '../tools/debugging';
+import { isCommented, isLineAfterMain, getVariableType, getShaderForTypeVarInLine, getResultRange } from '../tools/debugging';
 
 var main_ge = {};
 var frames_counter = 0;
@@ -75,10 +75,15 @@ export default class VisualDebugger {
         let visualDebugger = main_ge.visualDebugger;
 
         if (target.wasValid) {
-            console.log('Testing line:', visualDebugger.testingLine, target.timeElapsedMs, target);
+            let elapsedMs = target.timeElapsedMs;
+            let range = getResultRange(visualDebugger.testingResults);
+            let value = elapsedMs - range.max.ms;
+
+            console.log('Testing line:', visualDebugger.testingLine, elapsedMs, value, range);
+
             let marker = document.createElement('div');
             marker.setAttribute('class', 'ge_assing_marker');
-            marker.innerHTML = target.timeElapsedMs.toString();
+            marker.innerHTML = elapsedMs.toFixed(2) + ' (<span class="' + (value < 0. ? 'ge_assing_marker_faster' : 'ge_assing_marker_slower') + '">' + value.toFixed(2) + '</span>)';
             cm.setGutterMarker( visualDebugger.testingLine, 
                                 'breakpoints', 
                                 marker);

@@ -78,6 +78,20 @@ export function getShaderForTypeVarInLine(cm, sType, sVariable, nLine) {
     return frag;
 }
 
-// export function getSlower(test_results) {
-    
-// }
+export function getResultRange(test_results) {
+    let min_ms = '10000000.0';
+    let min_line = 0;
+    let max_ms = '0.0';
+    let max_line = 0;
+    for (let i in test_results) {
+        if (test_results[i].ms < min_ms) {
+            min_ms = test_results[i].ms;
+            min_line = test_results[i].line;
+        }
+        if (test_results[i].ms > max_ms) {
+            max_ms = test_results[i].ms;
+            max_line = test_results[i].line;
+        }
+    }
+    return { min:{line: min_line, ms: min_ms}, max:{line: max_line, ms: max_ms} };
+}
