@@ -1,4 +1,4 @@
-import { isCommented, isLineAfterMain, getVariableType, getShaderForTypeVarInLine, getResultRange } from '../tools/debugging';
+import { isCommented, isLineAfterMain, getVariableType, getShaderForTypeVarInLine, getResultRange, getDeltaSum, getHits } from '../tools/debugging';
 import { unfocusLine, focusLine, unfocusAll, focusAll } from '../core/Editor.js';
 
 var main_ge = {};
@@ -46,7 +46,21 @@ export default class VisualDebugger {
 
             let results = visualDebugger.testingResults;
             let range = getResultRange(results);
-            console.log('Test DONE',range,results);
+            let sum = getDeltaSum(results);
+            let hits = getHits(results)
+
+            console.log('Test: ',range.max.ms+'ms', results);
+            cm.clearGutter('breakpoints');
+            for (let i in results) {
+                if (results[i].delta > 0.) {
+                    let val = (results[i].delta/sum)*100;
+                    let marker_html = val.toFixed(0)+'%';
+                    if ( val > (100.0/hits) ) {
+                        marker_html = '<span class="ge_assing_marker_slower">'+marker_html+'</span>';
+                    }
+                    cm.setGutterMarker(results[i].line, 'breakpoints', makeMarker(marker_html));
+                }
+            }
             return;
         }
 
@@ -97,12 +111,9 @@ export default class VisualDebugger {
             // console.log('Testing line:', visualDebugger.testingLine, elapsedMs, delta, range);
 
             // Create gutter marker
-            let marker = document.createElement('div');
-            marker.setAttribute('class', 'ge_assing_marker');
-            marker.innerHTML = elapsedMs.toFixed(2) + ' (<span class="' + (delta < 0. ? 'ge_assing_marker_faster' : 'ge_assing_marker_slower') + '">' + delta.toFixed(2) + '</span>)';
             cm.setGutterMarker( visualDebugger.testingLine, 
                                 'breakpoints', 
-                                marker);
+                                makeMarker(elapsedMs.toFixed(2)));
 
             // Test next line
             visualDebugger.testLine(visualDebugger.testingLine+1);
@@ -172,10 +183,10 @@ export default class VisualDebugger {
     }
 }
 
-function makeMarker(line, simbol) {
+function makeMarker(html,extra_class) {
     let marker = document.createElement('div');
-    marker.setAttribute('class', 'ge_assing_marker');
-    marker.innerHTML = simbol;
+    marker.setAttribute('class', 'ge_assing_marker' );
+    marker.innerHTML = html;
     return marker;
 }
 

@@ -95,3 +95,23 @@ export function getResultRange(test_results) {
     }
     return { min:{line: min_line, ms: min_ms}, max:{line: max_line, ms: max_ms} };
 }
+
+export function getDeltaSum(test_results) {
+    let total = 0.0;
+    for (let i in test_results) {
+        if (test_results[i].delta > 0) {
+            total += test_results[i].delta;
+        }
+    }
+    return total;
+}
+
+export function getHits(test_results) {
+    let total = 0;
+    for (let i in test_results) {
+        if (test_results[i].delta > 0) {
+            total++;
+        }
+    }
+    return total;
+}
