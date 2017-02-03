@@ -6,6 +6,7 @@ import MenuItem from '../ui/MenuItem';
 import { saveAs } from '../vendor/FileSaver.min.js';
 
 var CONTROLS_CLASSNAME = 'ge_control';
+var CONTROLS_PANEL_CLASSNAME = 'ge_control_panel';
 
 export default class Shader {
     constructor (main) {
@@ -41,9 +42,12 @@ export default class Shader {
         })
 
         // CONTROLS
+        this.controls_container = document.createElement('ul');
+        this.controls_container.className = CONTROLS_CLASSNAME;
         this.control_pannel = document.createElement('ul');
-        this.control_pannel.className = CONTROLS_CLASSNAME;
-        this.el.appendChild(this.control_pannel);
+        this.control_pannel.className = CONTROLS_PANEL_CLASSNAME;
+        this.controls_container.appendChild(this.control_pannel);
+        this.el.appendChild(this.controls_container);
         this.controls = {};
         // play/stop
         this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">pause</i>', (event) => {

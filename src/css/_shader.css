@@ -16,14 +16,30 @@
 }
 
 .ge_control {
-	padding: 8px;
-  border-radius: 4px;
-	text-align: center;
-	position: absolute;
-    bottom: 16px;
-    left: 16px;
-    //right: 0px;
-    width: 120px;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    /*background-color: rgba(0,0,0,.5);*/
+
+    opacity: 1;
+    -webkit-transition: opacity .3s;
+    -moz-transition: opacity .3s;
+    transition: opacity .3s;
+    z-index: var(--z-shader);
+}
+
+.ge_control_panel {
+    padding: 8px;
+    border-radius: 4px;
+    text-align: center;
+    position: absolute;
+    bottom: 0px;
+    /*bottom: 16px;*/
+    /*left: 16px;*/
+    /*width: 120px;*/
+    left: 50%;
+    transform: translate(-50%, 0);
     margin: auto;
     background-color: rgba(0,0,0,.5);
 
@@ -33,6 +49,8 @@
     transition: opacity .3s;
     z-index: var(--z-shader);
 }
+
+
 
 .ge_contol li {
   margin: 0;
