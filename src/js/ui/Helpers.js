@@ -6,8 +6,6 @@ import FloatPicker from './pickers/FloatPicker';
 import Color from './pickers/types/Color';
 
 import Modal from './modals/Modal';
-import { isLineAfterMain, getVariableType, getShaderForTypeVarInLine } from '../tools/debugging.js';
-import { unfocusLine, focusLine, unfocusAll, focusAll } from '../core/Editor.js';
 
 // Return all pattern matches with captured groups
 RegExp.prototype.execAll = function(string) {
@@ -48,21 +46,10 @@ export default class Helpers {
         wrapper.addEventListener('contextmenu', (event) => {
             let cursor = this.main.editor.getCursor(true);
             let token = this.main.editor.getTokenAt(cursor);
-            focusAll(this.main.editor);
-            this.main.debugging = false;
-
-            if (token.type === 'variable' && isLineAfterMain(main.editor, cursor.line)) {
-                var type = getVariableType(main.editor, token.string);
-                if (type !== 'none') {
-                    event.preventDefault();
-                    main.shader.canvas.load(getShaderForTypeVarInLine(main.editor, type, token.string, cursor.line));
-                    unfocusAll(this.main.editor);
-                    focusLine(this.main.editor, cursor.line);
-                    this.main.debugging = true;
-                }
+            if (token.type === 'variable') {
+                this.main.visualDebugger.debug(token.string, cursor.line);
             } else {
-                let frag = main.options.frag_header + main.editor.getValue() + main.options.frag_footer;
-                main.shader.canvas.load(frag);
+                this.main.update();
             }
         });
 
