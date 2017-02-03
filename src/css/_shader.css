@@ -20,7 +20,6 @@
     position: absolute;
     width: 100%;
     bottom: 0px;
-    /*background-color: rgba(0,0,0,.5);*/
 
     opacity: 1;
     -webkit-transition: opacity .3s;
@@ -35,9 +34,6 @@
     text-align: center;
     position: absolute;
     bottom: 0px;
-    /*bottom: 16px;*/
-    /*left: 16px;*/
-    /*width: 120px;*/
     left: 50%;
     transform: translate(-50%, 0);
     margin: auto;
