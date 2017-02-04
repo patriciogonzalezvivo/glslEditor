@@ -48,6 +48,7 @@ void main() {
 
 export default class GlslEditor {
     constructor (selector, options) {
+        this.createFontLink();
         subscribeMixin(this);
 
         if (typeof selector === 'object' && selector.nodeType && selector.nodeType === 1) {
@@ -324,6 +325,17 @@ export default class GlslEditor {
             focusAll(this.editor);
         }
         this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+    }
+
+    createFontLink() {
+        var head  = document.getElementsByTagName('head')[0];
+        var link = document.createElement( "link" );
+        link.href = "https://fonts.googleapis.com/icon?family=Material+Icons";
+        link.type = "text/css";
+        link.rel = "stylesheet";
+        link.media = "screen,print";
+        head.appendChild(link);
+        document.getElementsByTagName( "head" )[0].appendChild( link );
     }
 
     togglePresentationWindow(flag) {
