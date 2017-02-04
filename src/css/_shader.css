@@ -39,7 +39,7 @@
     margin: auto;
     width: 120px;
     background-color: rgba(0,0,0,.5);
-
+    font-size: 18px !important;
     opacity: 1;
     -webkit-transition: opacity .3s;
     -moz-transition: opacity .3s;
