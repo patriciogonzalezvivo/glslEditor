@@ -107,6 +107,9 @@ export default class VisualDebugger {
             let elapsedMs = target.timeElapsedMs;
             let range = getResultRange(visualDebugger.testingResults);
             let delta = elapsedMs - range.max.ms;
+            if (visualDebugger.testingResults.length === 0) {
+                delta = 0.0;
+            }
             visualDebugger.testingResults.push({line:visualDebugger.testingLine, ms:target.timeElapsedMs, delta:delta});
             // console.log('Testing line:', visualDebugger.testingLine, elapsedMs, delta, range);
 
