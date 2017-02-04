@@ -51,22 +51,22 @@ export default class Shader {
         this.controls = {};
         // play/stop
         // this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">pause</i>', (event) => {
-        this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '&#9616;&nbsp;&#9612;', (event) => {
+        this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">pause</i>', (event) => {
             event.stopPropagation();
             event.preventDefault();
             if (glslcanvas.paused) {
                 glslcanvas.play();
                 // this.controls.playPause.name = '<i class="material-icons">pause</i>';//'Pause';
-                this.controls.playPause.name = '&#9616;&nbsp;&#9612;';//'Pause';
+                this.controls.playPause.name = '<i class="material-icons">pause</i>';//'Pause';
             } else {
                 glslcanvas.pause();
-                this.controls.playPause.name = '&nbsp;&#9654;&nbsp;';//'Play';
+                this.controls.playPause.name = '<i class="material-icons">play_arrow</i>';//'Play';
             }
         });
         // rec
         this.isCapturing = false;
         // let rec = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">fiber_manual_record</i>', (event) => {
-        let rec = new MenuItem(this.control_pannel, 'ge_control_element', '&#11044;', (event) => {
+        let rec = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">&#xE061;</i>', (event) => {
             event.stopPropagation();
             event.preventDefault();
             if (this.isCapturing) {
@@ -77,11 +77,10 @@ export default class Shader {
         });
         this.controls.rec = rec;
         this.controls.rec.button.style.color = 'red';
-        this.controls.rec.button.style.transform = 'translate(0px,-2px)';
 
         // present mode (only if there is a presentation.html file to point to)
         // this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">open_in_new</i>', (event) => {
-        this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
+        this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">open_in_new</i>', (event) => {
             event.stopPropagation();
             event.preventDefault();
             if (main.pWindowOpen) {
@@ -90,8 +89,6 @@ export default class Shader {
                 main.togglePresentationWindow(true);
             }
         });
-        this.controls.presentationMode.button.style.fontSize = '24px';
-        this.controls.presentationMode.button.style.transform = 'translate(0px,-2px)';
 
         this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
         this.el_control.addEventListener('mouseenter', (event) => { this.showControls(); });
@@ -168,9 +165,7 @@ export default class Shader {
             this.isCapturing = true;
             this.controls.rec.button.style.color = 'white';
             // this.controls.rec.name = '<i class="material-icons">stop</i>';
-            this.controls.rec.name = '&#9632;';
-            this.controls.rec.button.style.transform = 'translate(0px,2px)';
-            this.controls.rec.button.style.fontSize = '28px';
+            this.controls.rec.name = '<i class="material-icons">&#xE061;</i>';
         }
     }
 
@@ -179,9 +174,7 @@ export default class Shader {
             this.isCapturing = false;
             this.controls.rec.button.style.color = 'red';
             // this.controls.rec.name = '<i class="material-icons">fiber_manual_record</i>';
-            this.controls.rec.name = '&#11044;';
-            this.controls.rec.button.style.fontSize = '14px';
-            this.controls.rec.button.style.transform = 'translate(0px,-2px)';
+            this.controls.rec.name = '<i class="material-icons">stop</i>';
             this.media_capture.stopVideoCapture().then((video) => {
                 saveAs(video.blob, `${+new Date()}.webm`);
             });
