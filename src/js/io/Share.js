@@ -15,7 +15,7 @@ export function saveOnServer (ge, callback) {
     }
 
     // STORE A COPY on SERVER
-    let url = 'http://thebookofshaders.com:8080/';
+    let url = 'https://thebookofshaders.com:8080/';
     // let url = 'http://localhost:8080/';
     let data = new FormData();
     data.append('code', content);
