@@ -13,7 +13,7 @@
 
 .ge_menu {
     display: inline-block;
-    margin: 16px 24px 16px 16px;
+    margin: 16px 32px 16px 16px;
     letter-spacing: 0.2em;
     font-size: 14px;
 }
@@ -21,6 +21,8 @@
 .ge_menu .material-icons {
   font-size: 18px;
   vertical-align: bottom;
+  display: inline-block;
+  margin-right: 4px;
 }
 
 .ge_menu--hidden {
@@ -38,17 +40,17 @@
     color: inherit;
     outline: none;
     text-align: left;
-    letter-spacing: 0.1em !important;
+    letter-spacing: 0.05em !important;
 }
 
 .ge_menu_highlight {
   width: 24px;
-  color: var(--ui-highlight-color);
+  color: #FFFFFF;
 }
 
 .ge_menu_disabled {
   width: 24px;
-  color: #607D8B;
+  color: #777777;
 }
 
 .ge_menu_button:hover {

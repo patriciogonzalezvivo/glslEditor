@@ -27,23 +27,10 @@ export default class Menu {
             this.fileInput.click();
         });
 
-        // AUTOUPDATE
-        this.menus.autoupdate = new MenuItem(this.el, 'ge_menu', ' <span class="ge_menu_highlight"><i class="material-icons">autorenew</i></span> Auto Update', (event) => {
-            if (main.autoupdate) {
-                main.autoupdate = false;
-                this.menus.autoupdate.name = '<span class="ge_menu_disabled"><i class="material-icons">autorenew</i></span> Auto Update';
-                // this.menus.autoupdate.button.style.color = 'gray';
-            } else {
-                main.autoupdate = true;
-                main.update();
-                this.menus.autoupdate.name = ' <span class="ge_menu_highlight"><i class="material-icons">autorenew</i></span> Auto Update';
-                // this.menus.autoupdate.button.style.color = 'white';
-            }
-        });
         // this.menus.autoupdate.button.style.color = main.autoupdate ? 'white' : 'gray';
 
         // TEST
-        this.menus.test = new MenuItem(this.el, 'ge_menu', '⟐ Test', (event) => {
+        this.menus.test = new MenuItem(this.el, 'ge_menu', '<i class="material-icons">timeline</i> Test', (event) => {
             main.visualDebugger.check();
         });
 
@@ -56,6 +43,21 @@ export default class Menu {
             let bbox = this.menus.share.el.getBoundingClientRect();
             this.exportModal.presentModal(bbox.left - 5, bbox.top + bbox.height + 5);
         });
+
+
+          // AUTOUPDATE
+          this.menus.autoupdate = new MenuItem(this.el, 'ge_menu', ' <i class="material-icons">autorenew</i> Update: ON', (event) => {
+              if (main.autoupdate) {
+                  main.autoupdate = false;
+                  this.menus.autoupdate.name = '<i class="material-icons">autorenew</i> Update: OFF';
+                  // this.menus.autoupdate.button.style.color = 'gray';
+              } else {
+                  main.autoupdate = true;
+                  main.update();
+                  this.menus.autoupdate.name = '<i class="material-icons">autorenew</i> Update: ON';
+                  // this.menus.autoupdate.button.style.color = 'white';
+              }
+          });
 
         main.container.appendChild(this.el);
     }
