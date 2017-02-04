@@ -6,7 +6,8 @@ export default class ExportIcon {
 
         this.el = document.createElement('div');
         this.el.setAttribute('class', 'ge_export_icon');
-        this.el.innerHTML = '<i class="material-icons">more_vert</i>';
+        this.el.innerHTML = '△';
+        // this.el.innerHTML = '<i class="material-icons">more_vert</i>';
         this.el.addEventListener('click', (event) => {
             if (main.change || !this.modal) {
                 this.modal = new ExportModal('ge_export', { main: main });
