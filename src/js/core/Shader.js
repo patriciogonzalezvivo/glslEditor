@@ -6,6 +6,7 @@ import MenuItem from '../ui/MenuItem';
 import { saveAs } from '../vendor/FileSaver.min.js';
 
 var CONTROLS_CLASSNAME = 'ge_control';
+var CONTROLS_PANEL_CLASSNAME = 'ge_control_panel';
 
 export default class Shader {
     constructor (main) {
@@ -41,16 +42,21 @@ export default class Shader {
         })
 
         // CONTROLS
+        this.controls_container = document.createElement('ul');
+        this.controls_container.className = CONTROLS_CLASSNAME;
         this.control_pannel = document.createElement('ul');
-        this.control_pannel.className = CONTROLS_CLASSNAME;
-        this.el.appendChild(this.control_pannel);
+        this.control_pannel.className = CONTROLS_PANEL_CLASSNAME;
+        this.controls_container.appendChild(this.control_pannel);
+        this.el.appendChild(this.controls_container);
         this.controls = {};
         // play/stop
+        // this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">pause</i>', (event) => {
         this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '&#9616;&nbsp;&#9612;', (event) => {
             event.stopPropagation();
             event.preventDefault();
             if (glslcanvas.paused) {
                 glslcanvas.play();
+                // this.controls.playPause.name = '<i class="material-icons">pause</i>';//'Pause';
                 this.controls.playPause.name = '&#9616;&nbsp;&#9612;';//'Pause';
             } else {
                 glslcanvas.pause();
@@ -59,6 +65,7 @@ export default class Shader {
         });
         // rec
         this.isCapturing = false;
+        // let rec = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">fiber_manual_record</i>', (event) => {
         let rec = new MenuItem(this.control_pannel, 'ge_control_element', '&#11044;', (event) => {
             event.stopPropagation();
             event.preventDefault();
@@ -71,7 +78,9 @@ export default class Shader {
         this.controls.rec = rec;
         this.controls.rec.button.style.color = 'red';
         this.controls.rec.button.style.transform = 'translate(0px,-2px)';
+
         // present mode (only if there is a presentation.html file to point to)
+        // this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">open_in_new</i>', (event) => {
         this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '⬔', (event) => {
             event.stopPropagation();
             event.preventDefault();
@@ -81,7 +90,8 @@ export default class Shader {
                 main.togglePresentationWindow(true);
             }
         });
-        this.controls.presentationMode.button.style.fontSize = '22px';
+        this.controls.presentationMode.button.style.fontSize = '24px';
+        this.controls.presentationMode.button.style.transform = 'translate(0px,-2px)';
 
         this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
         this.el_control.addEventListener('mouseenter', (event) => { this.showControls(); });
@@ -156,8 +166,9 @@ export default class Shader {
         this.requestRedraw();
         if (this.media_capture.startVideoCapture()) {
             this.isCapturing = true;
-            this.controls.rec.name = '&#9632;';
             this.controls.rec.button.style.color = 'white';
+            // this.controls.rec.name = '<i class="material-icons">stop</i>';
+            this.controls.rec.name = '&#9632;';
             this.controls.rec.button.style.transform = 'translate(0px,2px)';
             this.controls.rec.button.style.fontSize = '28px';
         }
@@ -166,8 +177,9 @@ export default class Shader {
     stopVideoCapture () {
         if (this.isCapturing) {
             this.isCapturing = false;
-            this.controls.rec.name = '&#11044;';
             this.controls.rec.button.style.color = 'red';
+            // this.controls.rec.name = '<i class="material-icons">fiber_manual_record</i>';
+            this.controls.rec.name = '&#11044;';
             this.controls.rec.button.style.fontSize = '14px';
             this.controls.rec.button.style.transform = 'translate(0px,-2px)';
             this.media_capture.stopVideoCapture().then((video) => {
@@ -197,17 +209,16 @@ export default class Shader {
         this.presentationWindow.document.body.appendChild(this.canvas.canvas);
         var d = this.presentationWindow.document;
         var div = d.createElement("div");
-        div.appendChild(d.createTextNode("Projector mode | "));
+        div.appendChild(d.createTextNode("Projector mode"));
         var span = this.presentationWindow.document.createElement("span");
         div.appendChild(span);
-        span.appendChild(d.createTextNode("If the canvas doesn't update, drag this window and reveal the editor"));
+        span.appendChild(d.createTextNode(" - If the canvas doesn't update, drag this window and reveal the editor"));
         d.body.appendChild(div);
-
 
         d.title = "GLSL Editor"
         d.body.style.padding = "0";
         d.body.style.margin = "0";
-  			d.body.style.background = "#272822";
+  			d.body.style.background = "#171e22";
   			d.body.style.overflow = "hidden";
 
         div.style.position = "absolute";

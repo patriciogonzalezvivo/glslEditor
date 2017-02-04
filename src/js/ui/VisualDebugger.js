@@ -1,4 +1,5 @@
-import { isCommented, getVariableType, getShaderForTypeVarInLine } from '../tools/debugging';
+import { isCommented, isLineAfterMain, getVariableType, getShaderForTypeVarInLine, getResultRange, getDeltaSum, getHits } from '../tools/debugging';
+import { unfocusLine, focusLine, unfocusAll, focusAll } from '../core/Editor.js';
 
 var main_ge = {};
 var frames_counter = 0;
@@ -12,26 +13,23 @@ export default class VisualDebugger {
         main_ge = main;
 
         this.testing = false;
+        this.testingFrag = "";
         this.testingLine = 0;
-        this.testingLoaded = false;
-        main.shader.canvas.on('load', this.onLoad);
-        main.shader.canvas.on('render', this.onRender);
+        this.testingResults = [];
     }
 
     check() {
+        // Clean previus records
+        this.testingResults = [];
+
         let cm = this.main.editor;
         let nLines = cm.getDoc().size;
-        let shader = this.main.shader.canvas;
-        let total_delta = shader.timeDelta;
-        console.log('check: ', total_delta);
 
-        let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)\\s*', 'i');
         let mainStartsAt = 0;
         for (let i = 0; i < nLines; i++) {
-            // Do not start until being inside the main function
-            let voidMatch = voidRE.exec(cm.getLine(i));
-            if (voidMatch) {
+            if (isLineAfterMain(cm, i)) {
                 mainStartsAt = i;
+                break;
             }
         }
         this.testLine(mainStartsAt);
@@ -39,76 +37,107 @@ export default class VisualDebugger {
 
     testLine(nLine) {
         let cm = main_ge.editor;
-        let shader = main_ge.shader.canvas;
         let visualDebugger = main_ge.visualDebugger;
-        let nLines = cm.getDoc().size;
-        if (nLine >= nLines) {
-            console.log('End of file');
+        
+        // If is done testing...
+        if (nLine >= cm.getDoc().size) {
             visualDebugger.testingLine = 0;
             visualDebugger.testing = false;
-            let frag = main_ge.options.frag_header + cm.getValue() + main_ge.options.frag_footer;
-            shader.load(frag);
-            shader.forceRender = true;
+
+            let results = visualDebugger.testingResults;
+            let range = getResultRange(results);
+            let sum = getDeltaSum(results);
+            let hits = getHits(results)
+
+            console.log('Test: ',range.max.ms+'ms', results);
+            cm.clearGutter('breakpoints');
+            for (let i in results) {
+                if (results[i].delta > 0.) {
+                    let val = (results[i].delta/sum)*100;
+                    let marker_html = val.toFixed(0)+'%';
+                    if ( val > (100.0/hits) ) {
+                        marker_html = '<span class="ge_assing_marker_slower">'+marker_html+'</span>';
+                    }
+                    cm.setGutterMarker(results[i].line, 'breakpoints', makeMarker(marker_html));
+                }
+            }
             return;
         }
 
-        let variableRE = new RegExp('\\s*[float|vec2|vec3|vec4]?\\s+([\\w|\\_]*)[\\.\\w]*?\\s+[\\+|\\-|\\\\|\\*]?\\=', 'i');
-        let match = variableRE.exec(cm.getLine(nLine));
-        if (match) {
-            let variable = match[1];
-            let type = getVariableType(cm, variable)
-            if (type === 'none'){
+        if (isLineAfterMain(cm, nLine)) {
+            // If the line is inside the main function
+            let shader = main_ge.shader.canvas;
+
+            // Check for an active variable (a variable that have been declare or modify in this line)
+            let variableRE = new RegExp('\\s*[float|vec2|vec3|vec4]?\\s+([\\w|\\_]*)[\\.\\w]*?\\s+[\\+|\\-|\\\\|\\*]?\\=', 'i');
+            let match = variableRE.exec(cm.getLine(nLine));
+            if (match) {
+                // if there is an active variable, get what type is
+                let variable = match[1];
+                let type = getVariableType(cm, variable)
+                if (type === 'none') {
+                    // If it fails on finding the type keep going with the test on another line
+                    visualDebugger.testLine(nLine+1);
+                    return;
+                }
+
+                // Prepare 
+                visualDebugger.testing = true;
+                visualDebugger.testingLine = nLine;
+                visualDebugger.testingFrag = getShaderForTypeVarInLine(cm, type, variable, nLine);
+
+                shader.test(this.onTest,  visualDebugger.testingFrag);
+            } else {
                 visualDebugger.testLine(nLine+1);
-                return;
             }
-
-            let frag = getShaderForTypeVarInLine(cm, type, variable, nLine)+'\n\/\/u_time;\n\n';
-            visualDebugger.testing = true;
-            visualDebugger.testingLine = nLine;
-            visualDebugger.testingLoaded = false;
-            shader.load(frag);
-            shader.forceRender = true;
-            // console.log('Loading something to test', type, variable);
         } else {
+            // If the line is not inside main function, test the next one...
             visualDebugger.testLine(nLine+1);
-        }
+        } 
     }
 
-    onLoad() {
-        if (main_ge.visualDebugger.testing) {
-            frames_counter = 0;
-            main_ge.visualDebugger.testingLoaded = true;
-        }
-    }
-
-    onRender() {
-        let shader = main_ge.shader.canvas;
+    onTest (target) {
         let cm = main_ge.editor;
+        let shader = main_ge.shader.canvas;
         let visualDebugger = main_ge.visualDebugger;
 
-        if (visualDebugger.testing && visualDebugger.testingLoaded) {
-            if (shader.isValid) {
-                frames_counter++;
+        // If the test shader compiled...
+        if (target.wasValid) {
+            // get data, process and store.
+            let elapsedMs = target.timeElapsedMs;
+            let range = getResultRange(visualDebugger.testingResults);
+            let delta = elapsedMs - range.max.ms;
+            visualDebugger.testingResults.push({line:visualDebugger.testingLine, ms:target.timeElapsedMs, delta:delta});
+            // console.log('Testing line:', visualDebugger.testingLine, elapsedMs, delta, range);
 
-                if (frames_counter > frames_max) {
-                    console.log('Testing line:', visualDebugger.testingLine, shader.timeDelta);
-                    let marker = document.createElement('div');
-                    marker.setAttribute('class', 'ge_assing_marker');
-                    marker.innerHTML = shader.timeDelta.toString();
-                    cm.setGutterMarker( visualDebugger.testingLine, 
-                                        'breakpoints', 
-                                        marker);
+            // Create gutter marker
+            cm.setGutterMarker( visualDebugger.testingLine, 
+                                'breakpoints', 
+                                makeMarker(elapsedMs.toFixed(2)));
 
-                    visualDebugger.testing = false;
-                    visualDebugger.testingLoaded= false;
-                    frames_counter = 0;
-                    visualDebugger.testLine(visualDebugger.testingLine+1);
-                }
-            } else {
-                if (main_ge.errorsDisplay) {
-                    main_ge.errorsDisplay.clean();
-                }
+            // Test next line
+            visualDebugger.testLine(visualDebugger.testingLine+1);
+        } else {
+            // Test next line
+            visualDebugger.testLine(visualDebugger.testingLine+1);
+        }
+    }
+
+    debug (variable, nLine) {
+        focusAll(this.main.editor);
+        this.main.debugging = false;
+
+        if (isLineAfterMain(this.main.editor, nLine)) {
+            var type = getVariableType(this.main.editor, variable);
+            if (type !== 'none') {
+                event.preventDefault();
+                this.main.shader.canvas.load(getShaderForTypeVarInLine(this.main.editor, type, variable, nLine));
+                unfocusAll(this.main.editor);
+                focusLine(this.main.editor, nLine);
+                this.main.debugging = true;
             }
+        } else {
+            this.main.update();
         }
     }
 
@@ -154,10 +183,10 @@ export default class VisualDebugger {
     }
 }
 
-function makeMarker(line, simbol) {
+function makeMarker(html,extra_class) {
     let marker = document.createElement('div');
-    marker.setAttribute('class', 'ge_assing_marker');
-    marker.innerHTML = simbol;
+    marker.setAttribute('class', 'ge_assing_marker' );
+    marker.innerHTML = html;
     return marker;
 }
 

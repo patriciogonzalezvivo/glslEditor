@@ -7,14 +7,27 @@ export function isCommented(cm, nLine, match) {
     return false;
 }
 
+export function isLineAfterMain(cm, nLine) {
+    let totalLines = cm.getDoc().size;
+    let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)', 'i');
+    for (let i = 0; i < nLine && i < totalLines; i++) {
+        // Do not start until being inside the main function
+        let voidMatch = voidRE.exec(cm.getLine(i));
+        if (voidMatch) {
+            return true;
+        }
+    }
+    return false;
+}
+
 export function getVariableType(cm, sVariable) {
     let nLines = cm.getDoc().size;
 
     // Show line where the value of the variable is been asigned
     let uniformRE = new RegExp('\\s*uniform\\s+(float|vec2|vec3|vec4)\\s+' + sVariable + '\\s*;');
-    let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)\\s*\\{', 'i');
+    let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)', 'i');
     let voidIN = false;
-    let constructRE = new RegExp('(float|vec\\d)\\s+(' + sVariable + ')\\s+', 'i');
+    let constructRE = new RegExp('(float|vec\\d)\\s+(' + sVariable + ')\\s*[;]?', 'i');
     for (let i = 0; i < nLines; i++) {
         if (!voidIN) {
             // Do not start until being inside the main function
@@ -35,7 +48,6 @@ export function getVariableType(cm, sVariable) {
             }
         }
     }
-
     return 'none';
 }
 
@@ -64,4 +76,42 @@ export function getShaderForTypeVarInLine(cm, sType, sVariable, nLine) {
     frag += ';\n}\n';
 
     return frag;
+}
+
+export function getResultRange(test_results) {
+    let min_ms = '10000000.0';
+    let min_line = 0;
+    let max_ms = '0.0';
+    let max_line = 0;
+    for (let i in test_results) {
+        if (test_results[i].ms < min_ms) {
+            min_ms = test_results[i].ms;
+            min_line = test_results[i].line;
+        }
+        if (test_results[i].ms > max_ms) {
+            max_ms = test_results[i].ms;
+            max_line = test_results[i].line;
+        }
+    }
+    return { min:{line: min_line, ms: min_ms}, max:{line: max_line, ms: max_ms} };
+}
+
+export function getDeltaSum(test_results) {
+    let total = 0.0;
+    for (let i in test_results) {
+        if (test_results[i].delta > 0) {
+            total += test_results[i].delta;
+        }
+    }
+    return total;
+}
+
+export function getHits(test_results) {
+    let total = 0;
+    for (let i in test_results) {
+        if (test_results[i].delta > 0) {
+            total++;
+        }
+    }
+    return total;
 }

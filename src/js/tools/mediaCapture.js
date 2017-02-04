@@ -1,4 +1,7 @@
-/* global MediaRecorder */
+/* global MediaRecorder 
+Author: Brett Camper (@professorlemeza)
+URL: https://github.com/tangrams/tangram/blob/master/src/utils/media_capture.js
+*/
 import {createObjectURL} from './urls';
 
 export default class MediaCapture {

@@ -1,17 +1,24 @@
 .ge_assing_marker {
     margin-left: -15px;
 	color: var(--ui-highlight-color);
+    font-size: 10px;
+    /*transform: translate(0,50%);*/
 }
 
-.ge_assing_marker_on {
-    margin-left: -15px;
+.ge_assing_marker_faster {
+    color: green;
+}
+
+.ge_assing_marker_slower {
     color: red;
 }
 
-.ge_assing_marker:hover {
-	color: red;
-}
+/*.ge_assing_marker:hover {
+    color: red;
+}*/
 
-.cm-searching {
-	background: rgba(133, 204, 196,0.3);
-}
+/*.ge_assing_marker_on {
+    margin-left: -15px;
+    color: red;
+}*/
+

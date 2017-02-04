@@ -16,20 +16,42 @@
 }
 
 .ge_control {
-	margin: 0px;
-	padding: 5px;
-	text-align: center;
-	position: absolute;
-    bottom: 0px;
-    left: 0px;
+    text-align: center;
+    position: absolute;
     width: 100%;
+    bottom: 0px;
+
+    opacity: 1;
+    -webkit-transition: opacity .3s;
+    -moz-transition: opacity .3s;
+    transition: opacity .3s;
+    z-index: var(--z-shader);
+}
+
+.ge_control_panel {
+    padding: 8px;
+    border-radius: 4px;
+    text-align: center;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin: auto;
     background-color: rgba(0,0,0,.5);
 
     opacity: 1;
-	-webkit-transition: opacity .5s;
-	-moz-transition: opacity .5s;
-	transition: opacity .5s;
+    -webkit-transition: opacity .3s;
+    -moz-transition: opacity .3s;
+    transition: opacity .3s;
     z-index: var(--z-shader);
+}
+
+
+
+.ge_contol li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 .ge_control_hidden {
@@ -48,24 +70,31 @@
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	margin-right: 20px;
 }
 
 .ge_control_element_button {
-    height: 35px;
+  display: inline-block;
+	margin: 0px 8px 0px 8px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
     background: none;
     border: none;
     padding: 0;
     font: inherit;
     color: inherit;
-    text-align: left;
-
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    overflow: hidden;
+    outline: none;
+    //border: solid 1px rgba(255, 255, 255, 0.8);
+    //border-radius: 4px;
     -moz-user-select: -moz-none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+  	-khtml-user-select: none;
+  	-webkit-user-select: none;
+  	-ms-user-select: none;
+  	user-select: none;
 }
 
 .ge_control_element_button::selection { background: transparent;color:inherit; }
