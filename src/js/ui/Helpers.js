@@ -67,6 +67,8 @@ export default class Helpers {
             let match = this.getMatch(cursor);
             let token = this.main.editor.getTokenAt(cursor);
             if (match) {
+                this.main.update();
+                
                 // Toggles the trackpad to be off if it's already present.
                 if (this.activeModal && this.activeModal.isVisible) {
                     this.activeModal.removeModal();
@@ -139,6 +141,8 @@ export default class Helpers {
                 if (this.main.visualDebugger) {
                     this.main.visualDebugger.iluminate(token.string);
                 }
+            } else {
+                this.main.update();
             }
         });
     }
