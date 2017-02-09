@@ -100,7 +100,7 @@ This is a list of all the **options** you can set up:
 Special thanks to:
 
 - [Lou Huang](@saikofish): glslEditor born from learned leassons on [TangramPlay](http://tangrams.github.io/tangram-play/). His code and wizdom is all arround this project.
-- [Brett Camper](@professorlemeza): I learn JS at his side. The media capture and texture class (on GlslCanvas) are totally his credit.
+- [Brett Camper](@professorlemeza): media capture and texture class (on GlslCanvas) are totally his credit.
 - [Jaume Sanchez Elias](@thespite): thanks for the big help with the profiler tester.
 - [Kenichi Yoneda (Kynd)](@kynd.info): helped with the UI and presentation mode
 - [Thomas Hooper](@tdhooper): performance improvements
