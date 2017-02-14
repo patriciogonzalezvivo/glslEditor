@@ -7,18 +7,29 @@
 
 .ge_assing_marker_faster {
     color: green;
+    background-color: green;
 }
 
 .ge_assing_marker_slower {
     color: red;
+    background-color: red;
 }
 
-/*.ge_assing_marker:hover {
-    color: red;
-}*/
+.ge_assing_marker_pct {
+    position: absolute;
+    top: 0px;
+    left: -17px;
+    height: 100%;
+    z-index: -1;
+    background-color: #555;
+}
 
-/*.ge_assing_marker_on {
+.ge_assing_marker:hover {
+    color: red;
+}
+
+.ge_assing_marker_on {
     margin-left: -15px;
     color: red;
-}*/
+}
 

@@ -324,6 +324,10 @@ export default class GlslEditor {
             this.debugging = false;
             focusAll(this.editor);
         }
+
+        if (this.visualDebugger.testingResults.length) {
+            this.visualDebugger.clean();
+        }
         this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
     }
 

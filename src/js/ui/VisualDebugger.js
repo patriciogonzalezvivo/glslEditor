@@ -8,14 +8,26 @@ var frames_max = 100;
 export default class VisualDebugger {
     constructor (main) {
         this.main = main;
-        this.debbuging = false;
-        this.active = null;
+        this.breakpoint = null;
         main_ge = main;
 
         this.testing = false;
         this.testingFrag = "";
         this.testingLine = 0;
         this.testingResults = [];
+
+        this.main.editor.on('gutterClick', (cm, n) => {
+            let info = cm.lineInfo(n);
+            if (info && info.gutterMarkers && info.gutterMarkers.breakpoints) {
+                // Check for an active variable (a variable that have been declare or modify in this line)
+                let variableRE = new RegExp('\\s*[float|vec2|vec3|vec4]?\\s+([\\w|\\_]*)[\\.\\w]*?\\s+[\\+|\\-|\\\\|\\*]?\\=', 'i');
+                let match = variableRE.exec(info.text);
+                if (match) {
+                    this.debug(match[1], info.line);
+                    this.breakpoint = info.line;
+                }
+            }
+        });
     }
 
     check() {
@@ -52,14 +64,17 @@ export default class VisualDebugger {
             console.log('Test: ',range.max.ms+'ms', results);
             cm.clearGutter('breakpoints');
             for (let i in results) {
+                let val = (results[i].delta/sum)*30;
+                let marker_html = '<div>' +results[i].ms.toFixed(2);
                 if (results[i].delta > 0.) {
-                    let val = (results[i].delta/sum)*100;
-                    let marker_html = val.toFixed(0)+'%';
+                    marker_html += '<span class="ge_assing_marker_pct ';
                     if ( val > (100.0/hits) ) {
-                        marker_html = '<span class="ge_assing_marker_slower">'+marker_html+'</span>';
+                        marker_html += 'ge_assing_marker_slower';
                     }
-                    cm.setGutterMarker(results[i].line, 'breakpoints', makeMarker(marker_html));
+                    marker_html += '" style="width: '+val.toFixed(0)+'px;"></span>'
                 }
+                
+                cm.setGutterMarker(results[i].line, 'breakpoints', makeMarker(marker_html+'</div>'));
             }
             return;
         }
@@ -145,7 +160,7 @@ export default class VisualDebugger {
     }
 
     iluminate (variable) {
-        if (this.debbuging && this.variable === this.variable) {
+        if (this.main.debbuging && this.variable === this.variable) {
             return;
         }
         // this.clean();
@@ -164,7 +179,7 @@ export default class VisualDebugger {
     }
 
     clean (event) {
-        if (event && event.target && (event.target.className === 'ge_assing_marker' || event.target.className === 'ge_assing_marker_on')) {
+        if (event && event.target && event.target.className === 'ge_assing_marker') {
             return;
         }
 
@@ -173,16 +188,11 @@ export default class VisualDebugger {
         if (this.overlay) {
             cm.removeOverlay(this.overlay, true);
         }
-        // this.variable = null;
         this.type = null;
-        if (this.debbuging) {
+        if (this.main.debbuging) {
             this.main.shader.canvas.load(this.main.options.frag_header + this.main.editor.getValue() + this.main.options.frag_footer);
         }
-        this.debbuging = false;
-        if (this.active) {
-            this.active.setAttribute('class', 'ge_assing_marker');
-        }
-        this.active = false;
+        this.main.debbuging = false;
     }
 }
 

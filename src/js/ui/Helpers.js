@@ -54,8 +54,6 @@ export default class Helpers {
         });
 
         wrapper.addEventListener('mouseup', (event) => {
-            this.main.visualDebugger.clean(event);
-
             // bail out if we were doing a selection and not a click
             if (this.main.editor.somethingSelected()) {
                 return;
@@ -67,6 +65,7 @@ export default class Helpers {
             let match = this.getMatch(cursor);
             let token = this.main.editor.getTokenAt(cursor);
             if (match) {
+                this.main.visualDebugger.clean(event);
                 this.main.update();
                 
                 // Toggles the trackpad to be off if it's already present.
@@ -141,8 +140,6 @@ export default class Helpers {
                 if (this.main.visualDebugger) {
                     this.main.visualDebugger.iluminate(token.string);
                 }
-            } else {
-                this.main.update();
             }
         });
     }
