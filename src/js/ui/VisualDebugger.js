@@ -90,7 +90,7 @@ export default class VisualDebugger {
             if (match) {
                 // if there is an active variable, get what type is
                 let variable = match[1];
-                let type = getVariableType(cm, variable)
+                let type = getVariableType(cm, variable);
                 if (type === 'none') {
                     // If it fails on finding the type keep going with the test on another line
                     visualDebugger.testLine(nLine+1);
@@ -154,6 +154,7 @@ export default class VisualDebugger {
             };
             
         } else {
+            console.log(target)
             // Test next line
             visualDebugger.testLine(visualDebugger.testingLine+1);
         }

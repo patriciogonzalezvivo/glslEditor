@@ -132,12 +132,14 @@ export default class Helpers {
                 }
             }
             else if (this.main.options.tooltips && (token.type === 'builtin' || token.type === 'variable-3')) {
+                this.main.visualDebugger.clean(event);
                 let html = '<p>Learn more about: <a href="https://thebookofshaders.com/glossary/?search=' + token.string + '" target="_blank">' + token.string + '</a></p>';
                 this.activeModal = new Modal('ge_tooltip', { innerHTML: html });
                 this.activeModal.showAt(this.main.editor);
             }
             else if (token.type === 'variable') {
                 if (this.main.visualDebugger) {
+                    this.main.visualDebugger.clean(event);
                     this.main.visualDebugger.iluminate(token.string);
                 }
             }
