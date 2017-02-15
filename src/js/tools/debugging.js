@@ -96,6 +96,17 @@ export function getResultRange(test_results) {
     return { min:{line: min_line, ms: min_ms}, max:{line: max_line, ms: max_ms} };
 }
 
+export function getMedian(values) {
+    values.sort( function(a,b) {return a - b;} );
+
+    var half = Math.floor(values.length/2);
+
+    if(values.length % 2)
+        return values[half];
+    else
+        return (values[half-1] + values[half]) / 2.0;
+}
+
 export function getDeltaSum(test_results) {
     let total = 0.0;
     for (let i in test_results) {

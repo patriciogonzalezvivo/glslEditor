@@ -1,9 +1,8 @@
-import { isCommented, isLineAfterMain, getVariableType, getShaderForTypeVarInLine, getResultRange, getDeltaSum, getHits } from '../tools/debugging';
+import { isCommented, isLineAfterMain, getVariableType, getShaderForTypeVarInLine, getResultRange, getDeltaSum, getHits, getMedian } from '../tools/debugging';
 import { unfocusLine, focusLine, unfocusAll, focusAll } from '../core/Editor.js';
 
 var main_ge = {};
-var frames_counter = 0;
-var frames_max = 100;
+var N_SAMPLES = 30;
 
 export default class VisualDebugger {
     constructor (main) {
@@ -15,6 +14,7 @@ export default class VisualDebugger {
         this.testingFrag = "";
         this.testingLine = 0;
         this.testingResults = [];
+        this.testingSamples = [];
 
         this.main.editor.on('gutterClick', (cm, n) => {
             let info = cm.lineInfo(n);
@@ -64,14 +64,15 @@ export default class VisualDebugger {
             console.log('Test: ',range.max.ms+'ms', results);
             cm.clearGutter('breakpoints');
             for (let i in results) {
-                let val = (results[i].delta/sum)*30;
+                let pct = (results[i].delta/sum)*100;
+                let size = (results[i].delta/sum)*30;
                 let marker_html = '<div>' +results[i].ms.toFixed(2);
                 if (results[i].delta > 0.) {
                     marker_html += '<span class="ge_assing_marker_pct ';
-                    if ( val > (100.0/hits) ) {
+                    if ( pct > (100.0/hits) ) {
                         marker_html += 'ge_assing_marker_slower';
                     }
-                    marker_html += '" style="width: '+val.toFixed(0)+'px;"></span>'
+                    marker_html += '" style="width: '+size.toFixed(0)+'px;" data="'+pct.toFixed(0)+'%"></span>'
                 }
                 
                 cm.setGutterMarker(results[i].line, 'breakpoints', makeMarker(marker_html+'</div>'));
@@ -100,6 +101,11 @@ export default class VisualDebugger {
                 visualDebugger.testing = true;
                 visualDebugger.testingLine = nLine;
                 visualDebugger.testingFrag = getShaderForTypeVarInLine(cm, type, variable, nLine);
+                visualDebugger.testingSamples = [];
+
+                unfocusAll(cm);
+                focusLine(cm, nLine);
+                main_ge.debugging = true;
 
                 shader.test(this.onTest,  visualDebugger.testingFrag);
             } else {
@@ -120,21 +126,33 @@ export default class VisualDebugger {
         if (target.wasValid) {
             // get data, process and store.
             let elapsedMs = target.timeElapsedMs;
-            let range = getResultRange(visualDebugger.testingResults);
-            let delta = elapsedMs - range.max.ms;
-            if (visualDebugger.testingResults.length === 0) {
-                delta = 0.0;
-            }
-            visualDebugger.testingResults.push({line:visualDebugger.testingLine, ms:target.timeElapsedMs, delta:delta});
-            // console.log('Testing line:', visualDebugger.testingLine, elapsedMs, delta, range);
 
-            // Create gutter marker
-            cm.setGutterMarker( visualDebugger.testingLine, 
-                                'breakpoints', 
-                                makeMarker(elapsedMs.toFixed(2)));
+            if (visualDebugger.testingSamples.length < N_SAMPLES-1){
+                visualDebugger.testingSamples.push(elapsedMs);
+                shader.test(visualDebugger.onTest, visualDebugger.testingFrag);
+            } else {
+                focusAll(cm);
+                main_ge.debugging = false;
+                visualDebugger.testingSamples.push(elapsedMs);
+                elapsedMs = getMedian(visualDebugger.testingSamples);
 
-            // Test next line
-            visualDebugger.testLine(visualDebugger.testingLine+1);
+                let range = getResultRange(visualDebugger.testingResults);
+                let delta = elapsedMs - range.max.ms;
+                if (visualDebugger.testingResults.length === 0) {
+                    delta = 0.0;
+                }
+                visualDebugger.testingResults.push({line:visualDebugger.testingLine, ms:target.timeElapsedMs, delta:delta});
+                // console.log('Testing line:', visualDebugger.testingLine, elapsedMs, delta, range);
+
+                // Create gutter marker
+                cm.setGutterMarker( visualDebugger.testingLine, 
+                                    'breakpoints', 
+                                    makeMarker(elapsedMs.toFixed(2)));
+
+                // Test next line
+                visualDebugger.testLine(visualDebugger.testingLine+1);
+            };
+            
         } else {
             // Test next line
             visualDebugger.testLine(visualDebugger.testingLine+1);

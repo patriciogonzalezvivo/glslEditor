@@ -10,11 +10,6 @@
     background-color: green;
 }
 
-.ge_assing_marker_slower {
-    color: red;
-    background-color: red;
-}
-
 .ge_assing_marker_pct {
     position: absolute;
     top: 0px;
@@ -24,12 +19,16 @@
     background-color: #555;
 }
 
+.ge_assing_marker_slower {
+    background-color: red;
+}
+
 .ge_assing_marker:hover {
-    color: red;
+    color: white;
 }
 
 .ge_assing_marker_on {
     margin-left: -15px;
-    color: red;
+    color: white;
 }
 
