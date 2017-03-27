@@ -70,7 +70,11 @@ export default class GlslEditor {
             this.options = options;
         }
 
-        if (!this.options.imgs) {
+        if (this.options.displayMenu === undefined) {
+            this.options.displayMenu = true;
+        }
+
+        if (this.options.imgs) {
             this.options.imgs = [];
         }
 
@@ -202,12 +206,14 @@ export default class GlslEditor {
             this.new();
         }
 
-        // setup CrossStorage client
-        this.storage = new CrossStorageClient('https://openframe.io/hub.html');
-        this.storage.onConnect().then(() => {
-            console.log("Connected to OpenFrame [o]")
-        }.bind(this));
-
+        if (this.options.menu || this.options.exportIcon) {
+            // setup CrossStorage client
+            this.storage = new CrossStorageClient('https://openframe.io/hub.html');
+            this.storage.onConnect().then(() => {
+                console.log("Connected to OpenFrame [o]")
+            }.bind(this));
+        }
+        
         return this;
     }
 

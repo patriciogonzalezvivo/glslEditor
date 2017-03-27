@@ -41,67 +41,69 @@ export default class Shader {
             this.media_capture.completeScreenshot();
         })
 
-        // CONTROLS
-        this.controls_container = document.createElement('ul');
-        this.controls_container.className = CONTROLS_CLASSNAME;
-        this.control_pannel = document.createElement('ul');
-        this.control_pannel.className = CONTROLS_PANEL_CLASSNAME;
-        this.controls_container.appendChild(this.control_pannel);
-        this.el.appendChild(this.controls_container);
-        this.controls = {};
-        // play/stop
-        // this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">pause</i>', (event) => {
-        this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">pause</i>', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            if (glslcanvas.paused) {
-                glslcanvas.play();
-                // this.controls.playPause.name = '<i class="material-icons">pause</i>';//'Pause';
-                this.controls.playPause.name = '<i class="material-icons">pause</i>';//'Pause';
-            } else {
-                glslcanvas.pause();
-                this.controls.playPause.name = '<i class="material-icons">play_arrow</i>';//'Play';
-            }
-        });
-        // rec
-        this.isCapturing = false;
-        // let rec = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">fiber_manual_record</i>', (event) => {
-        let rec = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">&#xE061;</i>', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            if (this.isCapturing) {
-                this.stopVideoCapture();
-            } else {
-                this.startVideoCapture();
-            }
-        });
-        this.controls.rec = rec;
-        this.controls.rec.button.style.color = 'red';
+        if (main.options.displayMenu) {
+            // CONTROLS
+            this.controls_container = document.createElement('ul');
+            this.controls_container.className = CONTROLS_CLASSNAME;
+            this.control_pannel = document.createElement('ul');
+            this.control_pannel.className = CONTROLS_PANEL_CLASSNAME;
+            this.controls_container.appendChild(this.control_pannel);
+            this.el.appendChild(this.controls_container);
+            this.controls = {};
+            // play/stop
+            // this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">pause</i>', (event) => {
+            this.controls.playPause = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">pause</i>', (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                if (glslcanvas.paused) {
+                    glslcanvas.play();
+                    // this.controls.playPause.name = '<i class="material-icons">pause</i>';//'Pause';
+                    this.controls.playPause.name = '<i class="material-icons">pause</i>';//'Pause';
+                } else {
+                    glslcanvas.pause();
+                    this.controls.playPause.name = '<i class="material-icons">play_arrow</i>';//'Play';
+                }
+            });
+            // rec
+            this.isCapturing = false;
+            // let rec = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">fiber_manual_record</i>', (event) => {
+            let rec = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">&#xE061;</i>', (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                if (this.isCapturing) {
+                    this.stopVideoCapture();
+                } else {
+                    this.startVideoCapture();
+                }
+            });
+            this.controls.rec = rec;
+            this.controls.rec.button.style.color = 'red';
 
-        // present mode (only if there is a presentation.html file to point to)
-        // this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">open_in_new</i>', (event) => {
-        this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">open_in_new</i>', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            if (main.pWindowOpen) {
-                main.togglePresentationWindow(false);
-            } else {
-                main.togglePresentationWindow(true);
-            }
-        });
+            // present mode (only if there is a presentation.html file to point to)
+            // this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">open_in_new</i>', (event) => {
+            this.controls.presentationMode = new MenuItem(this.control_pannel, 'ge_control_element', '<i class="material-icons">open_in_new</i>', (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                if (main.pWindowOpen) {
+                    main.togglePresentationWindow(false);
+                } else {
+                    main.togglePresentationWindow(true);
+                }
+            });
 
-        this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
-        this.el_control.addEventListener('mouseenter', (event) => { this.showControls(); });
-        this.el_control.addEventListener('mouseleave', (event) => { this.hideControls(); });
-        this.el_canvas.addEventListener('mousemove', (event) => {
-            if (event.offsetY>this.el_canvas.clientHeight*.66) {
-                this.showControls();
-            }
-            else {
-                this.hideControls();
-            }
-        })
-        this.hideControls();
+            this.el_control = this.el.getElementsByClassName(CONTROLS_CLASSNAME)[0];
+            this.el_control.addEventListener('mouseenter', (event) => { this.showControls(); });
+            this.el_control.addEventListener('mouseleave', (event) => { this.hideControls(); });
+            this.el_canvas.addEventListener('mousemove', (event) => {
+                if (event.offsetY>this.el_canvas.clientHeight*.66) {
+                    this.showControls();
+                }
+                else {
+                    this.hideControls();
+                }
+            })
+            this.hideControls();
+        }
 
         // ========== EVENTS
         // Draggable/resizable/snappable
@@ -131,20 +133,20 @@ export default class Shader {
         if (main.menu) {
             this.el.style.top = (main.menu.el.clientHeight || main.menu.el.offsetHeight || main.menu.el.scrollHeight) + "px";
         }
-
+    
         // Add all this to the main container
-        main.container.appendChild(this.el);
+        main.container.appendChild(this.el);    
         glslcanvas.resize();
     }
 
     hideControls () {
-        if (this.el_control.className === CONTROLS_CLASSNAME) {
+        if (this.el_control && this.el_control.className === CONTROLS_CLASSNAME) {
             this.el_control.className = CONTROLS_CLASSNAME+' '+CONTROLS_CLASSNAME+'_hidden';
         }
     }
 
     showControls () {
-        if (this.el_control.className === CONTROLS_CLASSNAME+' '+CONTROLS_CLASSNAME+'_hidden') {
+        if (this.el_control && this.el_control.className === CONTROLS_CLASSNAME+' '+CONTROLS_CLASSNAME+'_hidden') {
             this.el_control.className = CONTROLS_CLASSNAME;
         }
     }
