@@ -28,7 +28,7 @@ export default class Shader {
 
         this.canvas = glslcanvas;
 
-        if (this.options.imgs.length > 0) {
+        if (this.options.imgs && this.options.imgs.length > 0) {
             for (let i in this.options.imgs) {
                 this.canvas.setUniform('u_tex' + i, this.options.imgs[i]);
             }

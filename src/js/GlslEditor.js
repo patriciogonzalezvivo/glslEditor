@@ -70,12 +70,12 @@ export default class GlslEditor {
             this.options = options;
         }
 
-        if (this.options.displayMenu === undefined) {
-            this.options.displayMenu = true;
-        }
-
         if (this.options.imgs) {
             this.options.imgs = [];
+        }
+
+        if (this.options.displayMenu === undefined) {
+            this.options.displayMenu = true;
         }
 
         if (this.container.hasAttribute('data-textures')) {
