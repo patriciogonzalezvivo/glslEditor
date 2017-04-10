@@ -143,6 +143,8 @@ export default class GlslEditor {
         this.errorsDisplay = new ErrorsDisplay(this);
         this.visualDebugger = new VisualDebugger(this);
 
+        this.validShaderText = "";
+        
         if (this.options.exportIcon) {
             this.export = new ExportIcon(this);
         }
@@ -276,6 +278,15 @@ export default class GlslEditor {
 
     getContent() {
         return this.editor.getValue();
+    }
+
+    getSuccessfullyCompilingContent() {
+        if (this.shader && this.shader.canvas && this.shader.canvas.isValid) {
+            this.validShaderText = this.editor.getValue();
+        } else {
+            this.validShaderText = '';
+        }
+        return this.validShaderText;
     }
 
     getAuthor() {
