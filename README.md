@@ -79,6 +79,20 @@ This is a list of all the **options** you can set up:
 
 ![](http://patriciogonzalezvivo.com/images/glslEditor/debugger.gif)
 
+## Electron Version
+
+When developing use this to automatically reload Electron on every change
+
+```bash
+npm run dev
+```
+
+For use just do:
+
+```bash
+npm run start
+```
+
 
 ## TODOs
 

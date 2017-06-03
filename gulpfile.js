@@ -6,6 +6,7 @@ var derequire = require('gulp-derequire');
 var livereload = require('gulp-livereload');
 var plumber = require('gulp-plumber');
 var sourcemaps = require('gulp-sourcemaps');
+var electron = require('electron-connect').server.create();
 
 var paths = {
     styles: 'src/css/**/*.css',
@@ -52,7 +53,8 @@ gulp.task('js', function () {
     var babelify = require('babelify');
     var source = require('vinyl-source-stream');
     var buffer = require('vinyl-buffer');
-    // var uglify = require('gulp-uglify');
+    var uglify = require('gulp-uglify');
+    var rename = require('gulp-rename');
 
     var bundle = browserify({
         entries: 'src/js/GlslEditor.js',
@@ -71,9 +73,11 @@ gulp.task('js', function () {
         .pipe(buffer())
         // .pipe(sourcemaps.init({ loadMaps: true }))
             // Add transformation tasks to the pipeline here.
-            // .pipe(uglify())
             // .on('error', gutil.log)
         // .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('./build'))
+        .pipe(uglify())
+        .pipe(rename({ extname: '.min.js' }))
         .pipe(gulp.dest('./build'));
 });
 
@@ -84,8 +88,18 @@ gulp.task('watch', function () {
     gulp.watch(paths.scripts, ['js']);
 });
 
+gulp.task('run', function () {
+    // Start browser process
+    electron.start();
+    // Reload browser process
+    gulp.watch(['build/glslEditor.css', 'build/glslEditor.js','src/index.html'], electron.reload);
+    gulp.watch(['src/main.js'], electron.restart);
+});
+
 // Build files, do not watch
 gulp.task('build', ['css', 'js']);
+
+gulp.task('electron', ['css', 'js', 'watch', 'run']);
 
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['css', 'js', 'watch']);
