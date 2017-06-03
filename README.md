@@ -107,8 +107,16 @@ npm run start
 
 ## Author
 
-[Patricio Gonzalez Vivo](http://https://twitter.com/patriciogv): [github](https://github.com/patriciogonzalezvivo) | [twitter](http://https://twitter.com/patriciogv) | [website](http://patriciogonzalezvivo.com)
+[Patricio Gonzalez Vivo](https://twitter.com/patriciogv): [github](https://github.com/patriciogonzalezvivo) | [twitter](https://twitter.com/patriciogv) | [website](http://patriciogonzalezvivo.com)
 
 ## Acknowledgments
 
-Special thanks to [Lou Huang](@saikofish). glslEditor born from learned leassons on [TangramPlay](http://tangrams.github.io/tangram-play/). His code and wizdom is all arround this project.
+Special thanks to:
+
+- [Lou Huang](@saikofish): glslEditor born from learned leassons on [TangramPlay](http://tangrams.github.io/tangram-play/). His code and wizdom is all arround this project.
+- [Brett Camper](@professorlemeza): media capture and texture class (on GlslCanvas) are totally his credit.
+- [Jaume Sanchez Elias](@thespite): thanks for the big help with the profiler tester.
+- [Kenichi Yoneda (Kynd)](@kynd.info): helped with the UI and presentation mode
+- [Thomas Hooper](@tdhooper): performance improvements
+
+

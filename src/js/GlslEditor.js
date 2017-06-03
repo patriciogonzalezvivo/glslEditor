@@ -1,6 +1,6 @@
-
+import 'document-register-element';
 import Shader from './core/Shader';
-import { initEditor } from './core/Editor';
+import { initEditor, focusAll } from './core/Editor';
 
 import Menu from './ui/Menu';
 import Helpers from './ui/Helpers';
@@ -21,8 +21,12 @@ import { subscribeMixin } from './tools/mixin';
 // 3er Parties
 import { saveAs } from './vendor/FileSaver.min.js';
 
-const EMPTY_FRAG_SHADER = `// Author: 
-// Title: 
+// Cross storage for Openframe -- allows restricted access to certain localStorage operations
+// on the openframe domain
+import { CrossStorageClient } from 'cross-storage';
+
+const EMPTY_FRAG_SHADER = `// Author:
+// Title:
 
 #ifdef GL_ES
 precision mediump float;
@@ -36,8 +40,7 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     st.x *= u_resolution.x/u_resolution.y;
 
-    st += vec2(.0);
-    vec3 color = vec3(1.);
+    vec3 color = vec3(0.);
     color = vec3(st.x,st.y,abs(sin(u_time)));
 
     gl_FragColor = vec4(color,1.0);
@@ -45,6 +48,7 @@ void main() {
 
 export default class GlslEditor {
     constructor (selector, options) {
+        this.createFontLink();
         subscribeMixin(this);
 
         if (typeof selector === 'object' && selector.nodeType && selector.nodeType === 1) {
@@ -66,8 +70,12 @@ export default class GlslEditor {
             this.options = options;
         }
 
-        if (!this.options.imgs) {
+        if (this.options.imgs) {
             this.options.imgs = [];
+        }
+
+        if (this.options.displayMenu === undefined) {
+            this.options.displayMenu = true;
         }
 
         if (this.container.hasAttribute('data-textures')) {
@@ -84,7 +92,17 @@ export default class GlslEditor {
 
         // Default Context
         if (!this.options.frag) {
-            this.options.frag = EMPTY_FRAG_SHADER;
+            var innerHTML = this.container.innerHTML.replace(/&lt;br&gt;/g,"");
+            innerHTML = innerHTML.replace(/<br>/g,"");
+            innerHTML = innerHTML.replace(/&nbsp;/g,"");
+            innerHTML = innerHTML.replace(/&lt;/g,"<");
+            innerHTML = innerHTML.replace(/&gt;/g,">");
+            innerHTML = innerHTML.replace(/&amp;/g,"&");
+            this.options.frag = innerHTML || EMPTY_FRAG_SHADER;
+
+            if (innerHTML) {
+                this.container.innerHTML = '';
+            }
         }
 
         // Default invisible Fragment header
@@ -131,19 +149,24 @@ export default class GlslEditor {
 
         // EVENTS
         this.editor.on('change', () => {
-           this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+            if (this.autoupdate) {
+                this.update();
+            }
         });
 
         if (this.options.canvas_follow) {
             this.shader.el.style.position = 'relative';
-            this.shader.el.style.float = 'right';
+            if (this.options.canvas_float) {
+                this.shader.el.style.float = this.options.canvas_float;
+            }
             this.editor.on('cursorActivity', (cm) => {
-                let height = cm.heightAtLine(cm.getCursor().line + 1, 'local') - this.shader.el.height;
+                let height = cm.heightAtLine(cm.getCursor().line + 1, 'local') - this.shader.el.clientHeight;
                 if (height < 0) {
                     height = 0.0;
                 }
                 this.shader.el.style.top = height.toString() + 'px';
             });
+
         }
 
         // If the user bails for whatever reason, hastily shove the contents of
@@ -178,24 +201,36 @@ export default class GlslEditor {
             else {
                 this.new();
             }
-        } 
+        }
         else {
             this.new();
+        }
+
+        if (this.options.menu || this.options.exportIcon) {
+            // setup CrossStorage client
+            this.storage = new CrossStorageClient('https://openframe.io/hub.html');
+            this.storage.onConnect().then(() => {
+                console.log("Connected to OpenFrame [o]")
+            }.bind(this));
         }
         
         return this;
     }
 
     new () {
-        this.setContent(EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
+        this.setContent(this.options.frag || EMPTY_FRAG_SHADER, (new Date().getTime()).toString());
         this.trigger('new_content', {});
+        this.options.frag = null;
     }
 
     setContent(shader, tabName) {
         // If the string is CODE
-        this.options.frag = shader;
         if (this.shader && this.shader.canvas) {
-            this.shader.canvas.load(shader);
+            if (this.debugging) {
+                this.debugging = false;
+                focusAll(this.editor);
+            }
+            this.shader.canvas.load(this.options.frag_header + shader + this.options.frag_footer);
         }
 
         if (this.editor) {
@@ -270,16 +305,9 @@ export default class GlslEditor {
         }
     }
 
-    getChapterNumber() {
-        let content = this.getContent();
-        let result = content.match(/\/\/\s*[C|c]hapter\s*:\s*(\d*)/i);
-        console.log(result);
-        if (result) {
-            return parseInt(result[1]);
-        }
-        else {
-            return 'unknown';
-        }
+    // Returns Promise
+    getOfToken() {
+        return this.storage.get('accessToken');
     }
 
     download () {
@@ -298,8 +326,72 @@ export default class GlslEditor {
     }
 
     update () {
+        if (this.debugging) {
+            this.debugging = false;
+            focusAll(this.editor);
+        }
+
+        if (this.visualDebugger.testingResults.length) {
+            this.visualDebugger.clean();
+        }
         this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+    }
+
+    createFontLink() {
+        var head  = document.getElementsByTagName('head')[0];
+        var link = document.createElement( "link" );
+        link.href = "https://fonts.googleapis.com/icon?family=Material+Icons";
+        link.type = "text/css";
+        link.rel = "stylesheet";
+        link.media = "screen,print";
+        head.appendChild(link);
+        document.getElementsByTagName( "head" )[0].appendChild( link );
+    }
+
+    togglePresentationWindow(flag) {
+      this.pWindowOpen = flag;
+      if (flag) {
+        this.shader.openWindow();
+      } else {
+        this.shader.closeWindow();
+      }
+    }
+
+    onClosePresentationWindow() {
+      this.pWindowOpen = false;
     }
 }
 
 window.GlslEditor = GlslEditor;
+
+var GlslWebComponent = function() {};
+GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
+GlslWebComponent.prototype.createdCallback = function createdCallback() {
+
+    var options = {
+        canvas_size: 150,
+        canvas_follow: true,
+        tooltips: true
+    };
+
+    for (var i = 0; i < this.attributes.length; i++) {
+        var attribute = this.attributes[i];
+        if (attribute.specified) {
+            var value = attribute.value;
+
+            if (value === 'true') {
+                value = true;
+            } else if (value === 'false') {
+                value = false;
+            } else if (parseInt(value)) {
+                value = parseInt(value);
+            }
+
+            options[attribute.name] = value;
+        }
+    }
+
+    this.glslEditor = new GlslEditor(this, options);
+}
+
+document.registerElement('glsl-editor', GlslWebComponent);

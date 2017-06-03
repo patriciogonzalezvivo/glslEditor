@@ -21,6 +21,8 @@ import 'codemirror/mode/clike/clike.js';
 // Keymap
 import 'codemirror/keymap/sublime';
 
+const UNFOCUS_CLASS = 'ge_editor-unfocus';
+
 export function initEditor (main) {
     if (main.options.lineNumbers === undefined) {
         main.options.lineNumbers = true;
@@ -55,4 +57,28 @@ export function initEditor (main) {
         autofocus: true
     });
     return cm;
+}
+
+export function unfocusLine(cm, line) {
+    if (line === null) return;
+    cm.getDoc().addLineClass(line, 'gutter', UNFOCUS_CLASS);
+    cm.getDoc().addLineClass(line, 'text', UNFOCUS_CLASS);
+}
+
+export function unfocusAll(cm) {
+    for (let i = 0, j = cm.getDoc().lineCount(); i <= j; i++) {
+        unfocusLine(cm, i);
+    }
+}
+
+export function focusLine(cm, line) {
+    if (line === null) return;
+    cm.getDoc().removeLineClass(line, 'gutter', UNFOCUS_CLASS);
+    cm.getDoc().removeLineClass(line, 'text', UNFOCUS_CLASS);
+}
+
+export function focusAll(cm) {
+    for (let i = 0, j = cm.getDoc().lineCount(); i <= j; i++) {
+        focusLine(cm, i);
+    }
 }

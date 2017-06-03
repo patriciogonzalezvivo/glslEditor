@@ -51,7 +51,6 @@ export default class Modal {
         this.el.style.width = this.width + 'px';
         this.el.style.height = this.height + 'px';
 
-        console.log(this.position);
         if (this.position) {
             this.el.style.position = this.position;
         }
@@ -83,15 +82,15 @@ export default class Modal {
             return;
         }
         // end this specific hacky part
-
         let target = event.target;
+        if (target) {
+            while (target !== document.documentElement && !target.classList.contains(this.getModalClass())) {
+                target = target.parentNode;
+            }
 
-        while (target !== document.documentElement && !target.classList.contains(this.getModalClass())) {
-            target = target.parentNode;
-        }
-
-        if (!target.classList.contains(this.getModalClass())) {
-            this.removeModal();
+            if (!target.classList.contains(this.getModalClass())) {
+                this.removeModal();
+            }    
         }
     }
 

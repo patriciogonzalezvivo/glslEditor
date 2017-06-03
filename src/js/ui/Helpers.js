@@ -27,6 +27,7 @@ RegExp.prototype.execAll = function(string) {
 export default class Helpers {
     constructor (main) {
         this.main = main;
+        this.main.debugging = false;
 
         let style = window.getComputedStyle(main.editor.getWrapperElement(), null);
         let bgColor = new Color(style.background !== '' ? style.background : style.backgroundColor);
@@ -42,9 +43,17 @@ export default class Helpers {
 
         // EVENTS
         let wrapper = this.main.editor.getWrapperElement();
-        wrapper.addEventListener('mouseup', (event) => {
-            this.main.visualDebugger.clean(event);
+        wrapper.addEventListener('contextmenu', (event) => {
+            let cursor = this.main.editor.getCursor(true);
+            let token = this.main.editor.getTokenAt(cursor);
+            if (token.type === 'variable') {
+                this.main.visualDebugger.debug(token.string, cursor.line);
+            } else {
+                this.main.update();
+            }
+        });
 
+        wrapper.addEventListener('mouseup', (event) => {
             // bail out if we were doing a selection and not a click
             if (this.main.editor.somethingSelected()) {
                 return;
@@ -56,6 +65,9 @@ export default class Helpers {
             let match = this.getMatch(cursor);
             let token = this.main.editor.getTokenAt(cursor);
             if (match) {
+                this.main.visualDebugger.clean(event);
+                this.main.update();
+                
                 // Toggles the trackpad to be off if it's already present.
                 if (this.activeModal && this.activeModal.isVisible) {
                     this.activeModal.removeModal();
@@ -120,12 +132,14 @@ export default class Helpers {
                 }
             }
             else if (this.main.options.tooltips && (token.type === 'builtin' || token.type === 'variable-3')) {
+                this.main.visualDebugger.clean(event);
                 let html = '<p>Learn more about: <a href="https://thebookofshaders.com/glossary/?search=' + token.string + '" target="_blank">' + token.string + '</a></p>';
                 this.activeModal = new Modal('ge_tooltip', { innerHTML: html });
                 this.activeModal.showAt(this.main.editor);
             }
             else if (token.type === 'variable') {
                 if (this.main.visualDebugger) {
+                    this.main.visualDebugger.clean(event);
                     this.main.visualDebugger.iluminate(token.string);
                 }
             }

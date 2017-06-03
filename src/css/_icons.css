@@ -1,20 +1,20 @@
 .ge_export_icon {
-    box-sizing: border-box;
     position: relative;
     float: right;
-    right: 10px;
+    right: 8px;
     bottom: 40px;
-    padding-top: 1px;
-    padding-bottom: 3px;
-    padding-left: 5px;
-    padding-right: 5px;
+    width: 32px;
+    height: 28px;
+    border-radius:16px;
+    padding-top:4px;
     /*box-shadow: var(--modal-shadow);*/
     user-select: none;
     z-index: var(--z-menu);
-
-    font-size: 20px;
+    text-align:center;
+    vertical-align: bottom;
+    background-color: rgba(0,0,0,.5);
+    font-size: 18px !important;
     color: var(--ui-component-text-color);
-    background-color: var(--ui-base-color);
     cursor: pointer;
 }
 
