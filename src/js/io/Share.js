@@ -57,7 +57,9 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
 
     function initiateOfRequest(ofToken) {
         let xhr = new XMLHttpRequest();
-        callback = callback || () => {};
+        if ( typeof callback === "undefined") {
+          callback = () => {};
+        }
         // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
         xhr.open('POST', `${OF_BASE_API_URL}/users/current/created_artwork`);
         // set content type to JSON...
