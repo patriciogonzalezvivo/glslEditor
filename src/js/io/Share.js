@@ -57,7 +57,7 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
 
     function initiateOfRequest(ofToken) {
         let xhr = new XMLHttpRequest();
-        if ( typeof callback === "undefined") {
+        if (typeof callback === "undefined") {
           callback = () => {};
         }
         // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
