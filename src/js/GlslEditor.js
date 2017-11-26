@@ -92,12 +92,12 @@ export default class GlslEditor {
 
         // Default Context
         if (!this.options.frag) {
-            var innerHTML = this.container.innerHTML.replace(/&lt;br&gt;/g,"");
-            innerHTML = innerHTML.replace(/<br>/g,"");
-            innerHTML = innerHTML.replace(/&nbsp;/g,"");
-            innerHTML = innerHTML.replace(/&lt;/g,"<");
-            innerHTML = innerHTML.replace(/&gt;/g,">");
-            innerHTML = innerHTML.replace(/&amp;/g,"&");
+            var innerHTML = this.container.innerHTML.replace(/&lt;br&gt;/g,'');
+            innerHTML = innerHTML.replace(/<br>/g,'');
+            innerHTML = innerHTML.replace(/&nbsp;/g,'');
+            innerHTML = innerHTML.replace(/&lt;/g,'<');
+            innerHTML = innerHTML.replace(/&gt;/g,'>');
+            innerHTML = innerHTML.replace(/&amp;/g,'&');
             this.options.frag = innerHTML || EMPTY_FRAG_SHADER;
 
             if (innerHTML) {
@@ -106,13 +106,13 @@ export default class GlslEditor {
         }
 
         // Default invisible Fragment header
-        if (!this.options.frag_header) {
-            this.options.frag_header = '';
+        if (!this.options.fragHeader) {
+            this.options.fragHeader = '';
         }
 
         // Default invisible Fragment footer
-        if (!this.options.frag_footer) {
-            this.options.frag_footer = '';
+        if (!this.options.fragFooter) {
+            this.options.fragFooter = '';
         }
 
         // Listen to hash changes
@@ -154,7 +154,7 @@ export default class GlslEditor {
             }
         });
 
-        if (this.options.canvas_follow) {
+        if (this.options.canvasFollow) {
             this.shader.el.style.position = 'relative';
             if (this.options.canvas_float) {
                 this.shader.el.style.float = this.options.canvas_float;
@@ -166,7 +166,6 @@ export default class GlslEditor {
                 }
                 this.shader.el.style.top = height.toString() + 'px';
             });
-
         }
 
         // If the user bails for whatever reason, hastily shove the contents of
@@ -210,7 +209,7 @@ export default class GlslEditor {
             // setup CrossStorage client
             this.storage = new CrossStorageClient('https://openframe.io/hub.html');
             this.storage.onConnect().then(() => {
-                console.log("Connected to OpenFrame [o]")
+                console.log('Connected to OpenFrame [o]');
             }).bind(this);
         }
 
@@ -230,7 +229,7 @@ export default class GlslEditor {
                 this.debugging = false;
                 focusAll(this.editor);
             }
-            this.shader.canvas.load(this.options.frag_header + shader + this.options.frag_footer);
+            this.shader.canvas.load(this.options.fragHeader + shader + this.options.fragFooter);
         }
 
         if (this.editor) {
@@ -334,43 +333,43 @@ export default class GlslEditor {
         if (this.visualDebugger.testingResults.length) {
             this.visualDebugger.clean();
         }
-        this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
+        this.shader.canvas.load(this.options.fragHeader + this.editor.getValue() + this.options.fragFooter);
     }
 
     createFontLink() {
-        var head  = document.getElementsByTagName('head')[0];
-        var link = document.createElement( "link" );
-        link.href = "https://fonts.googleapis.com/icon?family=Material+Icons";
-        link.type = "text/css";
-        link.rel = "stylesheet";
-        link.media = "screen,print";
+        var head = document.getElementsByTagName('head')[0];
+        var link = document.createElement('link');
+        link.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
+        link.type = 'text/css';
+        link.rel = 'stylesheet';
+        link.media = 'screen,print';
         head.appendChild(link);
-        document.getElementsByTagName( "head" )[0].appendChild( link );
+        document.getElementsByTagName('head')[0].appendChild(link);
     }
 
     togglePresentationWindow(flag) {
-      this.pWindowOpen = flag;
-      if (flag) {
-        this.shader.openWindow();
-      } else {
-        this.shader.closeWindow();
-      }
+        this.pWindowOpen = flag;
+        if (flag) {
+            this.shader.openWindow();
+        }
+        else {
+            this.shader.closeWindow();
+        }
     }
 
     onClosePresentationWindow() {
-      this.pWindowOpen = false;
+        this.pWindowOpen = false;
     }
 }
 
 window.GlslEditor = GlslEditor;
 
 var GlslWebComponent = function() {};
-GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
+GlslWebComponent.prototype = Object.create(HTMLElement.prototype);
 GlslWebComponent.prototype.createdCallback = function createdCallback() {
-
     var options = {
-        canvas_size: 150,
-        canvas_follow: true,
+        canvasSize: 150,
+        canvasFollow: true,
         tooltips: true
     };
 
@@ -381,9 +380,11 @@ GlslWebComponent.prototype.createdCallback = function createdCallback() {
 
             if (value === 'true') {
                 value = true;
-            } else if (value === 'false') {
+            }
+            else if (value === 'false') {
                 value = false;
-            } else if (parseInt(value)) {
+            }
+            else if (parseInt(value)) {
                 value = parseInt(value);
             }
 
@@ -392,6 +393,6 @@ GlslWebComponent.prototype.createdCallback = function createdCallback() {
     }
 
     this.glslEditor = new GlslEditor(this, options);
-}
+};
 
 document.registerElement('glsl-editor', GlslWebComponent);

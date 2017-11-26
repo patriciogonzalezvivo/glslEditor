@@ -31,12 +31,12 @@ export function initEditor (main) {
     // CREATE AND START CODEMIRROR
     let el = document.createElement('div');
     el.setAttribute('class', 'ge_editor');
-    
+
     // If there is a menu offset the editor to come after it
     if (main.menu) {
-        el.style.paddingTop = (main.menu.el.clientHeight || main.menu.el.offsetHeight || main.menu.el.scrollHeight) + "px";
+        el.style.paddingTop = (main.menu.el.clientHeight || main.menu.el.offsetHeight || main.menu.el.scrollHeight) + 'px';
     }
-    
+
     main.container.appendChild(el);
 
     let cm = CodeMirror(el, {
@@ -60,7 +60,7 @@ export function initEditor (main) {
 }
 
 export function unfocusLine(cm, line) {
-    if (line === null) return;
+    if (line === null) {return;}
     cm.getDoc().addLineClass(line, 'gutter', UNFOCUS_CLASS);
     cm.getDoc().addLineClass(line, 'text', UNFOCUS_CLASS);
 }
@@ -72,7 +72,7 @@ export function unfocusAll(cm) {
 }
 
 export function focusLine(cm, line) {
-    if (line === null) return;
+    if (line === null) {return;}
     cm.getDoc().removeLineClass(line, 'gutter', UNFOCUS_CLASS);
     cm.getDoc().removeLineClass(line, 'text', UNFOCUS_CLASS);
 }

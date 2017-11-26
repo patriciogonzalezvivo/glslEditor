@@ -83,7 +83,7 @@
     ],
     "array-bracket-spacing": [
       2,
-      "always",
+      "never",
       {
         "objectsInArrays": false
       }

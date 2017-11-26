@@ -7,9 +7,9 @@ export default class Matrix {
     constructor(m, type) {
         this.dim = 3;
         this.value = [
-                    [1, 0, 0],
-                    [0, 1, 0],
-                    [0, 0, 1]];
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1]];
         if (m) {
             this.set(m, type);
         }
@@ -29,9 +29,9 @@ export default class Matrix {
         let c = Math.cos(theta);
         let s = Math.sin(theta);
         let T = [
-                [1, 0, 0],
-                [0, c, -s],
-                [0, s, c]];
+            [1, 0, 0],
+            [0, c, -s],
+            [0, s, c]];
 
         this.value = this.getTransform(T);
     }
@@ -40,9 +40,9 @@ export default class Matrix {
         let c = Math.cos(theta);
         let s = Math.sin(theta);
         let T = [
-                [ c, 0, s],
-                [ 0, 1, 0],
-                [ -s, 0, c]];
+            [c, 0, s],
+            [0, 1, 0],
+            [-s, 0, c]];
 
         this.value = this.getTransform(T);
     }
