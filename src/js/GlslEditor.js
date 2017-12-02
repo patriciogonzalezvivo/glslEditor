@@ -74,8 +74,8 @@ export default class GlslEditor {
             this.options.imgs = [];
         }
 
-        if (this.options.displayMenu === undefined) {
-            this.options.displayMenu = true;
+        if (this.options.display_menu === undefined) {
+            this.options.display_menu = true;
         }
 
         if (this.container.hasAttribute('data-textures')) {
@@ -106,13 +106,13 @@ export default class GlslEditor {
         }
 
         // Default invisible Fragment header
-        if (!this.options.fragHeader) {
-            this.options.fragHeader = '';
+        if (!this.options.frag_header) {
+            this.options.frag_header = '';
         }
 
         // Default invisible Fragment footer
-        if (!this.options.fragFooter) {
-            this.options.fragFooter = '';
+        if (!this.options.frag_footer) {
+            this.options.frag_footer = '';
         }
 
         // Listen to hash changes
@@ -154,7 +154,7 @@ export default class GlslEditor {
             }
         });
 
-        if (this.options.canvasFollow) {
+        if (this.options.canvas_follow) {
             this.shader.el.style.position = 'relative';
             if (this.options.canvas_float) {
                 this.shader.el.style.float = this.options.canvas_float;
@@ -229,7 +229,7 @@ export default class GlslEditor {
                 this.debugging = false;
                 focusAll(this.editor);
             }
-            this.shader.canvas.load(this.options.fragHeader + shader + this.options.fragFooter);
+            this.shader.canvas.load(this.options.frag_header + shader + this.options.frag_footer);
         }
 
         if (this.editor) {
@@ -333,7 +333,7 @@ export default class GlslEditor {
         if (this.visualDebugger.testingResults.length) {
             this.visualDebugger.clean();
         }
-        this.shader.canvas.load(this.options.fragHeader + this.editor.getValue() + this.options.fragFooter);
+        this.shader.canvas.load(this.options.frag_header + this.editor.getValue() + this.options.frag_footer);
     }
 
     createFontLink() {
@@ -368,8 +368,8 @@ var GlslWebComponent = function() {};
 GlslWebComponent.prototype = Object.create(HTMLElement.prototype);
 GlslWebComponent.prototype.createdCallback = function createdCallback() {
     var options = {
-        canvasSize: 150,
-        canvasFollow: true,
+        canvas_size: 150,
+        canvas_follow: true,
         tooltips: true
     };
 
