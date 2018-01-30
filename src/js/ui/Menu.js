@@ -34,6 +34,23 @@ export default class Menu {
             main.visualDebugger.check();
         });
 
+        // IMPORT
+        this.fileInputImport = document.createElement('input');
+        this.fileInputImport.setAttribute('type', 'file');
+        this.fileInputImport.setAttribute('accept', 'text/x-yaml');
+        this.fileInputImport.style.display = 'none';
+        this.fileInputImport.texCount = 0;
+        let fii = this.fileInputImport;
+
+        // TODO: change file reading code so we can pass in a full path instead of just a file name.
+        this.fileInputImport.addEventListener('change', (event) => {
+            main.loadImageFile(event.target.files[0].name, fii.texCount);
+            fii.texCount++;
+        });
+        this.menus.import = new MenuItem(this.el, 'ge_menu', '<i class="material-icons">arrow_downward</i> Import', (event) => {
+            this.fileInputImport.click();
+        });
+
         // SHARE
         this.menus.share = new MenuItem(this.el, 'ge_menu', '<i class="material-icons">arrow_upward</i> Export', (event) => {
             if (main.change || !this.exportModal) {

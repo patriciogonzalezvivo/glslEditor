@@ -274,6 +274,20 @@ export default class GlslEditor {
         }
     }
 
+    loadImageFile(inImageFile, inTexCount){
+        if (inImageFile === undefined || inImageFile.length == 0)
+            return;
+        else if (inImageFile.indexOf(".png") == -1 && inImageFile.indexOf(".jpeg") == -1)
+            prompt("Not a valid file.");
+        else{
+            /* bind the incoming image as a texture called u_tex + whatever inTexCount currently is
+                test code to prove this works: 
+                this.shader.canvas.setUniform("u_tex" + inTexCount, 'https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/68dd54ca-60cf-4ef7-898b-26d7cbe48ec7/10-dithering-opt.jpg');
+            */
+            this.shader.canvas.setUniform("u_tex" + inTexCount, inImageFile);
+        }
+    }
+
     getContent() {
         return this.editor.getValue();
     }
