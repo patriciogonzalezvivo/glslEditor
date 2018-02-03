@@ -287,7 +287,7 @@ export default class GlslEditor {
         var shaderStart = shaderContent.slice(0, mainLoc-1);
         var shaderEnd = shaderContent.slice(mainLoc, shaderContent.length);
         if(texNameLoc == -1){ // texture is not in shader; load it into the shader by changing shader text
-            shaderContent = shaderStart + samplerLine + '//' + inImageFile + '\n' + shaderEnd;
+            shaderContent = shaderStart + '\n' + samplerLine + '//' + inImageFile + '\n' + shaderEnd;
             this.setContent(shaderContent);
         }
         else if (texNameLoc != -1 && texNameLoc < mainLoc){ // sampler name is already in there; just replace the comment that's already there
