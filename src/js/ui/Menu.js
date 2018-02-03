@@ -1,5 +1,6 @@
 import MenuItem from './MenuItem';
 import ExportModal from './modals/ExportModal';
+import ImportModal from './modals/ImportModal';
 
 export default class Menu {
     constructor (main) {
@@ -35,20 +36,13 @@ export default class Menu {
         });
 
         // IMPORT
-        this.fileInputImport = document.createElement('input');
-        this.fileInputImport.setAttribute('type', 'file');
-        this.fileInputImport.setAttribute('accept', 'text/x-yaml');
-        this.fileInputImport.style.display = 'none';
-        this.fileInputImport.texCount = 0;
-        let fii = this.fileInputImport;
-
-        // TODO: change file reading code so we can pass in a full path instead of just a file name.
-        this.fileInputImport.addEventListener('change', (event) => {
-            main.loadImageFile(event.target.files[0].name, fii.texCount);
-            fii.texCount++;
-        });
         this.menus.import = new MenuItem(this.el, 'ge_menu', '<i class="material-icons">arrow_downward</i> Import', (event) => {
-            this.fileInputImport.click();
+            if (main.change || !this.importModal) {
+                this.importModal = new ImportModal('ge_export', { main: main, position: 'fixed' });
+            }
+
+            let bbox = this.menus.import.el.getBoundingClientRect();
+            this.importModal.presentModal(bbox.left - 5, bbox.top + bbox.height + 5);
         });
 
         // SHARE

@@ -147,6 +147,8 @@ export default class GlslEditor {
             this.export = new ExportIcon(this);
         }
 
+        this.numActiveTextures = 0;
+
         // EVENTS
         this.editor.on('change', () => {
             if (this.autoupdate) {
@@ -274,18 +276,37 @@ export default class GlslEditor {
         }
     }
 
-    loadImageFile(inImageFile, inTexCount){
-        if (inImageFile === undefined || inImageFile.length == 0)
-            return;
-        else if (inImageFile.indexOf(".png") == -1 && inImageFile.indexOf(".jpeg") == -1)
-            prompt("Not a valid file.");
-        else{
-            /* bind the incoming image as a texture called u_tex + whatever inTexCount currently is
-                test code to prove this works: 
-                this.shader.canvas.setUniform("u_tex" + inTexCount, 'https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/68dd54ca-60cf-4ef7-898b-26d7cbe48ec7/10-dithering-opt.jpg');
-            */
-            this.shader.canvas.setUniform("u_tex" + inTexCount, inImageFile);
+    // load either a texture from an image contained in a URL or a local file.
+    // TODO: Bail back to user in the case of CORS failures. Right now, it secretly bails out upon failure.
+    // ChronoAndross 02/03/2018
+    loadImageFile(inImageFile){
+        var shaderContent = this.editor.getValue();
+        var samplerLine = 'uniform sampler2D u_tex'+this.numActiveTextures+';'
+        var texNameLoc = shaderContent.indexOf(samplerLine);
+        var mainLoc = shaderContent.indexOf('void main');
+        var shaderStart = shaderContent.slice(0, mainLoc-1);
+        var shaderEnd = shaderContent.slice(mainLoc, shaderContent.length);
+        if(texNameLoc == -1){ // texture is not in shader; load it into the shader by changing shader text
+            shaderContent = shaderStart + samplerLine + '//' + inImageFile + '\n' + shaderEnd;
+            this.setContent(shaderContent);
         }
+        else if (texNameLoc != -1 && texNameLoc < mainLoc){ // sampler name is already in there; just replace the comment that's already there
+            var beforeTexName = shaderContent.slice(0, texNameLoc-1); // get everything before u_tex(number) is declared
+            var texNameStart = shaderContent.slice(texNameLoc, mainLoc); // get everything starting as u_tex(number) to void main declaration
+            var firstEscapeCharLoc = texNameStart.indexOf('\n');
+            var texNameLine = texNameStart.slice(0, firstEscapeCharLoc); // get end of the line I just obtained
+            var commentStart = texNameLine.indexOf('//'); // find where the image is defined in this line
+            if (commentStart != -1) // if comment is there, replace it to replace the texture
+                shaderContent = beforeTexName + '\n' + samplerLine + '//' + inImageFile + '\n' + texNameStart.slice(firstEscapeCharLoc, texNameStart.length) + shaderEnd;
+            else
+                shaderContent = beforeTexName  + '\n' + samplerLine + '//' + inImageFile + '\n' + shaderEnd;  
+            this.setContent(shaderContent);
+        }
+
+        if (inImageFile.indexOf('data:image') != -1) // if importing local images, you need to load the uniforms since the code doens't know how to do this for some reason.
+            this.shader.canvas.setUniform("u_tex" + this.numActiveTextures, inImageFile);
+
+        this.numActiveTextures++;
     }
 
     getContent() {
