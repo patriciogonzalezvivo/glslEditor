@@ -1,24 +1,185 @@
+import { isCommented, isLineAfterMain, getVariableType, getShaderForTypeVarInLine, getResultRange, getDeltaSum, getHits, getMedian } from '../tools/debugging';
+import { unfocusLine, focusLine, unfocusAll, focusAll } from '../core/Editor.js';
+
+var main_ge = {};
+var N_SAMPLES = 30;
+
 export default class VisualDebugger {
     constructor (main) {
         this.main = main;
-        this.debbuging = false;
-        this.active = null;
+        this.breakpoint = null;
+        main_ge = main;
+
+        this.testing = false;
+        this.testingFrag = "";
+        this.testingLine = 0;
+        this.testingResults = [];
+        this.testingSamples = [];
 
         this.main.editor.on('gutterClick', (cm, n) => {
             let info = cm.lineInfo(n);
             if (info && info.gutterMarkers && info.gutterMarkers.breakpoints) {
-                if (this.active) {
-                    this.active.setAttribute('class', 'ge_assing_marker');
+                // Check for an active variable (a variable that have been declare or modify in this line)
+                let variableRE = new RegExp('\\s*[float|vec2|vec3|vec4]?\\s+([\\w|\\_]*)[\\.\\w]*?\\s+[\\+|\\-|\\\\|\\*]?\\=', 'i');
+                let match = variableRE.exec(info.text);
+                if (match) {
+                    this.debug(match[1], info.line);
+                    this.breakpoint = info.line;
                 }
-                info.gutterMarkers.breakpoints.setAttribute('class', 'ge_assing_marker_on');
-                this.debugLine(n);
-                this.active = info.gutterMarkers.breakpoints;
             }
         });
     }
 
+    check() {
+        // Clean previus records
+        this.testingResults = [];
+
+        let cm = this.main.editor;
+        let nLines = cm.getDoc().size;
+
+        let mainStartsAt = 0;
+        for (let i = 0; i < nLines; i++) {
+            if (isLineAfterMain(cm, i)) {
+                mainStartsAt = i;
+                break;
+            }
+        }
+        this.testLine(mainStartsAt);
+    }
+
+    testLine(nLine) {
+        let cm = main_ge.editor;
+        let visualDebugger = main_ge.visualDebugger;
+        
+        // If is done testing...
+        if (nLine >= cm.getDoc().size) {
+            visualDebugger.testingLine = 0;
+            visualDebugger.testing = false;
+
+            let results = visualDebugger.testingResults;
+            let range = getResultRange(results);
+            let sum = getDeltaSum(results);
+            let hits = getHits(results)
+
+            console.log('Test: ',range.max.ms+'ms', results);
+            cm.clearGutter('breakpoints');
+            for (let i in results) {
+                let pct = (results[i].delta/sum)*100;
+                let size = (results[i].delta/sum)*30;
+                let marker_html = '<div>' +results[i].ms.toFixed(2);
+                if (results[i].delta > 0.) {
+                    marker_html += '<span class="ge_assing_marker_pct ';
+                    if ( pct > (100.0/hits) ) {
+                        marker_html += 'ge_assing_marker_slower';
+                    }
+                    marker_html += '" style="width: '+size.toFixed(0)+'px;" data="'+pct.toFixed(0)+'%"></span>'
+                }
+                
+                cm.setGutterMarker(results[i].line, 'breakpoints', makeMarker(marker_html+'</div>'));
+            }
+            return;
+        }
+
+        if (isLineAfterMain(cm, nLine)) {
+            // If the line is inside the main function
+            let shader = main_ge.shader.canvas;
+
+            // Check for an active variable (a variable that have been declare or modify in this line)
+            let variableRE = new RegExp('\\s*[float|vec2|vec3|vec4]?\\s+([\\w|\\_]*)[\\.\\w]*?\\s+[\\+|\\-|\\\\|\\*]?\\=', 'i');
+            let match = variableRE.exec(cm.getLine(nLine));
+            if (match) {
+                // if there is an active variable, get what type is
+                let variable = match[1];
+                let type = getVariableType(cm, variable);
+                if (type === 'none') {
+                    // If it fails on finding the type keep going with the test on another line
+                    visualDebugger.testLine(nLine+1);
+                    return;
+                }
+
+                // Prepare 
+                visualDebugger.testing = true;
+                visualDebugger.testingLine = nLine;
+                visualDebugger.testingFrag = getShaderForTypeVarInLine(cm, type, variable, nLine);
+                visualDebugger.testingSamples = [];
+
+                unfocusAll(cm);
+                focusLine(cm, nLine);
+                main_ge.debugging = true;
+
+                shader.test(this.onTest,  visualDebugger.testingFrag);
+            } else {
+                visualDebugger.testLine(nLine+1);
+            }
+        } else {
+            // If the line is not inside main function, test the next one...
+            visualDebugger.testLine(nLine+1);
+        } 
+    }
+
+    onTest (target) {
+        let cm = main_ge.editor;
+        let shader = main_ge.shader.canvas;
+        let visualDebugger = main_ge.visualDebugger;
+
+        // If the test shader compiled...
+        if (target.wasValid) {
+            // get data, process and store.
+            let elapsedMs = target.timeElapsedMs;
+
+            if (visualDebugger.testingSamples.length < N_SAMPLES-1){
+                visualDebugger.testingSamples.push(elapsedMs);
+                shader.test(visualDebugger.onTest, visualDebugger.testingFrag);
+            } else {
+                focusAll(cm);
+                main_ge.debugging = false;
+                visualDebugger.testingSamples.push(elapsedMs);
+                elapsedMs = getMedian(visualDebugger.testingSamples);
+
+                let range = getResultRange(visualDebugger.testingResults);
+                let delta = elapsedMs - range.max.ms;
+                if (visualDebugger.testingResults.length === 0) {
+                    delta = 0.0;
+                }
+                visualDebugger.testingResults.push({line:visualDebugger.testingLine, ms:target.timeElapsedMs, delta:delta});
+                // console.log('Testing line:', visualDebugger.testingLine, elapsedMs, delta, range);
+
+                // Create gutter marker
+                cm.setGutterMarker( visualDebugger.testingLine, 
+                                    'breakpoints', 
+                                    makeMarker(elapsedMs.toFixed(2)));
+
+                // Test next line
+                visualDebugger.testLine(visualDebugger.testingLine+1);
+            };
+            
+        } else {
+            console.log(target)
+            // Test next line
+            visualDebugger.testLine(visualDebugger.testingLine+1);
+        }
+    }
+
+    debug (variable, nLine) {
+        focusAll(this.main.editor);
+        this.main.debugging = false;
+
+        if (isLineAfterMain(this.main.editor, nLine)) {
+            var type = getVariableType(this.main.editor, variable);
+            if (type !== 'none') {
+                event.preventDefault();
+                this.main.shader.canvas.load(getShaderForTypeVarInLine(this.main.editor, type, variable, nLine));
+                unfocusAll(this.main.editor);
+                focusLine(this.main.editor, nLine);
+                this.main.debugging = true;
+            }
+        } else {
+            this.main.update();
+        }
+    }
+
     iluminate (variable) {
-        if (this.debbuging && this.variable === this.variable) {
+        if (this.main.debbuging && this.variable === this.variable) {
             return;
         }
         // this.clean();
@@ -34,48 +195,10 @@ export default class VisualDebugger {
             }
             this.annotate = cm.showMatchesOnScrollbar(variable, true);
         }
-
-        let nLines = cm.getDoc().size;
-
-        // Show line where the value of the variable is been asigned
-        let voidRE = new RegExp('void main\\s*\\(\\s*[void]*\\)\\s*\\{', 'i');
-        let voidIN = false;
-        let constructRE = new RegExp('(float|vec\\d)\\s+(' + variable + ')\\s+', 'i');
-        let constructIN = false;
-        let assignRE = new RegExp('[\\s+](' + variable + ')[\\s|\\.|x|y|z|w|r|g|b|a|s|t|p|q]+[\\*|\\+|\\-|\\/]?=', 'i');
-        for (let i = 0; i < nLines; i++) {
-            if (!voidIN) {
-                // Do not start until being inside the main function
-                let voidMatch = voidRE.exec(cm.getLine(i));
-                if (voidMatch) {
-                    voidIN = true;
-                }
-            }
-            else {
-                if (!constructIN) {
-                    // Search for the constructor
-                    let constructMatch = constructRE.exec(cm.getLine(i));
-                    if (constructMatch && constructMatch[1] && !isCommented(cm, i, constructMatch)) {
-                        this.type = constructMatch[1];
-                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '+'));//'&#x2605;'));
-                        constructIN = true;
-                    }
-                }
-                else {
-                    // Search for changes on tha variable
-                    let assignMatch = assignRE.exec(cm.getLine(i));
-                    if (assignMatch && !isCommented(cm, i, assignMatch)) {
-                        cm.setGutterMarker(i, 'breakpoints', makeMarker(this, i, '●'));// '<span style="padding-left: 3px;">●</span>'));
-                    }
-                }
-            }
-        }
-
-        this.variable = variable;
     }
 
     clean (event) {
-        if (event && event.target && (event.target.className === 'ge_assing_marker' || event.target.className === 'ge_assing_marker_on')) {
+        if (event && event.target && event.target.className === 'ge_assing_marker') {
             return;
         }
 
@@ -84,60 +207,18 @@ export default class VisualDebugger {
         if (this.overlay) {
             cm.removeOverlay(this.overlay, true);
         }
-        this.variable = null;
         this.type = null;
-        if (this.debbuging) {
+        if (this.main.debbuging) {
             this.main.shader.canvas.load(this.main.options.frag_header + this.main.editor.getValue() + this.main.options.frag_footer);
         }
-        this.debbuging = false;
-        if (this.active) {
-            this.active.setAttribute('class', 'ge_assing_marker');
-        }
-        this.active = false;
-    }
-
-    debugLine (nLine) {
-        if (this.type && this.variable) {
-            let cm = this.main.editor;
-
-            let frag = '';
-            for (let i = 0; i < nLine + 1; i++) {
-                frag += cm.getLine(i) + '\n';
-            }
-
-            frag += '\tgl_FragColor = ';
-            if (this.type === 'float') {
-                frag += 'vec4(vec3(' + this.variable + '),1.)';
-            }
-            else if (this.type === 'vec2') {
-                frag += 'vec4(vec3(' + this.variable + ',0.),1.)';
-            }
-            else if (this.type === 'vec3') {
-                frag += 'vec4(' + this.variable + ',1.)';
-            }
-            else if (this.type === 'vec4') {
-                frag += this.variable;
-            }
-            frag += ';\n}\n';
-
-            this.main.shader.canvas.load(frag);
-            this.debbuging = true;
-
-            if (!this.main.shader.canvas.isValid) {
-                console.log('Something went wrong and the debugger did not work for', this.type, this.variable, ' , so I will stop and clean');
-                this.clean();
-                if (this.main.errorsDisplay) {
-                    this.main.errorsDisplay.clean();
-                }
-            }
-        }
+        this.main.debbuging = false;
     }
 }
 
-function makeMarker(vd, line, simbol) {
+function makeMarker(html,extra_class) {
     let marker = document.createElement('div');
-    marker.setAttribute('class', 'ge_assing_marker');
-    marker.innerHTML = simbol;
+    marker.setAttribute('class', 'ge_assing_marker' );
+    marker.innerHTML = html;
     return marker;
 }
 
@@ -165,12 +246,4 @@ function searchOverlay(query, caseInsensitive) {
             }
         }
     };
-}
-
-function isCommented(cm, nLine, match) {
-    let token = cm.getTokenAt({ line: nLine, ch: match.index });
-    if (token && token.type) {
-        return token.type === 'comment';
-    }
-    return false;
 }

@@ -79,6 +79,20 @@ This is a list of all the **options** you can set up:
 
 ![](http://patriciogonzalezvivo.com/images/glslEditor/debugger.gif)
 
+## Electron Version
+
+When developing use this to automatically reload Electron on every change
+
+```bash
+npm run dev
+```
+
+For use just do:
+
+```bash
+npm run start
+```
+
 
 ## TODOs
 
@@ -97,4 +111,12 @@ This is a list of all the **options** you can set up:
 
 ## Acknowledgments
 
-Special thanks to [Lou Huang](@saikofish). glslEditor born from learned leassons on [TangramPlay](http://tangrams.github.io/tangram-play/). His code and wizdom is all arround this project.
+Special thanks to:
+
+- [Lou Huang](@saikofish): glslEditor born from learned leassons on [TangramPlay](http://tangrams.github.io/tangram-play/). His code and wizdom is all arround this project.
+- [Brett Camper](@professorlemeza): media capture and texture class (on GlslCanvas) are totally his credit.
+- [Jaume Sanchez Elias](@thespite): thanks for the big help with the profiler tester.
+- [Kenichi Yoneda (Kynd)](@kynd.info): helped with the UI and presentation mode
+- [Thomas Hooper](@tdhooper): performance improvements
+
+

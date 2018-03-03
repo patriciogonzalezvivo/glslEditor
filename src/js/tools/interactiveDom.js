@@ -64,7 +64,7 @@ export function subscribeInteractiveDom (dom, options) {
 
     function onTouchDown (event) {
         onDown(event.touches[0]);
-        // e.preventDefault();
+        e.preventDefault();
     }
 
     function onTouchMove (event) {
@@ -81,7 +81,7 @@ export function subscribeInteractiveDom (dom, options) {
 
     function onMouseDown (event) {
         onDown(event);
-        // e.preventDefault();
+        e.preventDefault();
     }
 
     function onDown (event) {
@@ -149,6 +149,7 @@ export function subscribeInteractiveDom (dom, options) {
                 var currentWidth = Math.max(clicked.cx - e.clientX + clicked.w, minWidth);
                 if (currentWidth > minWidth) {
                     dom.style.width = currentWidth + 'px';
+                    dom.style.removeProperty('right');
                     dom.style.left = e.clientX + 'px';
                 }
             }
@@ -157,6 +158,7 @@ export function subscribeInteractiveDom (dom, options) {
                 var currentHeight = Math.max(clicked.cy - e.clientY + clicked.h, minHeight);
                 if (currentHeight > minHeight) {
                     dom.style.height = currentHeight + 'px';
+                    dom.style.removeProperty('bottom');
                     dom.style.top = e.clientY + 'px';
                 }
             }
@@ -202,6 +204,8 @@ export function subscribeInteractiveDom (dom, options) {
                 }
 
                 // moving
+                dom.style.removeProperty('right');
+                dom.style.removeProperty('bottom');
                 dom.style.top = (e.clientY - clicked.y) + 'px';
                 dom.style.left = (e.clientX - clicked.x) + 'px';
             }
@@ -222,6 +226,8 @@ export function subscribeInteractiveDom (dom, options) {
                     y = window.innerHeight - dom.offsetHeight;
                 }
 
+                dom.style.removeProperty('right');
+                dom.style.removeProperty('bottom');
                 dom.style.left = x + 'px';
                 dom.style.top = y + 'px';
             }
@@ -252,8 +258,6 @@ export function subscribeInteractiveDom (dom, options) {
         }
     }
     animate();
-
-
 
     function onUp(e) {
         calc(e);

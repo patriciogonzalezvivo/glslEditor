@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>GLSL Editor</title>
+    <!-- build:remove -->
+    <!-- Connect to server process -->
+    <script>require('electron-connect').client.create()</script>
+    <!-- end:build -->
+    <link type="text/css" rel="stylesheet" href="../build/glslEditor.css">
+    <link type="text/css" rel="stylesheet" href="./css/ElectronApp.css">
+    <script type="application/javascript" src="../build/glslEditor.js"></script>
+  </head>
+  <body>
+    <div id="glsl_editor"></div>
+  </body>
+
+  <script>
+    window.glslEditor = new GlslEditor('#glsl_editor', {
+      canvas_size: 500,
+      theme: 'monokai',
+      multipleBuffers: true,
+      watchHash: true,
+      fileDrops: true,
+      menu: true
+    });
+  </script>
+</html>

@@ -2,7 +2,7 @@ export default class MenuItem {
     constructor (container, className, name, onClick) {
         this.el = document.createElement('li');
         this.button = document.createElement('button');
-        this.button.className = 'ge_menu_button';
+        this.button.className = className+'_button';
         this.el.appendChild(this.button);
         this.el.setAttribute('class', className);
         this.button.innerHTML = name;

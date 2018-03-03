@@ -4,13 +4,17 @@
     font-family: var(--editor-font-family);
     font-size: 14px;
     line-height: 1.4;
-    /*height: 100%;*/
     height: auto;
     z-index: var(--z-editor);
 }
 
 .CodeMirror-linenumbers {
     padding: 0 8px;
+    font-family: Helvetica, Geneva, sans-serif;
+}
+
+.CodeMirror-linenumber.CodeMirror-gutter-elt {
+    color: #546E7A;
 }
 
 /* Slightly more padding around the text content */
@@ -20,4 +24,13 @@
 
 .CodeMirror-vscrollbar {
 	visibility: hidden;
+}
+
+.ge_editor-unfocus {
+    opacity: .5;
+    filter: blur(1px);
+}
+
+.CodeMirror {
+    margin-top: 12px;
 }
