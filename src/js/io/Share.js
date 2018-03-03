@@ -35,10 +35,10 @@ export function saveOnServer (ge, callback) {
         if (typeof callback === 'function') {
             let name = xhr.responseText;
             let replay = {
-                    content: content,
-                    name: name,
-                    url: url
-                };
+                content: content,
+                name: name,
+                url: url
+            };
             callback(replay);
             lastReplay = replay;
         }
@@ -57,8 +57,8 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
 
     function initiateOfRequest(ofToken) {
         let xhr = new XMLHttpRequest();
-        if (typeof callback === "undefined") {
-          callback = () => {};
+        if (typeof callback === 'undefined') {
+            callback = () => {};
         }
         // anywhere in the API that user {id} is needed, the alias 'current' can be used for the logged-in user
         xhr.open('POST', `${OF_BASE_API_URL}/users/current/created_artwork`);
@@ -90,6 +90,8 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
         xhr.onerror = (event) => {
             console.log('Status:',event.currentTarget.status);
         };
+        /* Remote expects underscore keys */
+        /* eslint-disable camelcase */
         xhr.send(JSON.stringify({
             title: title,
             author_name: author,
@@ -97,6 +99,7 @@ export function createOpenFrameArtwork(glslEditor, name, url, callback) {
             format: 'openframe-glslviewer',
             url: 'https://thebookofshaders.com/log/' + name + '.frag',
             thumb_url: 'https://thebookofshaders.com/log/' + name + '.png'
+        /* eslint-enable camelcase */
         }));
     }
 }

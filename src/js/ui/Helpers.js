@@ -38,7 +38,7 @@ export default class Helpers {
             fnColor: fgColor.getString('rgb'),
             dimColor: 'rgb(127, 127, 127)',
             selColor: 'rgb(40, 168, 107)',
-            link_button: true
+            linkButton: true
         };
 
         // EVENTS
@@ -48,7 +48,8 @@ export default class Helpers {
             let token = this.main.editor.getTokenAt(cursor);
             if (token.type === 'variable') {
                 this.main.visualDebugger.debug(token.string, cursor.line);
-            } else {
+            }
+            else {
                 this.main.update();
             }
         });
@@ -67,7 +68,7 @@ export default class Helpers {
             if (match) {
                 this.main.visualDebugger.clean(event);
                 this.main.update();
-                
+
                 // Toggles the trackpad to be off if it's already present.
                 if (this.activeModal && this.activeModal.isVisible) {
                     this.activeModal.removeModal();
@@ -85,7 +86,7 @@ export default class Helpers {
                         this.main.editor.replaceRange(newColor, start, end);
                     });
 
-                    this.activeModal.on('link_button', (color) => {
+                    this.activeModal.on('linkButton', (color) => {
                         this.activeModal = new Vec3Picker(color.getString('vec'), this.properties);
                         this.activeModal.showAt(this.main.editor);
                         this.activeModal.on('changed', (dir) => {

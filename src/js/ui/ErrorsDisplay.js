@@ -9,7 +9,8 @@ export default class ErrorsDisplay {
         this.main.shader.canvas.on('error', (arg) => {
             if (this.main.visualDebugger && this.main.visualDebugger.testing) {
                 this.clean();
-            } else {
+            }
+            else {
                 this.clean();
                 this.addError(arg);
             }

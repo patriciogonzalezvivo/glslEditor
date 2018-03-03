@@ -36,7 +36,7 @@ export default class HashWatch {
         let query = parseQuery(window.location.search.slice(1));
         if (query) {
             for (let key in query) {
-                if ( key === 'log') {
+                if (key === 'log') {
                     if (this.main.bufferManager) {
                         let logs = query.log.split(',');
                         for (let i in logs) {
@@ -46,11 +46,12 @@ export default class HashWatch {
                     else {
                         this.main.open('https://thebookofshaders.com/log/' + query.log + '.frag', query.log);
                     }
-                } else {
+                }
+                else {
                     let value = query[key];
                     if (value === 'true' || value === 'false') {
                         value = (value == 'true');
-                    } 
+                    }
                     else if (parseFloat(value)) {
                         value = parseFloat(value);
                     }

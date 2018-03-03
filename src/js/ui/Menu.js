@@ -45,19 +45,20 @@ export default class Menu {
         });
 
 
-          // AUTOUPDATE
-          this.menus.autoupdate = new MenuItem(this.el, 'ge_menu', ' <i class="material-icons">autorenew</i> Update: ON', (event) => {
-              if (main.autoupdate) {
-                  main.autoupdate = false;
-                  this.menus.autoupdate.name = '<i class="material-icons">autorenew</i> Update: OFF';
-                  // this.menus.autoupdate.button.style.color = 'gray';
-              } else {
-                  main.autoupdate = true;
-                  main.update();
-                  this.menus.autoupdate.name = '<i class="material-icons">autorenew</i> Update: ON';
-                  // this.menus.autoupdate.button.style.color = 'white';
-              }
-          });
+        // AUTOUPDATE
+        this.menus.autoupdate = new MenuItem(this.el, 'ge_menu', ' <i class="material-icons">autorenew</i> Update: ON', (event) => {
+            if (main.autoupdate) {
+                main.autoupdate = false;
+                this.menus.autoupdate.name = '<i class="material-icons">autorenew</i> Update: OFF';
+                // this.menus.autoupdate.button.style.color = 'gray';
+            }
+            else {
+                main.autoupdate = true;
+                main.update();
+                this.menus.autoupdate.name = '<i class="material-icons">autorenew</i> Update: ON';
+                // this.menus.autoupdate.button.style.color = 'white';
+            }
+        });
 
         main.container.appendChild(this.el);
     }
