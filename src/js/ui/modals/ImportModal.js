@@ -15,28 +15,13 @@ export default class ImportModal extends Modal {
         super(CSS_PREFIX, properties);
         this.main = properties.main;
 
-        // Import an image as a texture from the local drive.
-        // NOTE: Not supported in Chrome and Safari 11 and above (unless the developer option is turned on) 
-        // since they have navitely possess CORS issues.
-        this.fileInputImport = document.createElement('input');
-        this.fileInputImport.setAttribute('type', 'file');
-        this.fileInputImport.setAttribute('accept', 'text/x-yaml');
-        this.fileInputImport.style.display = 'none';
-        this.fileInputImport.addEventListener('change', (event) => {
-            var fr = new FileReader();
-            fr.onload = (event) => {
-                this.main.loadImageFile(event.target.result);
-            }
-            var fileName = event.target.files[0].name;
-            if (fileName.indexOf('.png') == -1 && fileName.indexOf('.jpeg') == -1 && fileName.indexOf('.jpg') == -1)
-                alert('Not a valid image file.');
+        // main method used for prompting the user for a path and sending it to loadImageFile
+        this.openImagePath = function(importString){
+            var imgPath;
+            if (importString.indexOf('localImport') != -1) 
+                imgPath = prompt("Please enter a local path to an image on disk.");
             else
-                fr.readAsDataURL(event.target.files[0]);
-        });
-
-        // determine if we want to processs the texture from an image contained in an URL in here.
-        this.openURLImage = new MenuItem(this.el, 'ge_sub_menu', 'Import Image URL...', (event) => {
-            var imgPath = prompt("Please enter a URL to an image.");
+                imgPath = prompt("Please enter a URL to an image.");
             var bShowError = false;
             if (imgPath != null){
                 if (imgPath.indexOf('.png') == -1 && imgPath.indexOf('.jpeg') == -1 && imgPath.indexOf('.jpg') == -1){
@@ -49,13 +34,21 @@ export default class ImportModal extends Modal {
 
             if (bShowError)
                 alert('Not a valid image file.');
+        };
+
+        // determine if we want to process the texture from an image contained in an URL in here.
+        this.openURLImage = new MenuItem(this.el, 'ge_sub_menu', 'Import Image URL...', (event) => {
+            this.openImagePath('urlImport');
         });
 
+        // Import an image as a texture from the local drive.
+        // NOTE: Not supported in Chrome and Safari 11 and above (unless the developer option is turned on) 
+        // since they have navitely possess CORS issues.
         this.openLocalImage = new MenuItem(this.el, 'ge_sub_menu', 'Import Local Image ...', (event) => {
             if (navigator.userAgent.indexOf('Chrome') != -1)
                 alert('This feature is unavailable with this browser. Please use Firefox or another compatible browser. Thanks!');
             else
-                this.fileInputImport.click();
+                this.openImagePath('localImport');
         });
     }
 }

@@ -303,9 +303,6 @@ export default class GlslEditor {
             this.setContent(shaderContent);
         }
 
-        if (inImageFile.indexOf('data:image') != -1) // if importing local images, you need to load the uniforms since the code doens't know how to do this for some reason.
-            this.shader.canvas.setUniform("u_tex" + this.numActiveTextures, inImageFile);
-
         this.numActiveTextures++;
     }
 
