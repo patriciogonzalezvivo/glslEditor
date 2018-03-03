@@ -56,6 +56,9 @@ export default class GlslEditor {
         }
         else if (typeof selector === 'string') {
             this.container = document.querySelector(selector);
+            if (!this.container) {
+                throw new Error(`element ${selector} not present`);
+            }
         }
         else {
             console.log('Error, type ' + typeof selector + ' of ' + selector + ' is unknown');
