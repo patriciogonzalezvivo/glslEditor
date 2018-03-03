@@ -143,8 +143,6 @@ export default class GlslEditor {
         this.errorsDisplay = new ErrorsDisplay(this);
         this.visualDebugger = new VisualDebugger(this);
 
-        this.validShaderText = "";
-        
         if (this.options.exportIcon) {
             this.export = new ExportIcon(this);
         }
@@ -213,15 +211,9 @@ export default class GlslEditor {
             this.storage = new CrossStorageClient('https://openframe.io/hub.html');
             this.storage.onConnect().then(() => {
                 console.log("Connected to OpenFrame [o]")
-<<<<<<< HEAD
             }).bind(this);
         }
 
-=======
-            }.bind(this));
-        }
-        
->>>>>>> 3a49f5654399517b11b3921a1fb591b020f643b8
         return this;
     }
 
@@ -286,32 +278,6 @@ export default class GlslEditor {
         return this.editor.getValue();
     }
 
-    getSuccessfullyCompilingContent() {
-<<<<<<< HEAD
-        let rtn = '';
-        if (this.shader && this.shader.canvas && this.shader.canvas.isValid) {
-            let validShaderText = this.editor.getValue();
-            /*validShaderText = validShaderText.replace(/2 u_r/gm, '3 iR');
-            validShaderText = validShaderText.replace(/u_r/gm, 'iR');
-            validShaderText = validShaderText.replace(/u_tex/gm, 'iChannel');
-            validShaderText = validShaderText.replace(/2 u_mouse/gm, '4 iMouse');
-            validShaderText = validShaderText.replace(/u_m/gm, 'iM');
-            validShaderText = validShaderText.replace(/u_time/gm, 'iGlobalTime');*/
-            rtn = validShaderText;
-        } 
-        console.log(rtn);
-        return rtn;
-    }
-=======
-        if (this.shader && this.shader.canvas && this.shader.canvas.isValid) {
-            this.validShaderText = this.editor.getValue();
-        } else {
-            this.validShaderText = '';
-        }
-        return this.validShaderText;
-    }
-
->>>>>>> 3a49f5654399517b11b3921a1fb591b020f643b8
     getAuthor() {
         let content = this.getContent();
         let result = content.match(/\/\/\s*[A|a]uthor\s*[\:]?\s*([\w|\s|\@|\(|\)|\-|\_]*)/i);
