@@ -143,6 +143,8 @@ export default class GlslEditor {
         this.errorsDisplay = new ErrorsDisplay(this);
         this.visualDebugger = new VisualDebugger(this);
 
+        this.validShaderText = "";
+        
         if (this.options.exportIcon) {
             this.export = new ExportIcon(this);
         }
@@ -211,9 +213,15 @@ export default class GlslEditor {
             this.storage = new CrossStorageClient('https://openframe.io/hub.html');
             this.storage.onConnect().then(() => {
                 console.log("Connected to OpenFrame [o]")
+<<<<<<< HEAD
             }).bind(this);
         }
 
+=======
+            }.bind(this));
+        }
+        
+>>>>>>> 3a49f5654399517b11b3921a1fb591b020f643b8
         return this;
     }
 
@@ -279,6 +287,7 @@ export default class GlslEditor {
     }
 
     getSuccessfullyCompilingContent() {
+<<<<<<< HEAD
         let rtn = '';
         if (this.shader && this.shader.canvas && this.shader.canvas.isValid) {
             let validShaderText = this.editor.getValue();
@@ -293,6 +302,16 @@ export default class GlslEditor {
         console.log(rtn);
         return rtn;
     }
+=======
+        if (this.shader && this.shader.canvas && this.shader.canvas.isValid) {
+            this.validShaderText = this.editor.getValue();
+        } else {
+            this.validShaderText = '';
+        }
+        return this.validShaderText;
+    }
+
+>>>>>>> 3a49f5654399517b11b3921a1fb591b020f643b8
     getAuthor() {
         let content = this.getContent();
         let result = content.match(/\/\/\s*[A|a]uthor\s*[\:]?\s*([\w|\s|\@|\(|\)|\-|\_]*)/i);
