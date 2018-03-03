@@ -21,16 +21,16 @@ export default class Vec3Picker extends Picker {
         this.shapes.push({
             edgeColour: this.dimColor,
             nodes: [[this.width / 2 - 50, this.height / 2, 100], [this.width / 2 + 50, this.height / 2, 100],
-                    [this.width / 2, this.height / 2 - 50, 100], [this.width / 2, this.height / 2 + 50, 100],
-                    [this.width / 2, this.height / 2, 50], [this.width / 2, this.height / 2, 150] ],
+                [this.width / 2, this.height / 2 - 50, 100], [this.width / 2, this.height / 2 + 50, 100],
+                [this.width / 2, this.height / 2, 50], [this.width / 2, this.height / 2, 150]],
             edges: [[0,1], [2,3], [4,5]]
         });
 
         this.shapes.push({
             textColour: this.fnColor,
             nodes: [[this.width / 2 + 68, this.height / 2, 100], [this.width / 2 - 68, this.height / 2, 100],
-                    [this.width / 2, this.height / 2 + 68, 100], [this.width / 2, this.height / 2 - 68, 100],
-                    [this.width / 2, this.height / 2, 168], [this.width / 2, this.height / 2, 32] ],
+                [this.width / 2, this.height / 2 + 68, 100], [this.width / 2, this.height / 2 - 68, 100],
+                [this.width / 2, this.height / 2, 168], [this.width / 2, this.height / 2, 32]],
             text: ['x', '-x', 'y', '-y', 'z', '-z']
         });
 
@@ -165,9 +165,9 @@ export default class Vec3Picker extends Picker {
         let mouse = new Vector([event.offsetX, event.offsetY]);
         let axis = {
             x: [68, 0, 0],
-            neg_x: [-68, 0, 0],
+            negX: [-68, 0, 0],
             y: [0, 68, 100],
-            neg_y: [0, -68, 0]
+            negY: [0, -68, 0]
         };
         let selected = '';
         for (let i in axis) {
@@ -183,13 +183,13 @@ export default class Vec3Picker extends Picker {
         if (selected === 'x') {
             this.camera.rotateY(-1.57079632679);
         }
-        else if (selected === 'neg_x') {
+        else if (selected === 'negX') {
             this.camera.rotateY(1.57079632679);
         }
         else if (selected === 'y') {
             this.camera.rotateX(-1.57079632679);
         }
-        else if (selected === 'neg_y') {
+        else if (selected === 'negY') {
             this.camera.rotateX(1.57079632679);
         }
 
@@ -207,4 +207,3 @@ export default class Vec3Picker extends Picker {
         this.point = [this.value.x * this.scale, this.value.y * this.scale, this.value.z * this.scale];
     }
 }
-

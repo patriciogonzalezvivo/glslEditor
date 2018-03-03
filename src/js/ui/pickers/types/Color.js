@@ -132,7 +132,7 @@ export default class Color {
     }
 
     uniformValue () {
-        var vec = this.get('vec')
+        var vec = this.get('vec');
         var arr = [vec.v, vec.e, vec.c];
         if (this.colors.alpha) {
             arr.push(this.colors.alpha);

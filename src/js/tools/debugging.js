@@ -34,7 +34,8 @@ export function getVariableType(cm, sVariable) {
             let voidMatch = voidRE.exec(cm.getLine(i));
             if (voidMatch) {
                 voidIN = true;
-            } else {
+            }
+            else {
                 let uniformMatch = uniformRE.exec(cm.getLine(i));
                 if (uniformMatch && !isCommented(cm, i, uniformMatch)) {
                     return uniformMatch[1];
@@ -78,49 +79,47 @@ export function getShaderForTypeVarInLine(cm, sType, sVariable, nLine) {
     return frag;
 }
 
-export function getResultRange(test_results) {
-    let min_ms = '10000000.0';
-    let min_line = 0;
-    let max_ms = '0.0';
-    let max_line = 0;
-    for (let i in test_results) {
-        if (test_results[i].ms < min_ms) {
-            min_ms = test_results[i].ms;
-            min_line = test_results[i].line;
+export function getResultRange(testResults) {
+    let minMS = '10000000.0';
+    let minLine = 0;
+    let maxMS = '0.0';
+    let maxLine = 0;
+    for (let i in testResults) {
+        if (testResults[i].ms < minMS) {
+            minMS = testResults[i].ms;
+            minLine = testResults[i].line;
         }
-        if (test_results[i].ms > max_ms) {
-            max_ms = test_results[i].ms;
-            max_line = test_results[i].line;
+        if (testResults[i].ms > maxMS) {
+            maxMS = testResults[i].ms;
+            maxLine = testResults[i].line;
         }
     }
-    return { min:{line: min_line, ms: min_ms}, max:{line: max_line, ms: max_ms} };
+    return { min:{line: minLine, ms: minMS}, max:{line: maxLine, ms: maxMS} };
 }
 
 export function getMedian(values) {
-    values.sort( function(a,b) {return a - b;} );
+    values.sort(function(a,b) {return a - b;});
 
-    var half = Math.floor(values.length/2);
+    var half = Math.floor(values.length / 2);
 
-    if(values.length % 2)
-        return values[half];
-    else
-        return (values[half-1] + values[half]) / 2.0;
+    if(values.length % 2) {return values[half];}
+    else {return (values[half - 1] + values[half]) / 2.0;}
 }
 
-export function getDeltaSum(test_results) {
+export function getDeltaSum(testResults) {
     let total = 0.0;
-    for (let i in test_results) {
-        if (test_results[i].delta > 0) {
-            total += test_results[i].delta;
+    for (let i in testResults) {
+        if (testResults[i].delta > 0) {
+            total += testResults[i].delta;
         }
     }
     return total;
 }
 
-export function getHits(test_results) {
+export function getHits(testResults) {
     let total = 0;
-    for (let i in test_results) {
-        if (test_results[i].delta > 0) {
+    for (let i in testResults) {
+        if (testResults[i].delta > 0) {
             total++;
         }
     }

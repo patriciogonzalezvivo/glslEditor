@@ -1,14 +1,13 @@
-/* global MediaRecorder 
+/* global MediaRecorder
 Author: Brett Camper (@professorlemeza)
 URL: https://github.com/tangrams/tangram/blob/master/src/utils/media_capture.js
 */
 import {createObjectURL} from './urls';
 
 export default class MediaCapture {
-
     constructor() {
-        this.queue_screenshot = null;
-        this.video_capture = null;
+        this.queueScreenshot = null;
+        this.videoCapture = null;
     }
 
     setCanvas (canvas) {
@@ -17,22 +16,22 @@ export default class MediaCapture {
 
     // Take a screenshot, returns a promise that resolves with the screenshot data when available
     screenshot () {
-        if (this.queue_screenshot != null) {
-            return this.queue_screenshot.promise; // only capture one screenshot at a time
+        if (this.queueScreenshot != null) {
+            return this.queueScreenshot.promise; // only capture one screenshot at a time
         }
 
         // Will resolve once rendering is complete and render buffer is captured
-        this.queue_screenshot = {};
-        this.queue_screenshot.promise = new Promise((resolve, reject) => {
-            this.queue_screenshot.resolve = resolve;
-            this.queue_screenshot.reject = reject;
+        this.queueScreenshot = {};
+        this.queueScreenshot.promise = new Promise((resolve, reject) => {
+            this.queueScreenshot.resolve = resolve;
+            this.queueScreenshot.reject = reject;
         });
-        return this.queue_screenshot.promise;
+        return this.queueScreenshot.promise;
     }
 
     // Called after rendering, captures render buffer and resolves promise with the image data
     completeScreenshot () {
-        if (this.queue_screenshot != null) {
+        if (this.queueScreenshot != null) {
             // Get data URL, convert to blob
             // Strip host/mimetype/etc., convert base64 to binary without UTF-8 mangling
             // Adapted from: https://gist.github.com/unconed/4370822
@@ -45,8 +44,8 @@ export default class MediaCapture {
             const blob = new Blob([buffer], { type: 'image/png' });
 
             // Resolve with screenshot data
-            this.queue_screenshot.resolve({ url, blob, type: 'png' });
-            this.queue_screenshot = null;
+            this.queueScreenshot.resolve({ url, blob, type: 'png' });
+            this.queueScreenshot = null;
         }
     }
 
@@ -56,21 +55,21 @@ export default class MediaCapture {
             console.log('warn: Video capture (Canvas.captureStream and/or MediaRecorder APIs) not supported by browser');
             return false;
         }
-        else if (this.video_capture) {
+        else if (this.videoCapture) {
             console.log('warn: Video capture already in progress, call Scene.stopVideoCapture() first');
             return false;
         }
 
         // Start a new capture
         try {
-            let cap = this.video_capture = {};
+            let cap = this.videoCapture = {};
             cap.chunks = [];
             cap.stream = this.canvas.captureStream();
             cap.options = { mimeType: 'video/webm' }; // TODO: support other format options
-            cap.media_recorder = new MediaRecorder(cap.stream, cap.options);
-            cap.media_recorder.ondataavailable = (event) => {
+            cap.mediaRecorder = new MediaRecorder(cap.stream, cap.options);
+            cap.mediaRecorder.ondataavailable = (event) => {
                 if (event.data.size > 0) {
-                   cap.chunks.push(event.data);
+                    cap.chunks.push(event.data);
                 }
 
                 // Stopped recording? Create the final capture file blob
@@ -87,16 +86,16 @@ export default class MediaCapture {
                         });
                     }
                     cap.stream = null;
-                    cap.media_recorder = null;
-                    this.video_capture = null;
+                    cap.mediaRecorder = null;
+                    this.videoCapture = null;
 
                     cap.resolve({ url, blob, type: 'webm' });
                 }
             };
-            cap.media_recorder.start();
+            cap.mediaRecorder.start();
         }
         catch (e) {
-            this.video_capture = null;
+            this.videoCapture = null;
             console.log('error: Scene video capture failed', e);
             return false;
         }
@@ -105,21 +104,20 @@ export default class MediaCapture {
 
     // Stops capturing a video stream from the canvas, returns a promise that resolves with the video when available
     stopVideoCapture () {
-        if (!this.video_capture) {
+        if (!this.videoCapture) {
             console.log('warn: No scene video capture in progress, call Scene.startVideoCapture() first');
             return Promise.resolve({});
         }
 
         // Promise that will resolve when final stream is available
-        this.video_capture.promise = new Promise((resolve, reject) => {
-            this.video_capture.resolve = resolve;
-            this.video_capture.reject = reject;
+        this.videoCapture.promise = new Promise((resolve, reject) => {
+            this.videoCapture.resolve = resolve;
+            this.videoCapture.reject = reject;
         });
 
         // Stop recording
-        this.video_capture.media_recorder.stop();
+        this.videoCapture.mediaRecorder.stop();
 
-        return this.video_capture.promise;
+        return this.videoCapture.promise;
     }
-
 }

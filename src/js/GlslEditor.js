@@ -56,6 +56,9 @@ export default class GlslEditor {
         }
         else if (typeof selector === 'string') {
             this.container = document.querySelector(selector);
+            if (!this.container) {
+                throw new Error(`element ${selector} not present`);
+            }
         }
         else {
             console.log('Error, type ' + typeof selector + ' of ' + selector + ' is unknown');
@@ -74,8 +77,8 @@ export default class GlslEditor {
             this.options.imgs = [];
         }
 
-        if (this.options.displayMenu === undefined) {
-            this.options.displayMenu = true;
+        if (this.options.display_menu === undefined) {
+            this.options.display_menu = true;
         }
 
         if (this.container.hasAttribute('data-textures')) {
@@ -92,12 +95,12 @@ export default class GlslEditor {
 
         // Default Context
         if (!this.options.frag) {
-            var innerHTML = this.container.innerHTML.replace(/&lt;br&gt;/g,"");
-            innerHTML = innerHTML.replace(/<br>/g,"");
-            innerHTML = innerHTML.replace(/&nbsp;/g,"");
-            innerHTML = innerHTML.replace(/&lt;/g,"<");
-            innerHTML = innerHTML.replace(/&gt;/g,">");
-            innerHTML = innerHTML.replace(/&amp;/g,"&");
+            var innerHTML = this.container.innerHTML.replace(/&lt;br&gt;/g,'');
+            innerHTML = innerHTML.replace(/<br>/g,'');
+            innerHTML = innerHTML.replace(/&nbsp;/g,'');
+            innerHTML = innerHTML.replace(/&lt;/g,'<');
+            innerHTML = innerHTML.replace(/&gt;/g,'>');
+            innerHTML = innerHTML.replace(/&amp;/g,'&');
             this.options.frag = innerHTML || EMPTY_FRAG_SHADER;
 
             if (innerHTML) {
@@ -168,7 +171,6 @@ export default class GlslEditor {
                 }
                 this.shader.el.style.top = height.toString() + 'px';
             });
-
         }
 
         // If the user bails for whatever reason, hastily shove the contents of
@@ -212,7 +214,7 @@ export default class GlslEditor {
             // setup CrossStorage client
             this.storage = new CrossStorageClient('https://openframe.io/hub.html');
             this.storage.onConnect().then(() => {
-                console.log("Connected to OpenFrame [o]")
+                console.log('Connected to OpenFrame [o]');
             }).bind(this);
         }
 
@@ -370,36 +372,36 @@ export default class GlslEditor {
     }
 
     createFontLink() {
-        var head  = document.getElementsByTagName('head')[0];
-        var link = document.createElement( "link" );
-        link.href = "https://fonts.googleapis.com/icon?family=Material+Icons";
-        link.type = "text/css";
-        link.rel = "stylesheet";
-        link.media = "screen,print";
+        var head = document.getElementsByTagName('head')[0];
+        var link = document.createElement('link');
+        link.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
+        link.type = 'text/css';
+        link.rel = 'stylesheet';
+        link.media = 'screen,print';
         head.appendChild(link);
-        document.getElementsByTagName( "head" )[0].appendChild( link );
+        document.getElementsByTagName('head')[0].appendChild(link);
     }
 
     togglePresentationWindow(flag) {
-      this.pWindowOpen = flag;
-      if (flag) {
-        this.shader.openWindow();
-      } else {
-        this.shader.closeWindow();
-      }
+        this.pWindowOpen = flag;
+        if (flag) {
+            this.shader.openWindow();
+        }
+        else {
+            this.shader.closeWindow();
+        }
     }
 
     onClosePresentationWindow() {
-      this.pWindowOpen = false;
+        this.pWindowOpen = false;
     }
 }
 
 window.GlslEditor = GlslEditor;
 
 var GlslWebComponent = function() {};
-GlslWebComponent.prototype = Object.create(HTMLElement.prototype)
+GlslWebComponent.prototype = Object.create(HTMLElement.prototype);
 GlslWebComponent.prototype.createdCallback = function createdCallback() {
-
     var options = {
         canvas_size: 150,
         canvas_follow: true,
@@ -413,9 +415,11 @@ GlslWebComponent.prototype.createdCallback = function createdCallback() {
 
             if (value === 'true') {
                 value = true;
-            } else if (value === 'false') {
+            }
+            else if (value === 'false') {
                 value = false;
-            } else if (parseInt(value)) {
+            }
+            else if (parseInt(value)) {
                 value = parseInt(value);
             }
 
@@ -424,6 +428,6 @@ GlslWebComponent.prototype.createdCallback = function createdCallback() {
     }
 
     this.glslEditor = new GlslEditor(this, options);
-}
+};
 
 document.registerElement('glsl-editor', GlslWebComponent);

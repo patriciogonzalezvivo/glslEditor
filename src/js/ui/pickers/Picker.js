@@ -129,7 +129,7 @@ export default class Picker {
         this.renderer.drawFrame();
     }
 
-     /**
+    /**
      *  Removes modal from DOM and destroys related event listeners
      */
     removeModal () {

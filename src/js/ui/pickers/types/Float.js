@@ -19,5 +19,4 @@ export default class Float {
     uniformMethod () {
         return '1f';
     }
-
 }

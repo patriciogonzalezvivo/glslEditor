@@ -72,8 +72,8 @@ gulp.task('js', function () {
         .pipe(derequire())
         .pipe(buffer())
         // .pipe(sourcemaps.init({ loadMaps: true }))
-            // Add transformation tasks to the pipeline here.
-            // .on('error', gutil.log)
+        // Add transformation tasks to the pipeline here.
+        // .on('error', gutil.log)
         // .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./build'))
         .pipe(uglify())

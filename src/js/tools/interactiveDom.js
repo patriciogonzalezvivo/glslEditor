@@ -196,10 +196,10 @@ export function subscribeInteractiveDom (dom, options) {
 
                 if (preSnapped) {
                     setBounds(dom,
-                            e.clientX - preSnapped.width / 2,
-                            e.clientY - Math.min(clicked.y, preSnapped.height),
-                            preSnapped.width,
-                            preSnapped.height);
+                        e.clientX - preSnapped.width / 2,
+                        e.clientY - Math.min(clicked.y, preSnapped.height),
+                        preSnapped.width,
+                        preSnapped.height);
                     return;
                 }
 
@@ -314,7 +314,7 @@ export function subscribeInteractiveDom (dom, options) {
         // hintHide();
         dom.trigger('move', { finish: true, el: dom });
         dom.trigger('resize', { finish: true, el: dom });
-    }
+    };
 
     return dom;
 }
