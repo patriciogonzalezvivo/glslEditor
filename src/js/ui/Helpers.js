@@ -106,8 +106,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newDir.length;
-                        this.main.editor.replaceRange(newDir, start, end, 
-                        `+${match.type}`);
+                        this.main.editor.replaceRange(newDir, start, end, `+${match.type}`);
                     });
                 }
                 else if (match.type === 'vec2') {
