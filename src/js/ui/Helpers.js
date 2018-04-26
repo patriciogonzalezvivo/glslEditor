@@ -83,7 +83,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newColor.length;
-                        this.main.editor.replaceRange(newColor, start, end);
+                        this.main.editor.replaceRange(newColor, start, end, `+${match.type}`);
                     });
 
                     this.activeModal.on('linkButton', (color) => {
@@ -94,7 +94,7 @@ export default class Helpers {
                             let start = { line: cursor.line, ch: match.start };
                             let end = { line: cursor.line, ch: match.end };
                             match.end = match.start + newDir.length;
-                            this.main.editor.replaceRange(newDir, start, end);
+                            this.main.editor.replaceRange(newDir, start, end, `+${match.type}`);
                         });
                     });
                 }
@@ -106,7 +106,8 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newDir.length;
-                        this.main.editor.replaceRange(newDir, start, end);
+                        this.main.editor.replaceRange(newDir, start, end, 
+                        `+${match.type}`);
                     });
                 }
                 else if (match.type === 'vec2') {
@@ -117,7 +118,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newpos.length;
-                        this.main.editor.replaceRange(newpos, start, end);
+                        this.main.editor.replaceRange(newpos, start, end, `+${match.type}`);
                     });
                 }
                 else if (match.type === 'number') {
@@ -128,7 +129,7 @@ export default class Helpers {
                         let start = { line: cursor.line, ch: match.start };
                         let end = { line: cursor.line, ch: match.end };
                         match.end = match.start + newNumber.length;
-                        this.main.editor.replaceRange(newNumber, start, end);
+                        this.main.editor.replaceRange(newNumber, start, end, `+${match.type}`);
                     });
                 }
             }
