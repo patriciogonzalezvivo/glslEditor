@@ -98,7 +98,7 @@ export default class ColorPicker extends Picker {
         this.dom.colorDisc = this.el.querySelector('.ge_colorpicker_disc');
         this.dom.luminanceBar = this.el.querySelector('.ge_colorpicker_bar-luminance');
 
-        if (this.link_button) {
+        if (this.linkButton) {
             let lbutton = document.createElement('div');
             lbutton.innerHTML = '+';
             lbutton.className = this.CSS_PREFIX + 'link-button';
@@ -106,9 +106,9 @@ export default class ColorPicker extends Picker {
             this.el.appendChild(lbutton);
 
             lbutton.addEventListener('click', () => {
-                this.trigger('link_button', this.value);
-                if (typeof this.link_button === 'function') {
-                    this.link_button(this.value);
+                this.trigger('linkButton', this.value);
+                if (typeof this.linkButton === 'function') {
+                    this.linkButton(this.value);
                 }
                 this.removeModal();
             });
