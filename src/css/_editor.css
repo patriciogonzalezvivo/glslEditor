@@ -26,9 +26,14 @@
 	visibility: hidden;
 }
 
+.ge_editor {
+    background-color: #272823;
+}
+
 .ge_editor-unfocus {
     opacity: .5;
     filter: blur(1px);
+    background-color: #272823;
 }
 
 .CodeMirror {
