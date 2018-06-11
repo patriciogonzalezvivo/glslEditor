@@ -22,7 +22,7 @@ export default class Shader {
         this.elCanvas.setAttribute('class', 'ge_canvas');
         this.elCanvas.setAttribute('width', (this.options.canvas_width || this.options.canvas_size || '250') / window.devicePixelRatio);
         this.elCanvas.setAttribute('height', (this.options.canvas_height || this.options.canvas_size || '250') / window.devicePixelRatio);
-        this.elCanvas.setAttribute('data-fragment', this.options.frag);
+        this.elCanvas.setAttribute('data-fragment', this.options.frag_header + this.options.frag + this.options.frag_footer);
         this.el.appendChild(this.elCanvas);
         let glslcanvas = new GlslCanvas(this.elCanvas, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
 
