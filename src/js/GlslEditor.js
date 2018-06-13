@@ -73,7 +73,7 @@ export default class GlslEditor {
             this.options = options;
         }
 
-        if (this.options.imgs) {
+        if (this.options.imgs === undefined) {
             this.options.imgs = [];
         }
 
