@@ -20,11 +20,15 @@ export default class Shader {
         // CREATE AND START GLSLCANVAS
         this.elCanvas = document.createElement('canvas');
         this.elCanvas.setAttribute('class', 'ge_canvas');
-        this.elCanvas.setAttribute('width', (this.options.canvas_width || this.options.canvas_size || '250') / window.devicePixelRatio);
-        this.elCanvas.setAttribute('height', (this.options.canvas_height || this.options.canvas_size || '250') / window.devicePixelRatio);
         this.elCanvas.setAttribute('data-fragment', this.options.frag_header + this.options.frag + this.options.frag_footer);
         this.el.appendChild(this.elCanvas);
         let glslcanvas = new GlslCanvas(this.elCanvas, { premultipliedAlpha: false, preserveDrawingBuffer: true, backgroundColor: 'rgba(1,1,1,1)' });
+
+        let width = (this.options.canvas_width || this.options.canvas_size || '250');
+        let height =  (this.options.canvas_height || this.options.canvas_size || '250');
+        glslcanvas.canvas.style.width = width + 'px';
+        glslcanvas.canvas.style.height = height + 'px';
+        glslcanvas.resize();
 
         this.canvas = glslcanvas;
 
