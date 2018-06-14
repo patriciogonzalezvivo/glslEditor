@@ -20,7 +20,7 @@ export function saveOnServer (ge, callback) {
     let data = new FormData();
     data.append('code', content);
 
-    let dataURL = ge.shader.el_canvas.toDataURL('image/png');
+    let dataURL = ge.shader.elCanvas.toDataURL('image/png');
     let blobBin = atob(dataURL.split(',')[1]);
     let array = [];
     for (let i = 0; i < blobBin.length; i++) {
