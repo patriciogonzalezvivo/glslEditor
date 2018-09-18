@@ -34,7 +34,11 @@ export default class ErrorsDisplay {
         let re = /ERROR:\s+\d+:(\d+):\s+('.*)/g;
         let matches = re.exec(args.error);
         if (matches) {
-            let line = parseInt(matches[1]) - 1;
+            let numLines = 1;
+            if(this.main.options.frag_header.length > 0) {
+                numLines = (this.main.options.frag_header.match(/\r?\n/g) || '').length + 1;
+            }
+            let line = parseInt(matches[1]) - numLines;
             let er = matches[2];
             let msg = document.createElement('div');
 
