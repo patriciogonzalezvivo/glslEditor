@@ -138,6 +138,26 @@ export default class GlslEditor {
             new FileDrop(this);
         }
 
+        if (this.options.indentUnit === undefined) {
+            this.options.indentUnit = 4;
+        }
+
+        if (this.options.tabSize === undefined) {
+            this.options.tabSize = 4;
+        }
+
+        if (this.options.indentWithTabs === undefined) {
+            this.options.indentWithTabs = false;
+        }
+
+        if (this.options.lineWrapping === undefined) {
+            this.options.lineWrapping = true;
+        }
+
+        if (this.options.autofocus === undefined) {
+            this.options.autofocus = true;
+        }
+
         // CORE elements
         this.shader = new Shader(this);
         this.editor = initEditor(this);
