@@ -71,7 +71,9 @@ export default class BufferManager {
             }
             old.unlinkDoc(linked);
         }
-        this.main.editor.focus();
+        if (this.main.options.autofocus) {
+            this.main.editor.focus();
+        }
         this.main.setContent(this.main.getContent());
 
         if (this.tabs[this.current]) {
