@@ -58,6 +58,11 @@ This is a list of all the **options** you can set up:
 | ```watchHash```| bool | Listen to changes on the wash path to load files |```false```|
 | ```frag_header``` | string| Adds a hidden header to every shader before compiling |```""```|
 | ```frag_footer``` | string| Adds a hidden footer to every shader before compiling |```""```|
+| ```indentUnit``` | number | How many spaces a block should be indented | ```4``` |
+| ```tabSize``` | number | The width of a tab character | ```4``` |
+| ```indentWithTabs``` | bool | Whether, when indenting, the spaces should be replaced by tabs  | ```false``` |
+| ```lineWrapping``` | bool | Whether CodeMirror should wrap for long lines | ```true``` |
+| ```autofocus``` | bool | Can be used to make CodeMirror focus itself on initialization | ```true``` |
 
 ## Some of the features features
 

@@ -51,10 +51,12 @@ export function initEditor (main) {
         showCursorWhenSelecting: true,
         theme: main.options.theme,
         dragDrop: false,
-        indentUnit: 4,
+        indentUnit: main.options.indentUnit,
+        tabSize: main.options.tabSize,
+        indentWithTabs: main.options.indentWithTabs,
         gutters: main.options.lineNumbers ? ['CodeMirror-linenumbers', 'breakpoints'] : false,
-        lineWrapping: true,
-        autofocus: true
+        lineWrapping: main.options.lineWrapping,
+        autofocus: main.options.autofocus
     });
     return cm;
 }
