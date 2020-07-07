@@ -34,7 +34,7 @@
     "browserify": "^11.2.0",
     "browserify-shim": "^3.8.11",
     "csswring": "^4.0.0",
-    "electron": "^1.6.5",
+    "electron": "^7.2.4",
     "electron-connect": "^0.6.1",
     "electron-packager": "^8.6.0",
     "gulp": "^3.9.0",
