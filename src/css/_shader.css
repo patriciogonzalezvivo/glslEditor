@@ -5,13 +5,14 @@
     right: 0px;
     margin: 0px;
     padding: 0px;
-	z-index: var(--z-shader);
+    transition: top 0.25s ease;
+    z-index: var(--z-shader);
 }
 
 .ge_canvas {
     margin: 0px;
     padding: 0px;
-	z-index: var(--z-shader);
+    z-index: var(--z-shader);
 }
 
 .ge_control {
