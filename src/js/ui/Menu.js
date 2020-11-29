@@ -1,5 +1,6 @@
 import MenuItem from './MenuItem';
 import ExportModal from './modals/ExportModal';
+import ImportModal from './modals/ImportModal';
 
 export default class Menu {
     constructor (main) {
@@ -32,6 +33,16 @@ export default class Menu {
         // TEST
         this.menus.test = new MenuItem(this.el, 'ge_menu', '<i class="material-icons">timeline</i> Test', (event) => {
             main.visualDebugger.check();
+        });
+
+        // IMPORT
+        this.menus.import = new MenuItem(this.el, 'ge_menu', '<i class="material-icons">arrow_downward</i> Import', (event) => {
+            if (main.change || !this.importModal) {
+                this.importModal = new ImportModal('ge_export', { main: main, position: 'fixed' });
+            }
+
+            let bbox = this.menus.import.el.getBoundingClientRect();
+            this.importModal.presentModal(bbox.left - 5, bbox.top + bbox.height + 5);
         });
 
         // SHARE
