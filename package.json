@@ -59,7 +59,7 @@
   "dependencies": {
     "babel": "^5.8.29",
     "babel-runtime": "5.8.29",
-    "codemirror": "5.8.0",
+    "codemirror": "5.58.2",
     "cross-storage": "^1.0.0",
     "document-register-element": "^1.9.1",
     "eslint": "^4.11.0",
