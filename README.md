@@ -64,7 +64,7 @@ This is a list of all the **options** you can set up:
 | ```lineWrapping``` | bool | Whether CodeMirror should wrap for long lines | ```true``` |
 | ```autofocus``` | bool | Can be used to make CodeMirror focus itself on initialization | ```true``` |
 
-## Some of the features features
+## Some of the features
 
 - Inline Color picker and 3D vector picker for '''vec3''
 
