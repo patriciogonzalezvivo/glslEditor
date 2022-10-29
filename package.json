@@ -4,6 +4,7 @@
   "description": "Simple GLSL Fragment Shader Editor",
   "main": "src/main.js",
   "scripts": {
+    "dev:vite": "vite src/",
     "build": "gulp",
     "dev": "gulp electron",
     "start": "electron .",
@@ -64,6 +65,7 @@
     "document-register-element": "^1.9.1",
     "eslint": "^4.11.0",
     "glslCanvas": "^0.1.8",
+    "vite": "^3.2.1",
     "xhr": "^2.2.0"
   },
   "overrides": {
