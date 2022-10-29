@@ -61,7 +61,8 @@ gulp.task('js', function () {
         standalone: 'GlslEditor',
         debug: true,
         transform: [
-            babelify.configure({ optional: ['runtime'] }),
+            // babelify.configure({ optional: ['runtime'] }),
+            babelify.configure({ }),
             shim
         ]
     });
@@ -97,9 +98,9 @@ gulp.task('run', function () {
 });
 
 // Build files, do not watch
-gulp.task('build', ['css', 'js']);
+gulp.task('build', gulp.series('css', 'js'));
 
-gulp.task('electron', ['css', 'js', 'watch', 'run']);
+gulp.task('electron', gulp.series('css', 'js', 'watch', 'run'));
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['css', 'js', 'watch']);
+gulp.task('default', gulp.series('css', 'js', 'watch'));
