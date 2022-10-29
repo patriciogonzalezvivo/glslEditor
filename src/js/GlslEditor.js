@@ -17,14 +17,13 @@ const STORAGE_LAST_EDITOR_CONTENT = "last-content";
 // Import Utils
 import xhr from "xhr";
 import { subscribeMixin } from "./tools/mixin";
-import { saveAs } from "./tools/download";
-import { getJSON } from "./tools/common";
-import CodeMirror from "codemirror";
 
-// // Cross storage for Openframe -- allows restricted access to certain localStorage operations
-// // on the openframe domain
-// import { CrossStorageClient } from "cross-storage";
-// import { getMode } from "codemirror";
+// 3er Parties
+import { saveAs } from "./tools/download";
+
+// Cross storage for Openframe -- allows restricted access to certain localStorage operations
+// on the openframe domain
+import { CrossStorageClient } from "cross-storage";
 
 const EMPTY_FRAG_SHADER = `// Author:
 // Title:
@@ -58,14 +57,12 @@ export default class GlslEditor {
       selector.nodeType === 1
     ) {
       this.container = selector;
-    } 
-    else if (typeof selector === "string") {
+    } else if (typeof selector === "string") {
       this.container = document.querySelector(selector);
       if (!this.container) {
         throw new Error(`element ${selector} not present`);
       }
-    } 
-    else {
+    } else {
       console.log(
         "Error, type " + typeof selector + " of " + selector + " is unknown"
       );
@@ -75,27 +72,30 @@ export default class GlslEditor {
     this.options = {};
     this.change = false;
     this.autoupdate = true;
-    this.lygia_glob = null;
 
-    if (options)
+    if (options) {
       this.options = options;
+    }
 
-    if (this.options.imgs === undefined)
+    if (this.options.imgs === undefined) {
       this.options.imgs = [];
+    }
 
-    if (this.options.display_menu === undefined)
+    if (this.options.display_menu === undefined) {
       this.options.display_menu = true;
+    }
 
     if (this.container.hasAttribute("data-textures")) {
       let imgList = this.container.getAttribute("data-textures").split(",");
-      for (let i in imgList)
+      for (let i in imgList) {
         this.options.imgs.push(imgList[i]);
-      
+      }
     }
 
     // Default Theme
-    if (!this.options.theme)
+    if (!this.options.theme) {
       this.options.theme = "default";
+    }
 
     // Default Context
     if (!this.options.frag) {
@@ -107,48 +107,60 @@ export default class GlslEditor {
       innerHTML = innerHTML.replace(/&amp;/g, "&");
       this.options.frag = innerHTML || EMPTY_FRAG_SHADER;
 
-      if (innerHTML)
+      if (innerHTML) {
         this.container.innerHTML = "";
+      }
     }
 
     // Default invisible Fragment header
-    if (!this.options.frag_header)
+    if (!this.options.frag_header) {
       this.options.frag_header = "";
+    }
 
     // Default invisible Fragment footer
-    if (!this.options.frag_footer)
+    if (!this.options.frag_footer) {
       this.options.frag_footer = "";
+    }
 
     // Listen to hash changes
-    if (this.options.watchHash)
+    if (this.options.watchHash) {
       new HashWatch(this);
+    }
 
     // Load UI
-    if (this.options.menu)
+    if (this.options.menu) {
       this.menu = new Menu(this);
+    }
 
     // Support for multiple buffers
-    if (this.options.multipleBuffers)
+    if (this.options.multipleBuffers) {
       this.bufferManager = new BufferManager(this);
+    }
 
     // Listen to file drops
-    if (this.options.fileDrops)
+    if (this.options.fileDrops) {
       new FileDrop(this);
+    }
 
-    if (this.options.indentUnit === undefined)
+    if (this.options.indentUnit === undefined) {
       this.options.indentUnit = 4;
+    }
 
-    if (this.options.tabSize === undefined)
+    if (this.options.tabSize === undefined) {
       this.options.tabSize = 4;
+    }
 
-    if (this.options.indentWithTabs === undefined)
+    if (this.options.indentWithTabs === undefined) {
       this.options.indentWithTabs = false;
+    }
 
-    if (this.options.lineWrapping === undefined)
+    if (this.options.lineWrapping === undefined) {
       this.options.lineWrapping = true;
+    }
 
-    if (this.options.autofocus === undefined)
+    if (this.options.autofocus === undefined) {
       this.options.autofocus = true;
+    }
 
     // CORE elements
     this.shader = new Shader(this);
@@ -158,8 +170,9 @@ export default class GlslEditor {
     this.errorsDisplay = new ErrorsDisplay(this);
     this.visualDebugger = new VisualDebugger(this);
 
-    if (this.options.exportIcon)
+    if (this.options.exportIcon) {
       this.export = new ExportIcon(this);
+    }
 
     // EVENTS
     this.editor.on("change", () => {
@@ -170,10 +183,9 @@ export default class GlslEditor {
 
     if (this.options.canvas_follow) {
       this.shader.el.style.position = "relative";
-
-      if (this.options.canvas_float)
+      if (this.options.canvas_float) {
         this.shader.el.style.float = this.options.canvas_float;
-
+      }
       this.editor.on("cursorActivity", (cm) => {
         let height =
           cm.heightAtLine(cm.getCursor().line + 1, "local") -
@@ -184,48 +196,6 @@ export default class GlslEditor {
         this.shader.el.style.top = height.toString() + "px";
       });
     }
-
-    this.editor.on('inputRead', (cm, change) => {
-      let cur = cm.getCursor(),
-          token = cm.getTokenAt(cur);
-      let line = token.string.trim();
-          
-      if (line.startsWith('#include')) {
-        let path = line.substring(10);
-        if (this.lygia_glob === null) {
-          getJSON('https://lygia.xyz/glsl.json', (err, data) => {
-            if (err === null) {
-              this.lygia_glob = data;
-            }
-          });
-        }
-        console.log('autocomplete for', path);
-
-        let start = token.start;
-        let end = cur.ch;
-        let lineN = cur.line;
-
-        let result = []
-
-        if (this.lygia_glob !== null) {
-          this.lygia_glob.forEach( (w) => {if (w.startsWith(path)) result.push('#include \"' + w + '\"');} );
-          result.sort();
-        }
-
-        if (result.length > 0) {
-          CodeMirror.showHint(cm, () => {
-            let rta = {
-              list: result, 
-              from: CodeMirror.Pos(lineN, start),
-              to: CodeMirror.Pos(lineN, end)
-            };
-            
-            console.log(rta);
-            return rta;
-          }, {completeSingle: true, alignWithWord: true});
-        }
-      }
-    });
 
     // If the user bails for whatever reason, hastily shove the contents of
     // the editor into some kind of storage. This overwrites whatever was
@@ -269,14 +239,14 @@ export default class GlslEditor {
       this.new();
     }
 
-    // if (this.options.menu || this.options.exportIcon) {
-    //   // setup CrossStorage client
-    //   this.storage = new CrossStorageClient("https://openframe.io/hub.html");
-    //   this.storage.onConnect().then(() => {
-    //     console.log("Connected to OpenFrame [o]");
-    //   });
-    //   // }).bind(this);
-    // }
+    if (this.options.menu || this.options.exportIcon) {
+      // setup CrossStorage client
+      this.storage = new CrossStorageClient("https://openframe.io/hub.html");
+      this.storage.onConnect().then(() => {
+        console.log("Connected to OpenFrame [o]");
+      });
+      // }).bind(this);
+    }
 
     return this;
   }
@@ -306,8 +276,7 @@ export default class GlslEditor {
       if (tabName !== undefined && this.bufferManager !== undefined) {
         this.bufferManager.open(tabName, shader);
         this.bufferManager.select(tabName);
-      } 
-      else {
+      } else {
         this.editor.setValue(shader);
         this.editor.setSize(null, this.editor.getDoc().height + "px");
         this.editor.setSize(null, "auto");
@@ -399,9 +368,9 @@ export default class GlslEditor {
       focusAll(this.editor);
     }
 
-    if (this.visualDebugger.testingResults.length) 
+    if (this.visualDebugger.testingResults.length) {
       this.visualDebugger.clean();
-    
+    }
     this.shader.canvas.load(
       this.options.frag_header +
         this.editor.getValue() +
@@ -422,10 +391,11 @@ export default class GlslEditor {
 
   togglePresentationWindow(flag) {
     this.pWindowOpen = flag;
-    if (flag)
+    if (flag) {
       this.shader.openWindow();
-    else
+    } else {
       this.shader.closeWindow();
+    }
   }
 
   onClosePresentationWindow() {
@@ -449,12 +419,13 @@ GlslWebComponent.prototype.createdCallback = function createdCallback() {
     if (attribute.specified) {
       var value = attribute.value;
 
-      if (value === "true")
+      if (value === "true") {
         value = true;
-      else if (value === "false")
+      } else if (value === "false") {
         value = false;
-      else if (parseInt(value))
+      } else if (parseInt(value)) {
         value = parseInt(value);
+      }
 
       options[attribute.name] = value;
     }
