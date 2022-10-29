@@ -84,20 +84,33 @@ This is a list of all the **options** you can set up:
 
 ![](http://patriciogonzalezvivo.com/images/glslEditor/debugger.gif)
 
-## Electron Version
 
+## Browser Version
+Runs glslEditor in your favourite Browser™
+
+```bash
+npm run browser
+```
+
+or
+
+```bash
+yarn browser
+```
+
+## Electron Version
+Runs glslEditor in [electron](https://www.electronjs.org/)
 When developing use this to automatically reload Electron on every change
 
 ```bash
-npm run dev
+npm run electron
 ```
 
-For use just do:
+or 
 
 ```bash
-npm run start
+yarn electron
 ```
-
 
 ## TODOs
 
