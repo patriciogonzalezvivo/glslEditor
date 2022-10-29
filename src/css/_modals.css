@@ -24,6 +24,22 @@
     list-style-type: none;
 }
 
+.ge_keyboard_modal {
+    overflow: hidden;
+    color: var(--ui-component-text-color);
+    background-color: var(--ui-base-color);
+    /*box-shadow: var(--modal-shadow);*/
+    box-shadow: 0 5px 5px 5px rgba(0,0,0,.2),0 5px 0px 0px rgba(0,0,0,.25);
+    user-select: none;
+    cursor: pointer;
+    margin: 0px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    list-style-type: none;
+}
+
 .ge_tooltip_modal {
     padding: 10px;
     padding-top: 0px;
@@ -40,4 +56,5 @@
 .ge_tooltip_modal p {
     color: var(--ui-subtext-color);
     margin: 6px;
+
 }
