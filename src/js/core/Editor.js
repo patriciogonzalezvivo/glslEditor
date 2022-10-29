@@ -18,8 +18,8 @@ import "codemirror/addon/display/rulers";
 import "codemirror/addon/display/panel";
 import "codemirror/mode/clike/clike.js";
 
-// Keymap
-// import "codemirror/keymap/sublime";
+// Keymaps
+import "codemirror/keymap/sublime";
 import "codemirror/keymap/vim";
 
 const UNFOCUS_CLASS = "ge_editor-unfocus";
@@ -49,7 +49,7 @@ export function initEditor(main) {
     lineNumbers: main.options.lineNumbers,
     matchBrackets: true,
     mode: "x-shader/x-fragment",
-    keyMap: "vim",
+    keyMap: "sublime",
     autoCloseBrackets: true,
     extraKeys: { "Ctrl-Space": "autocomplete" },
     showCursorWhenSelecting: true,
@@ -64,6 +64,7 @@ export function initEditor(main) {
     lineWrapping: main.options.lineWrapping,
     autofocus: main.options.autofocus,
   });
+  cm.addKeyMap("vim");
   return cm;
 }
 

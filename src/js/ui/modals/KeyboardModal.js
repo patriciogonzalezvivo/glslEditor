@@ -7,13 +7,12 @@ export default class KeyboardModal extends Modal {
     super(CSS_PREFIX, properties);
     this.main = properties.main;
 
-    this.vim = new MenuItem(this.el, "ge_sub_menu", "Vim", (event) => {});
+    this.vim = new MenuItem(this.el, "ge_sub_menu", "Vim", (event) => {
+      window.glslEditor.editor.setOption("keyMap", "vim");
+    });
 
-    this.sublime = new MenuItem(
-      this.el,
-      "ge_sub_menu",
-      "Sublime",
-      (event) => {}
-    );
+    this.sublime = new MenuItem(this.el, "ge_sub_menu", "Sublime", (event) => {
+      window.glslEditor.editor.setOption("keyMap", "sublime");
+    });
   }
 }

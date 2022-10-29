@@ -66,7 +66,7 @@ export default class Menu {
         let bbox = this.menus.share.el.getBoundingClientRect();
         this.exportModal.presentModal(
           bbox.left - 5,
-          bbox.top + bbox.height + 5
+          bbox.top + bbox.height + 15
         );
       }
     );
@@ -96,19 +96,18 @@ export default class Menu {
     this.menus.keymap = new MenuItem(
       this.el,
       "ge_menu",
-      ' <i class="material-icons">keyboard</i> Vim',
+      ' <i class="material-icons">keyboard</i> Keymap',
       (event) => {
         if (main.change || !this.keyboardModal) {
           this.keyboardModal = new KeyboardModal("ge_keyboard", {
             main: main,
-            position: "fixed",
           });
         }
 
-        let bbox = this.menus.share.el.getBoundingClientRect();
+        let bbox = this.menus.keymap.el.getBoundingClientRect();
         this.keyboardModal.presentModal(
           bbox.left - 5,
-          bbox.top + bbox.height + 5
+          bbox.top + bbox.height + 15
         );
       }
     );
