@@ -3,7 +3,7 @@ import { subscribeInteractiveDom } from "../tools/interactiveDom";
 import MediaCapture from "../tools/mediaCapture";
 import MenuItem from "../ui/MenuItem";
 // 3er Parties
-// import { saveAs } from '../vendor/FileSaver.min.js';
+import { saveAs } from "../tools/download";
 
 var CONTROLS_CLASSNAME = "ge_control";
 var CONTROLS_PANEL_CLASSNAME = "ge_control_panel";
@@ -222,7 +222,7 @@ export default class Shader {
       // this.controls.rec.name = '<i class="material-icons">fiber_manual_record</i>';
       this.controls.rec.name = '<i class="material-icons">stop</i>';
       this.mediaCapture.stopVideoCapture().then((video) => {
-        // saveAs(video.blob, `${Number(new Date())}.webm`);
+        saveAs(video.blob, `${Number(new Date())}.webm`);
       });
     }
   }
