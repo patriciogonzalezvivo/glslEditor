@@ -37,7 +37,7 @@
     "csswring": "^4.0.0",
     "electron": "^1.6.5",
     "electron-connect": "^0.6.1",
-    "electron-packager": "^8.6.0",
+    "electron-packager": "^17.0.0",
     "gulp": "^3.9.0",
     "gulp-derequire": "^2.1.0",
     "gulp-livereload": "^3.8.1",
