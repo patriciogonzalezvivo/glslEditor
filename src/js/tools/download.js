@@ -4,4 +4,4 @@ export function saveAs(blob, filename) {
     link.setAttribute("download", filename);
     link.setAttribute("href", url);
     link.click();
-  }
+}
