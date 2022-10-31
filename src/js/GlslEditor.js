@@ -190,7 +190,7 @@ export default class GlslEditor {
           token = cm.getTokenAt(cur);
       let line = token.string.trim();
           
-      if (line.startsWith('#include \"lygia')) {
+      if (line.startsWith('#include')) {
         let path = line.substring(10);
         if (this.lygia_glob === null) {
           getJSON('https://lygia.xyz/glsl.json', (err, data) => {
