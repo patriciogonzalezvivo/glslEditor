@@ -3134,10 +3134,10 @@ glogg@^1.0.0:
   dependencies:
     sparkles "^1.0.0"
 
-glslCanvas@^0.1.8:
-  version "0.1.8"
-  resolved "https://registry.npmjs.org/glslCanvas/-/glslCanvas-0.1.8.tgz"
-  integrity sha512-PL8HVgtLOwZ3cSYlWm7SM4fNucOH78Q5GX/t1aywFu4cvk/OZLLlnBs6kuHBWsSrlwD++M2KPqiaWGr21Xgf7Q==
+glslCanvas@^0.2.1:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/glslCanvas/-/glslCanvas-0.2.4.tgz#9558fe22f0cbbc723c5d334eef2c6cc16f7b2ad5"
+  integrity sha512-mUbwAFwygipM1ixdOzKjpuMCbiSt3yZ0M4DF9zqDZ/9OTOzSLp0XYtvNOn8+ncirPOm2v+lv5PSCINqzC7aipA==
   dependencies:
     xhr "^2.6.0"
 
