@@ -1,6 +1,6 @@
 {
   "name": "glslEditor",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Simple GLSL Fragment Shader Editor",
   "main": "src/electron.js",
   "scripts": {
