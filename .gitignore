@@ -3,3 +3,4 @@
 node_modules
 dist
 dist-electron
+package-lock.json
