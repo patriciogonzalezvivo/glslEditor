@@ -17,8 +17,6 @@ const STORAGE_LAST_EDITOR_CONTENT = "last-content";
 // Import Utils
 import xhr from "xhr";
 import { subscribeMixin } from "./tools/mixin";
-
-// 3er Parties
 import { saveAs } from "./tools/download";
 
 // Cross storage for Openframe -- allows restricted access to certain localStorage operations
