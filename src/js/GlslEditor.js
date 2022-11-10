@@ -17,8 +17,6 @@ const STORAGE_LAST_EDITOR_CONTENT = "last-content";
 // Import Utils
 import xhr from "xhr";
 import { subscribeMixin } from "./tools/mixin";
-
-// 3er Parties
 import { saveAs } from "./tools/download";
 import { getJSON } from "./tools/common";
 import CodeMirror from "codemirror";
@@ -192,7 +190,7 @@ export default class GlslEditor {
           token = cm.getTokenAt(cur);
       let line = token.string.trim();
           
-      if (line.startsWith('#include \"lygia')) {
+      if (line.startsWith('#include')) {
         let path = line.substring(10);
         if (this.lygia_glob === null) {
           getJSON('https://lygia.xyz/glsl.json', (err, data) => {

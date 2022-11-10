@@ -2,7 +2,6 @@ import GlslCanvas from "glslCanvas";
 import { subscribeInteractiveDom } from "../tools/interactiveDom";
 import MediaCapture from "../tools/mediaCapture";
 import MenuItem from "../ui/MenuItem";
-// 3er Parties
 import { saveAs } from "../tools/download";
 
 var CONTROLS_CLASSNAME = "ge_control";
