@@ -5,7 +5,7 @@
     right: 0px;
     margin: 0px;
     padding: 0px;
-    transition: top 0.25s ease;
+    transition: top 0.05s ease-out;
     z-index: var(--z-shader);
 }
 
