@@ -48,9 +48,9 @@ export function subscribeInteractiveDom (dom, options) {
     }
 
     // Mouse events
-    dom.addEventListener('mousedown', onDown);
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
+    dom.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
 
     // Touch events
     dom.addEventListener('touchstart', onTouchDown, { passive: false });
@@ -84,6 +84,24 @@ export function subscribeInteractiveDom (dom, options) {
         if (event.touches.length === 0) {
             onUp(event.changedTouches[0]);
         }
+    }
+
+    function onMouseDown (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        onDown(event);
+    }
+
+    function onMouseMove (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        onMove(event);
+    }
+
+    function onMouseUp (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        onUp(event);
     }
 
     function onDown (event) {
