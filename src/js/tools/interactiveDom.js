@@ -49,13 +49,13 @@ export function subscribeInteractiveDom (dom, options) {
 
     // Mouse events
     dom.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
 
     // Touch events
-    dom.addEventListener('touchstart', onTouchDown);
-    document.addEventListener('touchmove', onTouchMove);
-    document.addEventListener('touchend', onTouchEnd);
+    dom.addEventListener('touchstart', onTouchDown, { passive: false });
+    document.addEventListener('touchmove', onTouchMove, { passive: false });
+    document.addEventListener('touchend', onTouchEnd, { passive: false });
 
     function hintHide() {
         setBounds(ghostdom, b.left, b.top, b.width, b.height);
@@ -63,25 +63,45 @@ export function subscribeInteractiveDom (dom, options) {
     }
 
     function onTouchDown (event) {
-        onDown(event.touches[0]);
-        e.preventDefault();
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.touches.length === 1) {
+            onDown(event.changedTouches[0]);
+        }
     }
 
     function onTouchMove (event) {
         event.preventDefault();
         event.stopPropagation();
-        onMove(event.touches[0]);
+        if (event.touches.length === 1) {
+            onMove(event.changedTouches[0]);
+        }
     }
 
     function onTouchEnd (event) {
+        event.preventDefault();
+        event.stopPropagation();
         if (event.touches.length === 0) {
-            onUp(e.changedTouches[0]);
+            onUp(event.changedTouches[0]);
         }
     }
 
     function onMouseDown (event) {
+        event.preventDefault();
+        event.stopPropagation();
         onDown(event);
-        e.preventDefault();
+    }
+
+    function onMouseMove (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        onMove(event);
+    }
+
+    function onMouseUp (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        onUp(event);
     }
 
     function onDown (event) {
